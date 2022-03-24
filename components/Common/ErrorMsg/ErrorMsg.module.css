@@ -1,0 +1,11 @@
+.input-container {
+  width: 100%;
+  background-color: rgb(253, 203, 197);
+  height: max-content;
+  padding: 5px 2px;
+  border-radius: 5px;
+}
+
+.input-text {
+  color: red;
+}

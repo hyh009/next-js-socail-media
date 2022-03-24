@@ -1,0 +1,53 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  white-space: nowrap;
+}
+.user-info {
+  display: flex;
+  flex-direction: column;
+  width: calc(80% - 35px);
+}
+
+.user-info-comment {
+  display: grid;
+  width: calc(80%);
+  grid-template-columns: 25px 1fr;
+  place-items: center start;
+  gap: 10px;
+}
+
+.username {
+  color: var(--darkRed);
+  font-weight: bold;
+  width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.location {
+  color: var(--darkGray);
+  width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.text-container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  width: 95%;
+}
+
+.username-comment {
+  color: var(--darkGray);
+  width: max-content;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  font-weight: bold;
+}

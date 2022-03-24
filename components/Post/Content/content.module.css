@@ -1,0 +1,71 @@
+.container {
+  width: 100%;
+}
+
+.text-container {
+  padding: 10px 5px;
+}
+.text {
+  letter-spacing: 0.5px;
+  font-size: 1.125rem;
+}
+
+.icon-delete {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.25rem;
+  color: var(--darkGray);
+  cursor: pointer;
+}
+.image-container {
+  max-width: 100%;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.image {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.icon-container {
+  display: flex;
+  gap: 15px;
+  padding: 5px;
+  font-size: 1.25rem;
+  justify-content: space-between;
+}
+
+.icon-and-text {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.icon-text {
+  color: var(--darkGray);
+  position: relative;
+  cursor: pointer;
+}
+
+.icon-like {
+  cursor: pointer;
+  color: red;
+  font-size: 1.125rem;
+}
+.icon-nolike {
+  cursor: pointer;
+  color: var(--darkGray);
+  font-size: 1.125rem;
+}
+.icon-comment {
+  color: var(--secondaryColor);
+  cursor: pointer;
+  font-size: 1.125rem;
+}
+
+.pointer {
+  cursor: pointer;
+}

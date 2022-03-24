@@ -1,0 +1,20 @@
+.container {
+  scroll-snap-align: start;
+  width: 100%;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 1.125rem;
+  position: relative;
+  box-shadow: 0px 2px 5px 1px #eee;
+}
+
+.icon {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: var(--darkGray);
+  font-size: 0.85rem;
+  cursor: pointer;
+}

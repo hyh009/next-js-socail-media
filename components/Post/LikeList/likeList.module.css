@@ -1,0 +1,72 @@
+.container {
+  width: 200px;
+  height: max-content;
+  max-height: 300px;
+  padding: 10px 5px;
+  list-style-type: none;
+  position: absolute;
+  top: 0;
+  transform: translateY(-100%);
+  background-color: white;
+  overflow: auto;
+  border-radius: 5px;
+  box-shadow: 0 0 5px 1px var(--darkGray);
+  display: flex;
+  flex-direction: column;
+  cursor: default;
+  gap: 5px;
+  z-index: 1;
+}
+
+.list {
+  display: grid;
+  grid-template-columns: 1fr 4fr 1fr;
+  place-items: center;
+  box-shadow: 0 0 3px var(--lightGray);
+  padding: 2px;
+  border-radius: 2px;
+  gap: 5px;
+}
+
+.list:hover {
+  background-color: #eee;
+}
+
+.user-name {
+  font-size: 0.9rem;
+  color: var(--secondaryColor);
+  font-weight: bold;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+}
+.search-icon {
+  cursor: pointer;
+}
+
+.icon {
+  align-self: flex-end;
+  color: var(--lightGray);
+  font-size: 1rem;
+  margin-top: -5px;
+  cursor: pointer;
+}
+
+.spinner {
+  grid-column: 1/4;
+  align-self: center;
+  animation-name: spin;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

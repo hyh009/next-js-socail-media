@@ -1,0 +1,25 @@
+.container {
+  display: grid;
+  grid-template-rows: 1fr 40px;
+}
+.container-maxHeight-180 {
+  display: grid;
+  grid-template-rows: 180px 40px;
+}
+
+.comment-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 5px 0;
+  border-top: 2px solid #eee;
+  height: 100%;
+  overflow: auto;
+  scroll-snap-type: y proximity;
+}
+
+.comment-input-container {
+  display: grid;
+  grid-template-columns: 11fr 1fr;
+  gap: 5px;
+}

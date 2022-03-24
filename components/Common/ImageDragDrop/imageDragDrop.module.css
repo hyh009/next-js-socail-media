@@ -1,0 +1,70 @@
+.container {
+  width: 85%;
+  margin-top: 20px;
+  min-height: 200px;
+  background-color: #eee;
+  user-select: none;
+  cursor: pointer;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.container-small {
+  width: 120px;
+  height: 120px;
+  border: 2px dashed black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.highlight {
+  border: 2px dashed var(--secondaryColor);
+}
+
+.dropArea {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 200px;
+}
+
+.dropArea-small {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.icon {
+  color: var(--darkGray);
+  font-size: 2.5rem;
+}
+
+.icon-small {
+  color: black;
+  font-size: 1.5rem;
+}
+
+.icon-active {
+  color: var(--secondaryColor);
+  font-size: 1.5rem;
+}
+
+.text {
+  font-size: 1.25rem;
+  color: var(--darkGray);
+  text-align: center;
+  margin: 0;
+}
+
+.text-highlight {
+  color: var(--middlePurple);
+}
+
+.img {
+  width: 80%;
+}

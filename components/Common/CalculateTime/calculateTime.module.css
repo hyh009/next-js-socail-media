@@ -1,0 +1,17 @@
+.date {
+  color: var(--secondaryColor);
+  width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  font-weight: bold;
+}
+
+.date-comment {
+  color: var(--darkGray);
+  width: max-content;
+  max-width: 50%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}

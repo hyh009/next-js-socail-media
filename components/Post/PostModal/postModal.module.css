@@ -1,0 +1,45 @@
+.container {
+  position: absolute;
+  display: grid;
+  grid-template-columns: minmax(450px, 1fr) minmax(300px, 1fr);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  z-index: 10;
+  width: 85%;
+  height: fit-content;
+  gap: 10px;
+}
+
+.textonly-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  z-index: 10;
+  width: 500px;
+  height: fit-content;
+}
+
+.image-container {
+  width: 100%;
+  box-shadow: 0 0 5px 1px var(--darkGray);
+  height: fit-content;
+}
+
+.image {
+  width: 100%;
+  display: block;
+}
+
+.postContainer {
+  background-color: white;
+  height: 100%;
+  padding: 10px;
+  box-shadow: 0 0 5px 1px var(--darkGray);
+  border-radius: 5px;
+}

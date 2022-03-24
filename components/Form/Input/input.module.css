@@ -1,0 +1,134 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.label {
+  padding: 2px;
+  color: var(--darkGray);
+  font-size: 1.25rem;
+}
+.inputContainer {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  border: 1px solid var(--lightGray);
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.box-shadow-inputContainer {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  border-radius: 5px;
+  padding: 5px;
+  box-shadow: 0 0 5px 0px var(--darkGray);
+}
+
+.icon {
+  font-size: 1rem;
+  color: inherit;
+  margin-left: 5px;
+}
+
+.spin {
+  animation-name: spin;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+.input {
+  border: none;
+  width: 95%;
+  padding: 2px;
+  background-color: inherit;
+  color: inherit;
+  font-size: 1.25rem;
+}
+
+.inputContainer:focus-within {
+  border: 2px solid var(--primaryColor);
+}
+
+.input:focus {
+  outline: none;
+}
+
+.textarea {
+  resize: none;
+  border: 1px solid var(--lightGray);
+  font-size: 1.25rem;
+  width: 100%;
+}
+
+.textarea:focus {
+  outline: none;
+  border: 2px solid var(--primaryColor);
+}
+.required::after {
+  content: " *";
+  color: red;
+  font-size: 0.75rem;
+}
+
+.invalid {
+  background-color: rgb(253, 203, 197);
+  color: red;
+  border: 1px solid red;
+}
+
+.autoComplete-container {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+}
+.autoComplete-input-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px;
+  border: 1px solid var(--lightGray);
+  border-radius: 5px;
+  font-size: 1.25rem;
+}
+
+.place-input {
+  border: none;
+  font-size: inherit;
+  width: 95%;
+}
+
+.suggestion-items {
+  display: flex;
+  align-items: center;
+  color: black;
+  background-color: #eee;
+  cursor: pointer;
+  gap: 5px;
+}
+
+.suggestion-items-active {
+  display: flex;
+  align-items: center;
+  background-color: black;
+  color: white;
+  gap: 5px;
+}
+
+.location-icon {
+  color: var(--lightGray);
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

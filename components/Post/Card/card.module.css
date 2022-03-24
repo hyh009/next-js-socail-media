@@ -1,0 +1,20 @@
+.container {
+  width: 100%;
+  max-width: 450px;
+  position: relative;
+  border: 1px solid var(--lightGray);
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 5px 1px var(--lightGray);
+  display: flex;
+  flex-direction: column;
+}
+
+.icon-delete {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.25rem;
+  color: var(--darkGray);
+  cursor: pointer;
+}
