@@ -6,6 +6,9 @@ const nextConfig = {
     CLOUDINARY_NAME: "dh2splieo",
     GOOGLE_API_KEY: "AIzaSyAoh4_Cx5tD4mMcq56k6QB-YW-dF9oBGEI",
   },
+  images: {
+    domains: ["res.cloudinary.com"],
+  },
 };
 
 module.exports = nextConfig;

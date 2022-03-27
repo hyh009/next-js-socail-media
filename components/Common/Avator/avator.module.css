@@ -15,16 +15,16 @@
   overflow: hidden;
 }
 
-.image {
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
-}
-
 .circle {
   border-radius: 50%;
 }
 
 .border-light {
   border: 2px solid var(--secondaryColor);
+}
+
+@media screen and (max-width: 770px) {
+  .no-tablet {
+    display: none;
+  }
 }

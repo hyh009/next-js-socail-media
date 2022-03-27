@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import classes from "./card.module.css";
-import { Content, CommentArea, PostModal } from "../index";
+import { Content, CommentArea, PostModal, CommentModal } from "../index";
 import { Popup } from "../../Common";
 import { BackDrop } from "../../Layout";
 import { AiOutlineClose } from "react-icons/ai";
@@ -12,12 +12,13 @@ const Card = ({ post, user, setToastrType, refreshRouter }) => {
   const [loading, setLoading] = useState(false);
   const [showPop, setShowPop] = useState(false);
   const [showPostModal, setShowPostModal] = useState(false);
+  const [showComments, setShowComments] = useState(false);
   const popRef = useRef(null);
-  const postModalRef = useRef(null);
+  const commentpopRef = useRef(null);
 
   // click outside to close popup
-  useClickOutsideClose(popRef, showPop, setShowPop);
-  useClickOutsideClose(postModalRef, showPostModal, setShowPostModal);
+  useClickOutsideClose(popRef, setShowPop);
+  useClickOutsideClose(commentpopRef, setShowComments);
 
   // delete a post
   const handleDeletePost = async (e) => {
@@ -29,13 +30,24 @@ const Card = ({ post, user, setToastrType, refreshRouter }) => {
 
   return (
     <>
-      {(loading || showPostModal) && <BackDrop />}
+      {(loading || showPostModal || showComments) && <BackDrop />}
       {showPostModal && (
         <PostModal
-          propRef={postModalRef}
           post={post}
           user={user}
           refreshRouter={refreshRouter}
+          setShowPostModal={setShowPostModal}
+          setShowComments={setShowComments}
+        />
+      )}
+      {showComments && (
+        <CommentArea
+          propClass="comment-modal"
+          post={post}
+          user={user}
+          showComments={showComments}
+          refreshRouter={refreshRouter}
+          popRef={commentpopRef}
         />
       )}
       <div className={classes.container}>
@@ -68,12 +80,14 @@ const Card = ({ post, user, setToastrType, refreshRouter }) => {
           setLoading={setLoading}
           showImage={true}
           setShowPostModal={setShowPostModal}
+          setShowComments={setShowComments}
         />
         <CommentArea
           post={post}
           user={user}
           refreshRouter={refreshRouter}
-          number={3}
+          number={showComments ? undefined : 3}
+          setShowComments={setShowComments}
         />
       </div>
     </>

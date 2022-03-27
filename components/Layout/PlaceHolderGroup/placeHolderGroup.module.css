@@ -1,0 +1,25 @@
+.endMessage-container {
+  display: flex;
+  position: relative;
+  width: 100%;
+  justify-content: center;
+  padding: 10px;
+}
+.text {
+  text-align: center;
+}
+.scrollBtn-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+  color: white;
+  position: absolute;
+  bottom: 0px;
+  right: 30px;
+  cursor: pointer;
+  height: 40px;
+  width: 40px;
+  font-size: 1.5rem;
+  border-radius: 50%;
+}

@@ -279,7 +279,7 @@ export const LoginForm = ({ submitHandler }) => {
     );
     if (isFiled) setSubmitDisable(false);
     else setSubmitDisable(true);
-  }, [inputs]);
+  }, [email, password]);
 
   const changeHandler = (e) => {
     const { name, value } = e.target;

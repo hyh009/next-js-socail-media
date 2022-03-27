@@ -12,15 +12,12 @@
 }
 
 .list {
-  color: var(--darkGray);
+  color: var(--darkRed);
   padding: 5px 10px;
+  transition: all 0.2s ease-in;
+  border-radius: 10px;
 }
 
-.list:hover {
-  border-radius: 10px;
-  background-color: var(--black);
-  color: white;
-}
 .link-text {
   text-decoration: none;
   display: flex;
@@ -35,6 +32,56 @@
 
 .active {
   background-color: var(--secondaryColor);
-  border-radius: 10px;
   color: var(--black);
+}
+
+.list:hover {
+  background-color: var(--black);
+  color: white;
+}
+
+.pcOnly {
+  color: inherit;
+}
+
+@media screen and (max-width: 1024px) {
+  .container {
+    width: 60px;
+    padding: 30px 10px;
+  }
+
+  .link-text {
+    display: flex;
+    justify-content: center;
+  }
+  .pcOnly {
+    display: none;
+  }
+  .list {
+    border-radius: 5px;
+  }
+}
+
+@media screen and (max-width: 770px) {
+  .pcOnly {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .container {
+    grid-row: 1/2;
+    flex-direction: row;
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    align-items: center;
+    top: 0px;
+    z-index: 1;
+    gap: 6vmin;
+  }
+
+  .list {
+    padding: 5px;
+  }
 }

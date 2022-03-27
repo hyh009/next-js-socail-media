@@ -12,14 +12,52 @@
   flex-direction: column;
   gap: 5px;
   padding: 5px 0;
+  padding-top: 20px;
   border-top: 2px solid #eee;
   height: 100%;
   overflow: auto;
   scroll-snap-type: y proximity;
+  overflow-x: hidden;
+  position: relative;
 }
 
 .comment-input-container {
   display: grid;
   grid-template-columns: 11fr 1fr;
   gap: 5px;
+}
+
+.comment-modal {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  z-index: 10;
+  background-color: white;
+  width: 40%;
+  height: 100vh;
+  overflow: auto;
+}
+
+@media screen and (max-width: 1024px) {
+  .post-modal {
+    display: none;
+  }
+
+  .comment-modal {
+    width: 70%;
+  }
+}
+
+@media screen and (max-width: 770px) {
+  .post-modal {
+    display: none;
+  }
+
+  .comment-modal {
+    width: 100%;
+    height: 80vh;
+  }
 }

@@ -2,6 +2,7 @@
   display: grid;
   min-height: 100vh;
   grid-template-columns: repeat(4, minmax(0, 1fr));
+  overflow-x: hidden;
 }
 
 .content-container {
@@ -27,5 +28,54 @@
 
 .notlogin-container {
   width: 100%;
-  min-height: 100vh;
+  min-height: calc(100vh - var(--navHeight));
+  overflow-x: hidden;
+}
+
+@media screen and (max-width: 1024px) {
+  .islogin-Container {
+    grid-template-columns: 60px 1fr 200px;
+  }
+
+  .content-container {
+    grid-column: 2/3;
+  }
+  .pcOnly {
+    display: none;
+  }
+  .list {
+    border-radius: 5px;
+  }
+}
+
+@media screen and (max-width: 770px) {
+  .islogin-Container {
+    grid-template-columns: 60px 1fr;
+  }
+  .content-container {
+    padding: 0 10px;
+  }
+  .pcOnly {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .islogin-Container {
+    grid-template-columns: none;
+    grid-template-rows: 40px 1fr;
+    position: relative;
+  }
+  .content-container {
+    height: calc(100vh - 40px);
+    grid-column: auto;
+    grid-row: 2/3;
+  }
+
+  .content-wrapper {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .pcOnly {
+    display: none;
+  }
 }

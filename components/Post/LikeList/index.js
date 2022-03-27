@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import classes from "./likeList.module.css";
 import { Avator } from "../../Common";
+import { Spinner } from "../../Layout";
 import baseUrl from "../../../utils/baseUrl";
 import axios from "axios";
 import {
@@ -23,7 +24,7 @@ const LikeList = ({ postId, propRef, setShowLikeList }) => {
       setLoading(false);
     };
 
-    getLikesUserInfo(likesUserInfo);
+    getLikesUserInfo();
     return () => {
       controller.abort();
     };
@@ -52,7 +53,11 @@ const LikeList = ({ postId, propRef, setShowLikeList }) => {
             <AiOutlineSearch className={classes[`search-icon`]} />
           </li>
         ))}
-      {loading && <AiOutlineLoading3Quarters className={classes.spinner} />}
+      {loading && (
+        <div className={classes[`spinner-container`]}>
+          <Spinner />
+        </div>
+      )}
     </ul>
   );
 };

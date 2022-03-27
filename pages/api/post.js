@@ -176,7 +176,7 @@ router.delete("/:postId/:commentId", authMiddleware, async (req, res) => {
     const { postId, commentId } = req.params;
     const { userId } = req;
 
-    const post = await PostModel.findById(postId).populate("Comments.user");
+    const post = await PostModel.findById(postId).populate("comments.user");
     if (!post) return res.status(404).json({ message: "Post not found" });
     const deleteComment = post.comments.find(
       (comment) => comment._id === commentId
@@ -185,7 +185,7 @@ router.delete("/:postId/:commentId", authMiddleware, async (req, res) => {
       return res.status(404).json({ message: "Comment not found" });
     //admin, post owner, comment owner can delete the comment
     if (
-      userId !== deleteComment.user.toString() &&
+      userId !== deleteComment.user._id.toString() &&
       deleteComment.user.role !== "admin" &&
       userId !== post.user.toString()
     ) {

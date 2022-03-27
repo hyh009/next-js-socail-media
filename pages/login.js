@@ -8,7 +8,7 @@ import { loginUser } from "../utils/authUser";
 import baseUrl from "../utils/baseUrl";
 import axios from "axios";
 
-const login = () => {
+const Login = () => {
   const handleLogin = async (e, inputData, setErrorMsg, setFormLoading) => {
     e.preventDefault();
     setFormLoading(true);
@@ -48,4 +48,4 @@ export const getServerSideProps = async (context) => {
   }
 };
 
-export default login;
+export default Login;

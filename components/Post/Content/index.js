@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import Image from "next/image";
 import classes from "./content.module.css";
 import { PostUser } from "../../Common";
 import { LikeList } from "../index";
@@ -13,11 +14,13 @@ const Content = ({
   refreshRouter,
   showImage,
   setShowPostModal,
+  setShowComments,
+  propClass,
 }) => {
   const [showLikeList, setShowLikeList] = useState(false);
   const likeListRef = useRef(null);
 
-  useClickOutsideClose(likeListRef, showLikeList, setShowLikeList);
+  useClickOutsideClose(likeListRef, setShowLikeList);
   //check if post is liked by current user
   const isLiked = () =>
     post.likes &&
@@ -42,14 +45,19 @@ const Content = ({
         }`}
         onClick={!post.picUrl ? () => setShowPostModal(true) : undefined}
       >
-        <span className={classes.text}>{post.text}</span>
+        <span className={`${classes.text} ${classes[propClass]}`}>
+          {post.text}
+        </span>
       </div>
       {post?.picUrl && showImage && (
         <div className={classes[`image-container`]}>
-          <img
-            className={classes.image}
-            alt={post.text}
+          <Image
             src={post.picUrl}
+            alt={post.text}
+            width="100%"
+            height="80%"
+            layout="responsive"
+            objectFit="cover"
             onClick={showImage ? () => setShowPostModal(true) : undefined}
           />
         </div>
@@ -75,12 +83,14 @@ const Content = ({
             />
           )}
           {post.likes.length === 0 && (
-            <span className={classes[`icon-text`]}>like</span>
+            <span className={`${classes[`icon-text`]} ${classes[propClass]}`}>
+              like
+            </span>
           )}
           {post.likes.length > 0 && (
             <>
               <span
-                className={classes[`icon-text`]}
+                className={`${classes[`icon-text`]} ${classes[propClass]}`}
                 onClick={() => setShowLikeList(true)}
               >
                 {post.likes.length === 1
@@ -100,16 +110,23 @@ const Content = ({
             </>
           )}
         </div>
-        <div className={classes[`icon-and-text`]}>
+        <div
+          className={classes[`icon-and-text`]}
+          onClick={
+            setShowComments ? () => setShowComments((prev) => !prev) : undefined
+          }
+        >
           <FaRegCommentDots
             className={classes[`icon-comment`]}
             title="show comments"
           />
           {post.comments.length === 0 && (
-            <span className={classes[`icon-text`]}>comment</span>
+            <span className={`${classes[`icon-text`]} ${classes[propClass]}`}>
+              comment
+            </span>
           )}
           {post.comments.length > 0 && (
-            <span className={classes[`icon-text`]}>
+            <span className={`${classes[`icon-text`]} ${classes[propClass]}`}>
               {post.comments.length === 1
                 ? `1 comment`
                 : `${post.comments.length} comments`}

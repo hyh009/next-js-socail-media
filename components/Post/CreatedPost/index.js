@@ -67,22 +67,23 @@ const CreatedPost = ({ user, refreshRouter, setToastrType }) => {
           <Avator
             src={user?.profilePicUrl}
             alt={user?.username}
-            size="auto"
             border="border-light"
             shape="circle"
           />
-          <TextArea
-            name="text"
-            placeholder="What do you want to share today?"
-            value={newPost.text}
-            rows="2"
-            changeHandler={changeHandler}
-          />
+          <div className={classes[`textArea-container`]}>
+            <TextArea
+              name="text"
+              placeholder="What's on your mind?"
+              value={newPost.text}
+              rows="2"
+              changeHandler={changeHandler}
+            />
+          </div>
         </div>
         {showOption && (
           <>
             <GooglePlaceAutoCompelete
-              placeholder="Add your location (optional)"
+              placeholder="Add location (optional)"
               icon={MdLocationOn}
               address={location}
               setAddress={setLocation}
@@ -99,7 +100,7 @@ const CreatedPost = ({ user, refreshRouter, setToastrType }) => {
             look="signup-button"
             type="button"
             clickHandler={clickHandler}
-            content={showOption ? "Hide option" : "More option"}
+            content={showOption ? "Hide options" : "More options"}
           />
           <Button
             look="signup-button"

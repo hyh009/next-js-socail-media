@@ -3,17 +3,17 @@
   align-items: center;
   gap: 10px;
   width: 100%;
-  white-space: nowrap;
 }
 .user-info {
   display: flex;
   flex-direction: column;
   width: calc(80% - 35px);
+  max-width: 300px;
 }
 
 .user-info-comment {
   display: grid;
-  width: calc(80%);
+  width: 80%;
   grid-template-columns: 25px 1fr;
   place-items: center start;
   gap: 10px;
@@ -22,15 +22,17 @@
 .username {
   color: var(--darkRed);
   font-weight: bold;
-  width: 100%;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  width: 100%;
+  max-width: 100%;
 }
 
 .location {
   color: var(--darkGray);
   width: 100%;
+  max-width: 100%;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;

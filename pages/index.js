@@ -4,8 +4,13 @@ import axios from "axios";
 import baseUrl from "../utils/baseUrl";
 import Head from "next/head";
 import { Card, CreatedPost } from "../components/Post";
-import { Nodata, PlaceHolderPosts, EndMessage } from "../components/Layout";
-import { PostToastr } from "../components/Layout/Toastr";
+import {
+  Nodata,
+  PlaceHolderPosts,
+  EndMessage,
+  PostToastr,
+  DivSpinner,
+} from "../components/Layout";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -20,7 +25,7 @@ const Home = (props) => {
   // to get data after create / delete / update data
   const refreshRouter = useCallback(
     () => router.replace(router.asPath),
-    [router.asPath]
+    [router]
   );
   // handle toast
   useEffect(() => {
@@ -60,9 +65,12 @@ const Home = (props) => {
 
   // handle infinite scroll
   const fetchDataOnScroll = () => {
-    console.log("here");
     const query = router.query;
-    query.page = parseInt(props.postPage.currentPage) + 1;
+    if (props.postPage.maxPage > props.postPage.currentPage) {
+      query.page = props.postPage.currentPage + 1;
+    } else {
+      query.page = props.postPage.currentPage;
+    }
     router.replace({
       pathname: router.pathname,
       query: query,
@@ -85,7 +93,7 @@ const Home = (props) => {
         hasMore={hasMore}
         next={fetchDataOnScroll}
         dataLength={props.posts.length}
-        loader={<PlaceHolderPosts />}
+        loader={<DivSpinner />}
         endMessage={<EndMessage />}
         scrollableTarget="scrollableDiv"
       >

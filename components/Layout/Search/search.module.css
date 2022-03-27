@@ -47,7 +47,6 @@
   font-weight: bold;
   height: 100%;
 }
-
 .img {
   width: 20px;
   aspect-ratio: 1/1;
@@ -85,18 +84,82 @@
   color: white;
 }
 
-.spin {
-  animation-name: spin;
-  animation-duration: 1s;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear;
+.tablet {
+  display: none;
 }
 
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
+@media screen and (max-width: 1024px) {
+  .container {
+    padding: 30px 0;
   }
-  to {
-    transform: rotate(360deg);
+  .input-container {
+    padding: 5px 10px;
+  }
+  .no-bigtablet {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 770px) {
+  .container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    transform: translateX(100%);
+    width: 230px;
+    background-color: rgba(0, 0, 0, 0.85);
+    z-index: 2;
+  }
+  .search-icon {
+    position: fixed;
+    top: 5px;
+    right: 20px;
+    cursor: pointer;
+    font-size: 1.75rem;
+    color: white;
+    background-color: black;
+    border-radius: 10px;
+    padding: 5px;
+    z-index: 2;
+  }
+
+  .close-icon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+    font-size: 1.25rem;
+    color: white;
+  }
+
+  .show-container {
+    animation: slide 0.3s ease-in forwards;
+  }
+
+  .tablet {
+    display: flex;
+  }
+  .no-tablet {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .container {
+    width: 100%;
+    padding: 50px;
+  }
+
+  .search-icon {
+    right: 10px;
+  }
+  .mobile {
+    display: flex;
+  }
+}
+
+@keyframes slide {
+  100% {
+    transform: translateX(0%);
   }
 }

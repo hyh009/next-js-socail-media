@@ -1,19 +1,17 @@
 import { Fragment } from "react";
-import HeadTags from "../HeadTags";
 import Navbar from "../Navbar";
 import classes from "./MainLayout.module.css";
 import nProgress from "nprogress";
 import Router from "next/router";
-import { Search, Sidebar } from "../index";
+import { Search, Sidebar, ScrollToTopBtn } from "../index";
 
-const Layout = ({ children, user }) => {
+const MainLayout = ({ children, user }) => {
   Router.onRouteChangeStart = () => nProgress.start();
   Router.onRouteChangeComplete = () => nProgress.done();
   Router.onRouteChangeError = () => nProgress.done();
 
   return (
     <Fragment>
-      <HeadTags />
       <div id="backdrop-root" />
       {user ? (
         <>
@@ -35,4 +33,4 @@ const Layout = ({ children, user }) => {
   );
 };
 
-export default Layout;
+export default MainLayout;

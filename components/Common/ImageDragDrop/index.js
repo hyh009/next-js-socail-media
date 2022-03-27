@@ -2,35 +2,38 @@ import { useCallback } from "react";
 import classes from "./imageDragDrop.module.css";
 import { BsImageFill, BsPlusLg } from "react-icons/bs";
 import { useDropzone } from "react-dropzone";
+import Image from "next/image";
 
-const ImageDragDrop = (props) => {
-  const { imagePreview, setImagePreview } = props;
-  const onDrop = useCallback((acceptedFiles) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(acceptedFiles[0]);
-    reader.onloadend = () => {
-      setImagePreview(reader.result);
-    };
-  }, []);
+const ImageDragDrop = ({ imagePreview, setImagePreview, size }) => {
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(acceptedFiles[0]);
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+    },
+    [setImagePreview]
+  );
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
     <div
       {...getRootProps()}
       className={`${
-        props.size === "small"
-          ? classes[`container-small`]
-          : classes[`container`]
+        size === "small" ? classes[`container-small`] : classes[`container`]
       } ${(isDragActive || imagePreview) && classes.highlight}`}
     >
       <input {...getInputProps()} />
-      {props.size === "small" ? (
-        <div className={classes[`dropArea-small`]}>
+      {size === "small" ? (
+        <>
           {imagePreview ? (
-            <img
+            <Image
               src={imagePreview}
-              alt="updated image"
-              className={classes.img}
+              alt="image preview"
+              width={100}
+              height={100}
+              objectFit="contain"
             />
           ) : (
             <BsPlusLg
@@ -39,14 +42,16 @@ const ImageDragDrop = (props) => {
               }
             />
           )}
-        </div>
+        </>
       ) : (
         <div className={classes.dropArea}>
           {imagePreview ? (
-            <img
+            <Image
               src={imagePreview}
-              alt="updated image"
-              className={classes.img}
+              alt="image preview"
+              width={300}
+              height={300}
+              objectFit="contain"
             />
           ) : isDragActive ? (
             <p className={`${classes.text} ${classes[`text-highlight`]}`}>
@@ -56,7 +61,7 @@ const ImageDragDrop = (props) => {
             <>
               <BsImageFill className={classes.icon} />
               <p className={classes.text}>
-                Drag 'n' drop some files here, <br />
+                Drag and drop some files here, <br />
                 or click to select files
               </p>
             </>

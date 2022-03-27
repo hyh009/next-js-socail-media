@@ -11,7 +11,7 @@ import { uploadPic } from "../utils/uploadPicToCloudinary";
 import baseUrl from "../utils/baseUrl";
 import axios from "axios";
 
-const signup = () => {
+const Signup = () => {
   const [imagePreview, setImagePreview] = useState("");
   const handleSignup = async (
     e,
@@ -71,4 +71,4 @@ export const getServerSideProps = async (context) => {
     return { props: { errorLoading: true } };
   }
 };
-export default signup;
+export default Signup;

@@ -3,12 +3,12 @@ import React from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import {
-  RiLogoutBoxRFill,
-  RiAccountCircleFill,
-  RiNotification2Fill,
-  RiMessage3Fill,
-  RiHome4Fill,
+  RiLogoutBoxRLine,
+  RiAccountCircleLine,
+  RiMessage2Line,
+  RiHome4Line,
 } from "react-icons/ri";
+import { MdNotificationsNone } from "react-icons/md";
 import { logoutUser } from "../../../utils/authUser";
 
 const Sidebar = ({ user }) => {
@@ -23,8 +23,8 @@ const Sidebar = ({ user }) => {
           }}
         >
           <a className={`${classes[`link-text`]}`}>
-            <RiHome4Fill />
-            Home
+            <RiHome4Line />
+            <span className={classes.pcOnly}>Home</span>
           </a>
         </Link>
       </li>
@@ -39,8 +39,8 @@ const Sidebar = ({ user }) => {
           }}
         >
           <a className={`${classes[`link-text`]}`}>
-            <RiMessage3Fill />
-            Message
+            <RiMessage2Line />
+            <span className={classes.pcOnly}>Message</span>
           </a>
         </Link>
       </li>
@@ -55,24 +55,26 @@ const Sidebar = ({ user }) => {
           }}
         >
           <a className={`${classes[`link-text`]}`}>
-            <RiNotification2Fill />
-            Notifications
+            <MdNotificationsNone />
+            <span className={classes.pcOnly}>Notifications</span>
           </a>
         </Link>
       </li>
       <li
         className={`${classes.list} ${
-          isActive(`${user.username}`) ? classes.active : ""
+          isActive(`/${encodeURIComponent(user.username)}`)
+            ? classes.active
+            : ""
         }`}
       >
         <Link
           href={{
-            pathname: `${user.username}`,
+            pathname: `/${encodeURIComponent(user.username)}`,
           }}
         >
           <a className={`${classes[`link-text`]}`}>
-            <RiAccountCircleFill />
-            Account
+            <RiAccountCircleLine />
+            <span className={classes.pcOnly}>Account</span>
           </a>
         </Link>
       </li>
@@ -83,8 +85,8 @@ const Sidebar = ({ user }) => {
         }}
       >
         <span className={`${classes[`link-text`]}`}>
-          <RiLogoutBoxRFill />
-          Logout
+          <RiLogoutBoxRLine />
+          <span className={classes.pcOnly}>Logout</span>
         </span>
       </li>
     </ul>

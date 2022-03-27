@@ -9,9 +9,12 @@
 }
 
 .input-area {
-  display: grid;
-  gap: 10px;
-  grid-template-columns: 1fr 15fr;
+  display: flex;
+  gap: 5px;
+}
+
+.textArea-container {
+  flex: 1;
 }
 
 .button-container {

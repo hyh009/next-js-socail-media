@@ -1,8 +1,7 @@
-import { useCallback } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import classes from "./Navbar.module.css";
-import { AiOutlineLogin, AiOutlineLogout } from "react-icons/ai";
+import { AiOutlineLogin } from "react-icons/ai";
 import { BsPencilSquare } from "react-icons/bs";
 
 const Navbar = () => {
@@ -10,7 +9,7 @@ const Navbar = () => {
   const checkIfActive = (route) => route === router.pathname;
   return (
     <div className={classes.menu}>
-      <Link href="login">
+      <Link href="login" passHref>
         <div
           className={`${classes[`menu-item`]} ${
             checkIfActive("/login") ? classes[`menu-active`] : ""
@@ -20,7 +19,7 @@ const Navbar = () => {
           Login
         </div>
       </Link>
-      <Link href="signup">
+      <Link href="signup" passHref>
         <div
           className={`${classes[`menu-item`]} ${
             checkIfActive("/signup") ? classes[`menu-active`] : ""

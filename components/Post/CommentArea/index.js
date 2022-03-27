@@ -1,12 +1,22 @@
 import { useState } from "react";
 import classes from "./commentArea.module.css";
 import { InputWithAvator } from "../../Form";
+import { Nodata } from "../../Layout";
 import { Button } from "../../Common";
 import { Comment } from "../index";
 import { BsFillArrowRightSquareFill, BsThreeDots } from "react-icons/bs";
 import { createComment, deleteComment } from "../../../utils/postAction";
 
-const CommentArea = ({ post, user, refreshRouter, number, restrictHeight }) => {
+const CommentArea = ({
+  post,
+  user,
+  refreshRouter,
+  number, // show how many comments
+  restrictHeight,
+  showComments, // to set no data placeholder for modal only
+  propClass, // type: comment-modal, post-modal
+  popRef, // to click outside close
+}) => {
   const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(false);
   if (typeof number === "undefined") number = post.comments.length;
@@ -37,17 +47,22 @@ const CommentArea = ({ post, user, refreshRouter, number, restrictHeight }) => {
   };
   return (
     <div
+      ref={popRef}
       className={`${
         restrictHeight && post.comments.length >= 3
-          ? classes[`container-maxHeight-180`]
+          ? classes[`container-maxHeight-${restrictHeight}`]
           : classes[`container`]
-      }`}
+      } ${classes[propClass]}`}
     >
       {/* comments area */}
       {post.comments && (
         <div className={`${classes[`comment-container`]}`}>
+          {post.comments.length === 0 && showComments && (
+            <Nodata text="no comment found" />
+          )}
           {post.comments.length > 0 &&
             post.comments
+              .sort((a, b) => new Date(b.date) - new Date(a.date))
               .slice(0, number)
               .map((comment) => (
                 <Comment

@@ -2,32 +2,66 @@ import React from "react";
 import ReactDOM from "react-dom";
 import classes from "./postModal.module.css";
 import { Content, CommentArea } from "../index";
+import Image from "next/image";
+import { AiOutlineClose } from "react-icons/ai";
 
-const PostModal = ({ propRef, post, user, refreshRouter }) => {
+const CloseIcon = ({ setShowPostModal }) => {
+  return ReactDOM.createPortal(
+    <AiOutlineClose
+      className={classes[`close-icon`]}
+      onClick={(e) => {
+        setShowPostModal(false);
+      }}
+    />,
+    document.getElementById("backdrop-root")
+  );
+};
+
+const PostModal = ({
+  post,
+  user,
+  refreshRouter,
+  setShowPostModal,
+  setShowComments,
+}) => {
   return ReactDOM.createPortal(
     <div
       className={`${
         post.picUrl ? classes.container : classes[`textonly-container`]
       }`}
-      ref={propRef}
     >
+      <CloseIcon setShowPostModal={setShowPostModal} />
       {post.picUrl && (
         <div className={classes[`image-container`]}>
-          <img className={classes.image} alt={post.text} src={post.picUrl} />
+          <Image
+            alt={post.text}
+            src={post.picUrl}
+            width="100%"
+            height="100%"
+            layout="responsive"
+            objectFit="contain"
+          />
         </div>
       )}
-      <div className={classes.postContainer}>
+      <div
+        className={`${classes.postContainer} ${
+          post.picUrl && classes[`tablet-postContainer`]
+        }`}
+      >
         <Content
           showImage={false}
           post={post}
           user={user}
           refreshRouter={refreshRouter}
+          propClass={post.picUrl && "post-modal"}
+          setShowComments={setShowComments}
         />
         <CommentArea
           post={post}
           user={user}
           refreshRouter={refreshRouter}
-          restrictHeight={true}
+          restrictHeight="180"
+          propClass={post.picUrl && "post-modal"}
         />
       </div>
     </div>,

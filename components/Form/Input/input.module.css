@@ -7,7 +7,7 @@
 .label {
   padding: 2px;
   color: var(--darkGray);
-  font-size: 1.25rem;
+  font-size: 1.125rem;
 }
 .inputContainer {
   display: flex;
@@ -48,7 +48,7 @@
   padding: 2px;
   background-color: inherit;
   color: inherit;
-  font-size: 1.25rem;
+  font-size: 1.125rem;
 }
 
 .inputContainer:focus-within {
@@ -62,7 +62,7 @@
 .textarea {
   resize: none;
   border: 1px solid var(--lightGray);
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   width: 100%;
 }
 
@@ -94,7 +94,7 @@
   padding: 5px;
   border: 1px solid var(--lightGray);
   border-radius: 5px;
-  font-size: 1.25rem;
+  font-size: 1.125rem;
 }
 
 .place-input {
