@@ -1,4 +1,4 @@
-const DEPLOY_URL = "https://mini-socail-media.netlify.app";
+const DEPLOY_URL = "https://mini-socail-media.netlify.app/api";
 const baseUrl =
   process.env.NODE_ENV !== "production"
     ? "http://localhost:3000/api"

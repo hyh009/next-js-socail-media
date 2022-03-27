@@ -35,7 +35,7 @@ const Sidebar = ({ user }) => {
       >
         <Link
           href={{
-            pathname: "/message",
+            pathname: "#",
           }}
         >
           <a className={`${classes[`link-text`]}`}>
@@ -51,7 +51,7 @@ const Sidebar = ({ user }) => {
       >
         <Link
           href={{
-            pathname: "/notification",
+            pathname: "#",
           }}
         >
           <a className={`${classes[`link-text`]}`}>
@@ -69,7 +69,7 @@ const Sidebar = ({ user }) => {
       >
         <Link
           href={{
-            pathname: `/${encodeURIComponent(user.username)}`,
+            pathname: `#`,
           }}
         >
           <a className={`${classes[`link-text`]}`}>
