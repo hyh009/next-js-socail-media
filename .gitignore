@@ -1,6 +1,5 @@
 node_modules
 .next
 package-lock.json
-next.config.js
 config.env
 jest.config.js
