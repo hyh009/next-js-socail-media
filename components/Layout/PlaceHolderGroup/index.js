@@ -15,7 +15,7 @@ export const EndMessage = () => {
   };
   return (
     <div className={classes[`endMessage-container`]}>
-      <span className={classes.text}> THIS IS THE END</span>
+      <span className={classes.text}>THE END</span>
       <div className={classes[`scrollBtn-container`]} onClick={scrollToTop}>
         <BiArrowToTop />
       </div>

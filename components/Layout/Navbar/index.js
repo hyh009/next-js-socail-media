@@ -9,7 +9,7 @@ const Navbar = () => {
   const checkIfActive = (route) => route === router.pathname;
   return (
     <div className={classes.menu}>
-      <Link href="login" passHref>
+      <Link href="/login" passHref>
         <div
           className={`${classes[`menu-item`]} ${
             checkIfActive("/login") ? classes[`menu-active`] : ""
@@ -19,7 +19,7 @@ const Navbar = () => {
           Login
         </div>
       </Link>
-      <Link href="signup" passHref>
+      <Link href="/signup" passHref>
         <div
           className={`${classes[`menu-item`]} ${
             checkIfActive("/signup") ? classes[`menu-active`] : ""

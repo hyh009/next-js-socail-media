@@ -6,12 +6,10 @@ import Head from "next/head";
 import { Card, CreatedPost } from "../components/Post";
 import {
   Nodata,
-  PlaceHolderPosts,
   EndMessage,
   PostToastr,
   DivSpinner,
 } from "../components/Layout";
-import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import InfiniteScroll from "react-infinite-scroll-component";
 import classes from "../components/Layout/MainLayout/MainLayout.module.css";

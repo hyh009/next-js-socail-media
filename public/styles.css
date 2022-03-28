@@ -1,10 +1,10 @@
 :root {
-  --navHeight: 40px;
+  --navHeight: 50px;
   --progressBar: #54d1db;
-  --primaryColor: #fcde67;
-  --secondaryColor: #5bccf6;
+  --primaryColor: rgb(30, 67, 136);
+  --secondaryColor: rgb(243, 221, 188);
   --black: #030e12;
-  --darkRed: #b8390e;
+  --darkRed: #ce4843;
   --darkGreen: rgb(5, 108, 112);
   --green: rgb(185, 238, 231);
   --darkGray: #545454;

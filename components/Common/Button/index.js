@@ -1,27 +1,39 @@
 import React from "react";
 import classes from "./button.module.css";
+import { Spinner } from "../../Layout";
 
-export const Button = (props) => {
-  const Icon = props.icon;
+export const Button = ({
+  content,
+  icon,
+  look,
+  type,
+  isDisable,
+  clickHandler,
+  arg,
+  loading,
+}) => {
+  const Icon = icon;
+
   return (
     <button
-      type={props.type}
-      className={`${classes[`basic-button`]} ${classes[props.look]} ${
-        props.isDisable ? classes.disable : ""
+      type={type}
+      className={`${classes[`basic-button`]} ${classes[look]} ${
+        isDisable ? classes.disable : ""
       }`}
-      disabled={props?.isDisable ? props.isDisable : false}
+      disabled={isDisable ? isDisable : false}
       onClick={
-        props.arg
+        arg
           ? (e) => {
-              props.clickHandler(e, props.arg);
+              clickHandler(e, arg);
             }
-          : props.clickHandler
-          ? props.clickHandler
+          : clickHandler
+          ? clickHandler
           : undefined
       }
     >
-      {props.icon && <Icon />}
-      {props.content}
+      {icon && !loading && <Icon />}
+      {icon && loading && <Spinner />}
+      {content}
     </button>
   );
 };

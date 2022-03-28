@@ -17,7 +17,6 @@ const Avator = ({ src, alt, size, shape, border, propClass }) => {
       } ${shape === "circle" && classes[`circle`]} ${
         border ? classes[border] : ""
       } ${classes[propClass]}`}
-      title={alt}
     >
       <Image
         src={src}

@@ -29,7 +29,7 @@
 
 .image-container {
   width: 100%;
-  max-width: 80vmin;
+  max-width: 100vmin;
   aspect-ratio: 1/1;
   position: relative;
 }

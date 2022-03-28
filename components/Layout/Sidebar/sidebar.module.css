@@ -12,7 +12,7 @@
 }
 
 .list {
-  color: var(--darkRed);
+  color: white;
   padding: 5px 10px;
   transition: all 0.2s ease-in;
   border-radius: 10px;
@@ -31,13 +31,13 @@
 }
 
 .active {
-  background-color: var(--secondaryColor);
+  background-color: var(--darkRed);
   color: var(--black);
 }
 
 .list:hover {
-  background-color: var(--black);
-  color: white;
+  background-color: var(--secondaryColor);
+  color: black;
 }
 
 .pcOnly {

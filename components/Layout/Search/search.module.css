@@ -47,11 +47,6 @@
   font-weight: bold;
   height: 100%;
 }
-.img {
-  width: 20px;
-  aspect-ratio: 1/1;
-  border-radius: 50%;
-}
 
 .input {
   width: 90%;

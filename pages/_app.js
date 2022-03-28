@@ -1,6 +1,8 @@
 import Head from "next/head";
 import MainLayout from "../components/Layout/MainLayout";
 import "../public/styles.css";
+import "react-toastify/dist/ReactToastify.css";
+import "cropperjs/dist/cropper.css";
 
 function MyApp({ Component, pageProps }) {
   return (

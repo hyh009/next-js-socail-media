@@ -3,23 +3,26 @@ import { uploadPic } from "../../../utils/uploadPicToCloudinary";
 import classes from "./createdPost.module.css";
 import { ImageDragDrop, InputErrorMsg, Avator, Button } from "../../Common";
 import { TextArea, GooglePlaceAutoCompelete } from "../../Form";
+import { CropImageModal } from "../index";
 import { BackDrop } from "../../Layout";
 import { MdLocationOn } from "react-icons/md";
+import { BiCrop } from "react-icons/bi";
 import { TiLocationArrowOutline } from "react-icons/ti";
 import { createPost } from "../../../utils/postAction";
 
 const CreatedPost = ({ user, refreshRouter, setToastrType }) => {
   const [newPost, setNewPost] = useState({ text: "" });
   const [imagePreview, setImagePreview] = useState("");
+  const [showModal, setShowModal] = useState(false);
   const [location, setLocation] = useState("");
   const [showOption, setShowOption] = useState(false);
-  const [isDisable, setIsDisable] = useState(true);
+  const [isDisable, setIsDisable] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
 
   useEffect(() => {
     setIsDisable(loading || newPost.text.length === 0);
-  }, [loading, newPost.text]);
+  }, [loading, newPost]);
 
   const clickHandler = (e) => {
     e.preventDefault();
@@ -61,6 +64,13 @@ const CreatedPost = ({ user, refreshRouter, setToastrType }) => {
   return (
     <>
       {loading && <BackDrop />}
+      {showModal && (
+        <CropImageModal
+          imagePreview={imagePreview}
+          setImagePreview={setImagePreview}
+          setShowModal={setShowModal}
+        />
+      )}
       <form className={classes.container} onSubmit={handleCreatePost}>
         {errorMsg && <InputErrorMsg errorMsg={errorMsg} />}
         <div className={classes[`input-area`]}>
@@ -93,6 +103,17 @@ const CreatedPost = ({ user, refreshRouter, setToastrType }) => {
               setImagePreview={setImagePreview}
               size="small"
             />
+            {imagePreview && (
+              <Button
+                content="Crop image"
+                type="button"
+                icon={BiCrop}
+                clickHandler={(e) => {
+                  e.preventDefault();
+                  setShowModal(true);
+                }}
+              />
+            )}
           </>
         )}
         <div className={classes[`button-container`]}>

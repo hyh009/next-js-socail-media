@@ -30,12 +30,13 @@ export const loginUser = async (user, setErrorMsg, setLoading) => {
     const res = await axios.post(`${baseUrl}/auth`, { user });
     const token = res.data;
     await axios.post(`${baseUrl}/auth/setcookie`, { token });
+    setLoading(false);
     Router.push("/");
   } catch (err) {
     const errorMsg = catchErrors(err);
     setErrorMsg(errorMsg);
+    setLoading(false);
   }
-  setLoading(false);
 };
 
 // save email to set value of login page email input
