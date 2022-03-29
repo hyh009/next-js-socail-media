@@ -25,6 +25,8 @@ const LinkText = forwardRef(({ onClick, href, text, Icon }, ref) => {
   );
 });
 
+LinkText.displayName = "LinkText";
+
 const Sidebar = ({ user }) => {
   const router = useRouter();
   const isActive = (route) => router.pathname === route;
