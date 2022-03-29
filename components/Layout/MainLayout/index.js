@@ -3,7 +3,7 @@ import Navbar from "../Navbar";
 import classes from "./MainLayout.module.css";
 import nProgress from "nprogress";
 import Router from "next/router";
-import { Search, Sidebar, ScrollToTopBtn } from "../index";
+import { Search, Sidebar, Center } from "../index";
 
 const MainLayout = ({ children, user }) => {
   Router.onRouteChangeStart = () => nProgress.start();
@@ -12,9 +12,9 @@ const MainLayout = ({ children, user }) => {
 
   return (
     <Fragment>
-      <div id="backdrop-root" />
       {user ? (
         <>
+          <div id="backdrop-root" />
           <div className={classes[`islogin-Container`]}>
             <Sidebar user={user} />
             <div className={classes[`content-container`]} id="scrollableDiv">
@@ -26,7 +26,10 @@ const MainLayout = ({ children, user }) => {
       ) : (
         <>
           <Navbar />
-          <div className={classes[`notlogin-container`]}>{children}</div>
+          <div className={classes[`notlogin-container`]}>
+            <div id="backdrop-root" />
+            <Center>{children}</Center>
+          </div>
         </>
       )}
     </Fragment>

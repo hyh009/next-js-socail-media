@@ -1,5 +1,5 @@
 import classes from "./sidebar.module.css";
-import React from "react";
+import { forwardRef } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import {
@@ -11,6 +11,20 @@ import {
 import { MdNotificationsNone } from "react-icons/md";
 import { logoutUser } from "../../../utils/authUser";
 
+const LinkText = forwardRef(({ onClick, href, text, Icon }, ref) => {
+  return (
+    <a
+      className={`${classes[`link-text`]}`}
+      href={href}
+      onClick={onClick}
+      ref={ref}
+    >
+      <Icon />
+      <span className={classes.pcOnly}>{text}</span>
+    </a>
+  );
+});
+
 const Sidebar = ({ user }) => {
   const router = useRouter();
   const isActive = (route) => router.pathname === route;
@@ -21,11 +35,9 @@ const Sidebar = ({ user }) => {
           href={{
             pathname: "/",
           }}
+          passHref
         >
-          <a className={`${classes[`link-text`]}`}>
-            <RiHome4Line />
-            <span className={classes.pcOnly}>Home</span>
-          </a>
+          <LinkText Icon={RiHome4Line} text="Home" />
         </Link>
       </li>
       <li
@@ -37,11 +49,9 @@ const Sidebar = ({ user }) => {
           href={{
             pathname: "/",
           }}
+          passHref
         >
-          <a className={`${classes[`link-text`]}`}>
-            <RiMessage2Line />
-            <span className={classes.pcOnly}>Message</span>
-          </a>
+          <LinkText Icon={RiMessage2Line} text="Message" />
         </Link>
       </li>
       <li
@@ -53,11 +63,9 @@ const Sidebar = ({ user }) => {
           href={{
             pathname: "/",
           }}
+          passHref
         >
-          <a className={`${classes[`link-text`]}`}>
-            <MdNotificationsNone />
-            <span className={classes.pcOnly}>Notifications</span>
-          </a>
+          <LinkText Icon={MdNotificationsNone} text="Notifications" />
         </Link>
       </li>
       <li
@@ -69,13 +77,11 @@ const Sidebar = ({ user }) => {
       >
         <Link
           href={{
-            pathname: `/`,
+            pathname: "/",
           }}
+          passHref
         >
-          <a className={`${classes[`link-text`]}`}>
-            <RiAccountCircleLine />
-            <span className={classes.pcOnly}>Account</span>
-          </a>
+          <LinkText Icon={RiAccountCircleLine} text="Account" />
         </Link>
       </li>
       <li

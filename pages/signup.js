@@ -36,7 +36,7 @@ const Signup = () => {
   };
 
   return (
-    <Center>
+    <>
       <WelcomeMessage />
       <ImageDragDrop
         imagePreview={imagePreview}
@@ -44,7 +44,7 @@ const Signup = () => {
       />
       <SignupForm submitHandler={handleSignup} imagePreview={imagePreview} />
       <FooterMessage />
-    </Center>
+    </>
   );
 };
 export const getServerSideProps = async (context) => {

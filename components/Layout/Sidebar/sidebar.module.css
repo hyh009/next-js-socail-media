@@ -28,6 +28,7 @@
   font-weight: bold;
   color: inherit;
   cursor: pointer;
+  color: white;
 }
 
 .active {
@@ -37,11 +38,10 @@
 
 .list:hover {
   background-color: var(--secondaryColor);
-  color: black;
 }
 
-.pcOnly {
-  color: inherit;
+.list:hover .link-text {
+  color: black;
 }
 
 @media screen and (max-width: 1024px) {

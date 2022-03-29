@@ -15,11 +15,11 @@ const Login = () => {
     await loginUser(inputData, setErrorMsg, setFormLoading);
   };
   return (
-    <Center>
+    <>
       <WelcomeMessage />
       <LoginForm submitHandler={handleLogin} />
       <FooterMessage />
-    </Center>
+    </>
   );
 };
 
