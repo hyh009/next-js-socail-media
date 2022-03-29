@@ -28,10 +28,10 @@ export const registerUser = async (
 export const loginUser = async (user, setErrorMsg, setLoading) => {
   try {
     const res = await axios.post(`${baseUrl}/auth`, { user });
-    const token = res.data;
-    await axios.post(`${baseUrl}/auth/setcookie`, { token });
-    setLoading(false);
-    Router.push("/");
+    if (res.data.message === "Success!") {
+      setLoading(false);
+      Router.push("/");
+    }
   } catch (err) {
     const errorMsg = catchErrors(err);
     setErrorMsg(errorMsg);
@@ -45,4 +45,13 @@ export const logoutUser = async (email) => {
   await axios(`${baseUrl}/auth/logout`);
   Router.push("/login");
   Router.reload();
+};
+
+export const redirectUser = (ctx, location) => {
+  if (ctx.req) {
+    ctx.res.writeHead(302, { Location: location });
+    ctx.res.end();
+  } else {
+    window.location.href = location;
+  }
 };

@@ -26,6 +26,7 @@ nextApp.prepare().then(() => {
   app.use("/api/post", require("./api/post"));
 
   app.all("*", (req, res) => handle(req, res));
+
   httpServer.listen(PORT, (err) => {
     if (err) throw err;
     console.log(`Express server running on ${PORT}`);

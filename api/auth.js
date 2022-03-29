@@ -59,28 +59,23 @@ router.post("/", async (req, res) => {
       { expiresIn: "2d" },
       (err, token) => {
         if (err) throw err;
-        res.status(200).json(token);
+
+        // set cookie for auth
+        const serialized = cookie.serialize("token", token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          maxAge: 60 * 60 * 24 * 2, // 2 days
+          path: "/",
+        });
+        res.setHeader("Set-Cookie", serialized);
+        res.status(200).json({ message: "Success!" });
       }
     );
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "server error" });
   }
-});
-
-// set cookie for auth
-router.post("/setcookie", (req, res) => {
-  const { token } = req.body;
-  // save cookies
-  const serialized = cookie.serialize("token", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    maxAge: 60 * 60 * 24 * 2, // 2 days
-    path: "/",
-  });
-  res.setHeader("Set-Cookie", serialized);
-  res.status(200).json({ message: "cookie set successfully" });
 });
 
 // verify token (for protected page)
