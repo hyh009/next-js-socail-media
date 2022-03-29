@@ -5,13 +5,18 @@ const next = require("next");
 const cookieParser = require("cookie-parser");
 const connectDb = require("./utilsServer/connectDb");
 const dev = process.env.NODE_ENV !== "production";
+const cors = require("cors");
 const nextApp = next({ dev });
 const handle = nextApp.getRequestHandler();
 require("dotenv").config({ path: "./config.env" });
 const PORT = process.env.PORT || 3000;
+
 connectDb();
+
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
+app.use(cors());
 
 nextApp.prepare().then(() => {
   app.use("/api/signup", require("./pages/api/signup"));

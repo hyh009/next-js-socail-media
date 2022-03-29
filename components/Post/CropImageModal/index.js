@@ -28,10 +28,6 @@ const CropImageModal = ({ imagePreview, setImagePreview, setShowModal }) => {
     return () => window.removeEventListener("keydown", shortcut);
   }, [cropper]);
 
-  useEffect(() => {
-    console.log(imagePreview);
-  }, [imagePreview]);
-
   const getCropData = () => {
     if (cropper) {
       setLoading(true);
