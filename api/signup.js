@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const UserModel = require("../../models/UserModel");
-const ProfileModel = require("../../models/ProfileModel");
-const FollowerModel = require("../../models/FollowerModel");
+const UserModel = require("../models/UserModel");
+const ProfileModel = require("../models/ProfileModel");
+const FollowerModel = require("../models/FollowerModel");
 const bcrypt = require("bcryptjs");
 const isEmail = require("validator/lib/isEmail");
 

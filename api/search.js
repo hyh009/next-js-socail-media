@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const UserModel = require("../../models/UserModel");
-const authMiddleware = require("../../middleware/authMiddleware");
+const UserModel = require("../models/UserModel");
+const authMiddleware = require("../middleware/authMiddleware");
 
 router.get("/:searchText", authMiddleware, async (req, res) => {
   const { searchText } = req.params;

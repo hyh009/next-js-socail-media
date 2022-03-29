@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const UserModel = require("../../models/UserModel");
-const FollowerModel = require("../../models/FollowerModel");
+const UserModel = require("../models/UserModel");
+const FollowerModel = require("../models/FollowerModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const isEmail = require("validator/lib/isEmail");
-const authMiddleware = require("../../middleware/authMiddleware");
+const authMiddleware = require("../middleware/authMiddleware");
 const cookie = require("cookie");
 
 // get user & follower & following info

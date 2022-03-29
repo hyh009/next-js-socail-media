@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const PostModel = require("../../models/PostModel");
-const FollowerModel = require("../../models/FollowerModel");
-const authMiddleware = require("../../middleware/authMiddleware");
+const PostModel = require("../models/PostModel");
+const FollowerModel = require("../models/FollowerModel");
+const authMiddleware = require("../middleware/authMiddleware");
 const uuid = require("uuid").v4;
 // create a post
 router.post("/", authMiddleware, async (req, res) => {
