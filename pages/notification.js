@@ -26,6 +26,7 @@ const Notification = ({
     const notificationRead = async () => {
       try {
         await axios.post(`${baseUrl}/notification`);
+        refreshRouter();
       } catch (err) {
         console.log(err);
       }

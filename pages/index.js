@@ -59,14 +59,16 @@ const Home = ({ user, posts, postPage, setToastrType, errorLoading }) => {
         setToastrType={setToastrType}
       />
       {showNoPost && <NoPosts />}
-      <InfiniteScrollPost
-        posts={posts}
-        hasMore={hasMore}
-        fetchDataOnScroll={fetchDataOnScroll}
-        setToastrType={setToastrType}
-        refreshRouter={refreshRouter}
-        user={user}
-      />
+      {posts.length > 0 && (
+        <InfiniteScrollPost
+          posts={posts}
+          hasMore={hasMore}
+          fetchDataOnScroll={fetchDataOnScroll}
+          setToastrType={setToastrType}
+          refreshRouter={refreshRouter}
+          user={user}
+        />
+      )}
     </>
   );
 };
