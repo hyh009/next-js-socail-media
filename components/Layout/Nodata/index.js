@@ -61,3 +61,7 @@ export const NoPost = () => {
     </div>
   );
 };
+
+export const NoComment = () => {
+  return <>no comment found</>;
+};
