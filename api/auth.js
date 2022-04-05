@@ -42,15 +42,16 @@ router.post("/", async (req, res) => {
     if (!user)
       return res
         .status(401)
-        .json({ messgae: "email or password is not correct" });
+        .json({ message: "email or password is not correct" });
 
     // if user exist check if password match
     const isCorrectPassword = await bcrypt.compare(password, user.password);
     if (!isCorrectPassword) {
       return res
         .status(401)
-        .json({ messgae: "email or password is not correct" });
+        .json({ message: "email or password is not correct" });
     }
+
     // create and save jwt token
     const payload = { userId: user._id };
     jwt.sign(

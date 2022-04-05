@@ -49,8 +49,8 @@ const ImageDragDrop = ({ imagePreview, setImagePreview, size }) => {
             <Image
               src={imagePreview}
               alt="image preview"
-              width={300}
-              height={300}
+              width={200}
+              height={200}
               objectFit="contain"
             />
           ) : isDragActive ? (

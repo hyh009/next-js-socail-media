@@ -2,9 +2,9 @@ import moment from "moment";
 import Moment from "react-moment";
 import classes from "./calculateTime.module.css";
 
-const calculateTime = ({ createdat, type }) => {
-  const postDate = moment(createdat);
-  const dateTitle = moment(createdat).format("YYYY MM DD, h:mm a");
+const calculateTime = ({ date, type, postId }) => {
+  const postDate = moment(date);
+  const dateTitle = moment(date).format("YYYY MM DD, h:mm a");
   const beforeYesterday = moment().subtract(2, "day").endOf("day");
   const yesterday = moment().subtract(1, "day").endOf("day");
   const today = moment().endOf("day");
@@ -31,7 +31,7 @@ const calculateTime = ({ createdat, type }) => {
             : ""
         }
       >
-        Today <Moment format="hh:mm A">{createdat}</Moment>
+        Today <Moment format="hh:mm A">{date}</Moment>
       </div>
     );
   } else if (checkDay() === "yesterday") {
@@ -46,7 +46,7 @@ const calculateTime = ({ createdat, type }) => {
             : ""
         }
       >
-        Yesterday <Moment format="hh:mm A">{createdat}</Moment>
+        Yesterday <Moment format="hh:mm A">{date}</Moment>
       </div>
     );
   } else if (checkDay() === "before yesterday") {
@@ -61,7 +61,7 @@ const calculateTime = ({ createdat, type }) => {
             : ""
         }
       >
-        <Moment format="YYYY-MM-DD hh:mm A">{createdat}</Moment>
+        <Moment format="YYYY-MM-DD hh:mm A">{date}</Moment>
       </div>
     );
   }

@@ -12,6 +12,7 @@ const Content = ({
   post,
   user,
   refreshRouter,
+  setUpdate,
   showImage,
   setShowPostModal,
   setShowComments,
@@ -28,7 +29,7 @@ const Content = ({
 
   // toggle like post
   const handleToggleLike = async (e, mode) => {
-    await toggleLikePost(post._id, mode, refreshRouter);
+    await toggleLikePost(post._id, mode, refreshRouter, setUpdate);
   };
 
   return (
@@ -38,6 +39,7 @@ const Content = ({
         user={post.user}
         date={post.createdAt}
         location={post.location}
+        postId={post._id}
       />
       <div
         className={`${classes[`text-container`]} ${

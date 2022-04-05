@@ -1,12 +1,14 @@
 .container {
   width: 85%;
-  margin-top: 20px;
-  min-height: 200px;
+  height: 200px;
   background-color: #eee;
   user-select: none;
   cursor: pointer;
   border-radius: 5px;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .container-small {

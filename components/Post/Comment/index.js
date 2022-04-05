@@ -11,9 +11,9 @@ const Comment = ({ comment, currentUser, postUser, deleteCommentHandler }) => {
   useClickOutsideClose(popRef, setShowPop);
   // only admin, comment owner, post owner can delete comment
   const showDeleteIcon =
-    comment.user.role === "admin" ||
-    comment.user._id === currentUser ||
-    postUser === currentUser;
+    currentUser.role === "admin" ||
+    comment.user._id === currentUser._id ||
+    postUser === currentUser._id;
 
   return (
     <div className={`${classes.container}`}>

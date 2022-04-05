@@ -1,9 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const PostModel = require("../models/PostModel");
+const UserModel = require("../models/UserModel");
 const FollowerModel = require("../models/FollowerModel");
 const authMiddleware = require("../middleware/authMiddleware");
 const uuid = require("uuid").v4;
+const {
+  newLikeNotification,
+  removeLikeNotification,
+  newCommentNotification,
+  removeCommentNotification,
+} = require("../utilsServer/notificationAction");
 // create a post
 router.post("/", authMiddleware, async (req, res) => {
   const { text, location, picUrl } = req.body;
@@ -66,6 +73,95 @@ router.get("/:postId", authMiddleware, async (req, res) => {
   }
 });
 
+// get posts by users that request user is following
+router.get("/user/following", authMiddleware, async (req, res) => {
+  const { page } = req.query;
+  try {
+    const number = Number(page);
+    const size = 8;
+    const { userId } = req;
+
+    const userFollowingStats = await FollowerModel.findOne({
+      user: userId,
+    }).select("-followers");
+
+    let posts = [];
+    let totalPosts = 0;
+    if (userFollowingStats.following.length > 0) {
+      posts = await PostModel.find({
+        user: {
+          $in: [
+            userId,
+            ...userFollowingStats.following.map((item) => item.user),
+          ],
+        },
+      })
+        .limit(size * number)
+        .sort({ createdAt: -1 })
+        .populate("user")
+        .populate("comments.user");
+      // only get the posts from the user that request user is following
+      totalPosts = await PostModel.find({
+        user: {
+          $in: [
+            userId,
+            ...userFollowingStats.following.map((item) => item.user),
+          ],
+        },
+      }).countDocuments();
+    } else if (userFollowingStats.following.length === 0) {
+      posts = await PostModel.find({ user: userId })
+        .limit(size * number)
+        .sort({ createdAt: -1 })
+        .populate("user")
+        .populate("comments.user");
+
+      totalPosts = await PostModel.find({ user: userId }).countDocuments();
+    }
+
+    return res.status(200).json({
+      posts,
+      currentPage: number,
+      maxPage: Math.ceil(totalPosts / size),
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Server error" });
+  }
+});
+
+// get posts by user
+router.get("/user/:username", authMiddleware, async (req, res) => {
+  const { page } = req.query;
+  const number = Number(page);
+  const size = 8;
+  const { username } = req.params;
+  try {
+    const user = await UserModel.findOne({ username: username.toLowerCase() });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const posts = await PostModel.find({ user: user._id })
+      .limit(size * number)
+      .sort({ createdAt: -1 })
+      .populate("user")
+      .populate("comments.user");
+
+    const totalPosts = await PostModel.find({
+      user: user._id,
+    }).countDocuments();
+
+    return res.status(200).json({
+      posts,
+      currentPage: number,
+      maxPage: Math.ceil(totalPosts / size),
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Server error" });
+  }
+});
+
 // get likes in a post
 router.get("/like/:postId", authMiddleware, async (req, res) => {
   try {
@@ -84,12 +180,25 @@ router.put("/like/:postId", authMiddleware, async (req, res) => {
   try {
     const { postId } = req.params;
     const { userId } = req;
-    const post = await PostModel.findOneAndUpdate(
-      { _id: postId },
-      { $push: { likes: { user: userId } } },
-      { new: true }
-    );
+    const post = await PostModel.findOne({ _id: postId });
     if (!post) return res.status({ message: "Post not found" });
+    // check  if user liked post before
+    const likeIndex = post.likes
+      .map((item) => item.user.toString())
+      .indexOf(userId);
+
+    if (likeIndex >= 0) {
+      return res
+        .status(400)
+        .json({ message: "You have already liked this post" });
+    }
+    post.likes.push({ user: userId });
+    await post.save();
+
+    // create notification
+    if (post.user.toString() !== userId) {
+      await newLikeNotification(userId, postId, post.user.toString());
+    }
     return res.status(200).json({ message: "post liked" });
   } catch (err) {
     console.log(err);
@@ -108,6 +217,11 @@ router.put("/unlike/:postId", authMiddleware, async (req, res) => {
       { new: true }
     );
     if (!post) return res.status(404).json({ message: "Post not found" });
+
+    // remove notification
+    if (post.user.toString() !== userId) {
+      await removeLikeNotification(userId, postId, post.user.toString());
+    }
     return res.status(200).json({ message: "Unliked post successfully" });
   } catch (err) {
     console.log(err);
@@ -142,6 +256,16 @@ router.put("/comment/:postId", authMiddleware, async (req, res) => {
       { new: true }
     );
     if (!post) return res.status(404).json({ message: "post not found" });
+    // create notification
+    if (post.user.toString() !== userId) {
+      await newCommentNotification(
+        userId,
+        newComment._id,
+        postId,
+        post.user.toString(),
+        text
+      );
+    }
     return res.status(200).json({ message: "comment added" });
   } catch (err) {
     console.log(err);
@@ -196,6 +320,16 @@ router.delete("/:postId/:commentId", authMiddleware, async (req, res) => {
       { $pull: { comments: { _id: commentId } } },
       { new: true }
     );
+
+    // remove notification
+    if (post.user.toString() !== userId) {
+      removeCommentNotification(
+        userId,
+        commentId,
+        postId,
+        post.user.toString()
+      );
+    }
     return res.status(200).json({ message: "Comment deleted successfully" });
   } catch (err) {
     console.log(err);

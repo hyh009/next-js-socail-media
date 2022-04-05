@@ -2,102 +2,136 @@ import classes from "./input.module.css";
 import PlacesAutocomplete from "react-places-autocomplete";
 import { Avator } from "../../Common";
 import { v4 as uuidv4 } from "uuid";
+import { Spinner } from "../../Layout";
 
-export const Input = (props) => {
-  const Icon = props.icon;
+export const Input = ({
+  label,
+  type,
+  name,
+  value,
+  changeHandler,
+  icon,
+  placeholder,
+  require,
+  invalid,
+  setShowPassword,
+  loading,
+}) => {
+  const Icon = icon;
   return (
     <div className={classes.container}>
-      {props.label && (
+      {label && (
         <label
           className={`${classes.label} ${
-            props.require === "require" ? classes.required : ""
+            require === "require" ? classes.required : ""
           }`}
         >
-          {props.label}
+          {label}
         </label>
       )}
       <div
-        className={`${classes.inputContainer} ${
-          props.invalid && classes.invalid
-        }`}
+        className={`${classes.inputContainer} ${invalid && classes.invalid}`}
       >
-        {props.icon && (
+        {icon && !loading && (
           <Icon
-            style={{ cursor: props.name === "password" && "pointer" }}
-            className={`${classes.icon} ${
-              props.iconAnimation === "spin" && classes.spin
-            }`}
+            style={{ cursor: name === "password" && "pointer" }}
+            className={`${classes.icon}`}
             onClick={
-              props?.setShowPassword
-                ? () => props.setShowPassword((prev) => !prev)
+              setShowPassword
+                ? () => setShowPassword((prev) => !prev)
                 : undefined
             }
           />
         )}
+        {icon && loading && (
+          <div className={classes.icon}>
+            <Spinner />
+          </div>
+        )}
         <input
           className={classes.input}
-          type={props.type}
-          placeholder={props.placeholder}
-          onChange={props.changeHandler}
-          value={props.value}
-          name={props.name}
+          type={type}
+          placeholder={placeholder}
+          onChange={changeHandler}
+          value={value}
+          name={name}
         />
       </div>
     </div>
   );
 };
 
-export const InputWithAvator = (props) => {
+export const InputWithAvator = ({
+  usernmae,
+  profilePicUrl,
+  type,
+  label,
+  placeholder,
+  name,
+  value,
+  changeHandler,
+  require,
+  invalid,
+}) => {
   return (
     <div className={classes.container}>
-      {props.label && (
+      {label && (
         <label
           className={`${classes.label} ${
-            props.require === "require" ? classes.required : ""
+            require === "require" ? classes.required : ""
           }`}
         >
-          {props.label}
+          {label}
         </label>
       )}
       <div
         className={`${classes[`box-shadow-inputContainer`]} ${
-          props.invalid && classes.invalid
+          invalid && classes.invalid
         }`}
       >
-        <Avator src={props.profilePicUrl} alt={props.usernmae} size="small" />
+        <Avator src={profilePicUrl} alt={usernmae} size="small" />
         <input
           className={classes.input}
-          type={props.type}
-          placeholder={props.placeholder}
-          onChange={props.changeHandler}
-          value={props.value}
-          name={props.name}
+          type={type}
+          placeholder={placeholder}
+          onChange={changeHandler}
+          value={value}
+          name={name}
         />
       </div>
     </div>
   );
 };
 
-export const TextArea = (props) => {
+export const TextArea = ({
+  label,
+  name,
+  value,
+  placeholder,
+  changeHandler,
+  cols,
+  rows,
+  require,
+}) => {
   return (
     <div className={classes.container}>
-      {props.label && (
+      {label && (
         <label
           className={`${classes.label} ${
-            props.require === "require" ? classes.required : ""
+            require === "require" ? classes.required : ""
           }`}
         >
-          {props.label}
+          {label}
         </label>
       )}
       <textarea
         className={classes.textarea}
-        name={props.name}
-        cols={props?.cols ? props.cols : "30"}
-        rows={props?.rows ? props.rows : "5"}
-        value={props.value}
-        placeholder={props.placeholder}
-        onChange={props.changeHandler}
+        name={name}
+        cols={cols ? cols : "30"}
+        rows={rows ? rows : "5"}
+        value={value}
+        placeholder={placeholder}
+        onChange={changeHandler}
       ></textarea>
     </div>
   );

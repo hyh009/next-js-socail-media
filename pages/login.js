@@ -1,8 +1,3 @@
-import {
-  WelcomeMessage,
-  FooterMessage,
-} from "../components/Common/WelcomeMessage";
-import Center from "../components/Layout/Center";
 import { LoginForm } from "../components/Form/AuthForm";
 import { loginUser } from "../utils/authUser";
 import baseUrl from "../utils/baseUrl";
@@ -16,9 +11,7 @@ const Login = () => {
   };
   return (
     <>
-      <WelcomeMessage />
       <LoginForm submitHandler={handleLogin} />
-      <FooterMessage />
     </>
   );
 };

@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: flex-end;
   padding: 0px 50px;
-  background-color: var(--darkRed);
+  background-color: var(--secondaryColor);
   height: var(--navHeight);
 }
 
@@ -14,11 +14,17 @@
   padding: 0 10px;
   cursor: pointer;
   height: 100%;
-  color: white;
+  color: black;
   font-weight: bold;
 }
 
 .menu-active {
-  background-color: #eee;
-  color: black;
+  background-color: var(--darkRed);
+  color: white;
+}
+
+@media screen and (max-width: 480px) {
+  .menu {
+    padding: 0px;
+  }
 }

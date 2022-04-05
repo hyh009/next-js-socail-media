@@ -3,7 +3,7 @@
   font-weight: bold;
   border: none;
   border-radius: 10px;
-  padding: 7px 5px;
+  padding: 5px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   align-self: flex-start;
@@ -12,7 +12,7 @@
   justify-content: center;
   gap: 5px;
   min-width: max-content;
-  font-size: 1.125rem;
+  font-size: 1rem;
 }
 
 .blue-half-button {
@@ -58,6 +58,19 @@
   background-color: rgb(214, 80, 80);
 }
 
+.small-reverse-button {
+  padding: 2px 5px;
+  background-color: white;
+  font-size: 1rem;
+  color: var(--darkRed);
+  align-self: unset;
+  border-radius: 5px;
+}
+
+.small-reverse-button:hover{
+  background-color: #eee;
+}
+
 .cancel-button {
   background-color: red;
   color: white;
@@ -75,9 +88,21 @@
   border-radius: 5px;
   font-size: 1rem;
 }
+
 .confirm-button:hover {
   background-color: rgb(58, 172, 58);
 }
+
+.black-small-button {
+  width: 20%;
+  background-color: var(--black);
+  color: white;
+}
+
+.black-small-button:hover {
+  background-color: rgba(0,0,0,0.7);
+}
+
 .disable {
   color: white;
   background-color: gray;

@@ -1,11 +1,6 @@
 import { useState } from "react";
-import Center from "../components/Layout/Center";
-import {
-  WelcomeMessage,
-  FooterMessage,
-} from "../components/Common/WelcomeMessage";
+import { ProgressBar } from "../components/Common";
 import { SignupForm } from "../components/Form/AuthForm";
-import { ImageDragDrop } from "../components/Common";
 import { registerUser } from "../utils/authUser";
 import { uploadPic } from "../utils/uploadPicToCloudinary";
 import baseUrl from "../utils/baseUrl";
@@ -13,6 +8,8 @@ import axios from "axios";
 
 const Signup = () => {
   const [imagePreview, setImagePreview] = useState("");
+  const [currentStep, setCurrentStep] = useState(0);
+  const stepText = ["ACCOUNT SETUP", "PERSONAL DETAILS", "SOCIAL PROFILE"];
   const handleSignup = async (
     e,
     inputData,
@@ -37,13 +34,14 @@ const Signup = () => {
 
   return (
     <>
-      <WelcomeMessage />
-      <ImageDragDrop
+      <ProgressBar currentStep={currentStep} stepText={stepText} />
+      <SignupForm
+        submitHandler={handleSignup}
         imagePreview={imagePreview}
         setImagePreview={setImagePreview}
+        currentStep={currentStep}
+        setCurrentStep={setCurrentStep}
       />
-      <SignupForm submitHandler={handleSignup} imagePreview={imagePreview} />
-      <FooterMessage />
     </>
   );
 };

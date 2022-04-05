@@ -28,7 +28,9 @@ const MainLayout = ({ children, user }) => {
           <Navbar />
           <div className={classes[`notlogin-container`]}>
             <div id="backdrop-root" />
-            <Center>{children}</Center>
+            <div className={classes.center}>
+              <div className={classes[`center-wrapper`]}>{children}</div>
+            </div>
           </div>
         </>
       )}

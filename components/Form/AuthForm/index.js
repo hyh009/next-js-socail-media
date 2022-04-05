@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { Input, TextArea } from "../Input";
-import { Button } from "../../Common/Button";
-import { InputErrorMsg } from "../../Common/ErrorMsg";
-import BackDrop from "../../Layout/BackDrop";
+import { Button, ImageDragDrop, InputErrorMsg } from "../../Common";
+import { BackDrop } from "../../Layout";
 import classes from "./authForm.module.css";
 import {
   BsFillPersonFill,
@@ -15,8 +14,6 @@ import {
   BsPencilSquare,
 } from "react-icons/bs";
 import { MdEmail, MdDoNotDisturbOn } from "react-icons/md";
-import { GrValidate } from "react-icons/gr";
-import { CgSpinnerTwoAlt } from "react-icons/cg";
 import { SiStoryblok } from "react-icons/si";
 import { RiAccountPinBoxFill } from "react-icons/ri";
 import { GoSignIn } from "react-icons/go";
@@ -24,7 +21,13 @@ import axios from "axios";
 import baseUrl from "../../../utils/baseUrl";
 import Cookies from "js-cookie";
 
-export const SignupForm = ({ submitHandler, imagePreview }) => {
+export const SignupForm = ({
+  submitHandler,
+  imagePreview,
+  setImagePreview,
+  currentStep,
+  setCurrentStep,
+}) => {
   const [inputs, setInputs] = useState({
     name: "",
     email: "",
@@ -36,7 +39,6 @@ export const SignupForm = ({ submitHandler, imagePreview }) => {
     instagram: "",
   });
   const [username, setUsername] = useState("");
-  const [showSocialLinks, setSocialLinks] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
   const [usernameLoading, setUsernameLoading] = useState(false);
@@ -44,6 +46,7 @@ export const SignupForm = ({ submitHandler, imagePreview }) => {
   const [submitDisable, setSubmitDisable] = useState(true);
   const [formLoading, setFormLoading] = useState(false);
   const [isDisable, setIsDisable] = useState(false);
+
   const { name, email, password, bio } = inputs;
 
   //check if every required field is filled
@@ -117,10 +120,13 @@ export const SignupForm = ({ submitHandler, imagePreview }) => {
     setUsername(e.target.value);
   };
 
-  // click and show socialLink input
-  const handleSocialLink = (e) => {
-    e.preventDefault();
-    setSocialLinks((prev) => !prev);
+  // handle change step
+  const handleChangeStep = (e, mode) => {
+    if (mode === "next") {
+      setCurrentStep((prev) => prev + 1);
+    } else if (mode === "previous") {
+      setCurrentStep((prev) => prev - 1);
+    }
   };
 
   return (
@@ -132,124 +138,166 @@ export const SignupForm = ({ submitHandler, imagePreview }) => {
           submitHandler(e, inputs, imagePreview, setErrorMsg, setFormLoading)
         }
       >
-        {errorMsg && <InputErrorMsg errorMsg={errorMsg} />}
-        <Input
-          type="text"
-          name="name"
-          placeholder="please enter your name"
-          label="Name"
-          value={name}
-          require="require"
-          icon={BsFillPersonFill}
-          changeHandler={changeHandler}
-        />
-        <Input
-          type="text"
-          name="email"
-          placeholder="please enter your eamil"
-          label="Email"
-          value={email}
-          require="require"
-          icon={MdEmail}
-          changeHandler={changeHandler}
-        />
-        <Input
-          type={showPassword ? "text" : "password"}
-          name="password"
-          placeholder="please enter your password"
-          label="Password"
-          value={password}
-          require="require"
-          icon={showPassword ? BsFillEyeFill : BsFillEyeSlashFill}
-          setShowPassword={setShowPassword}
-          changeHandler={changeHandler}
-        />
-        <Input
-          type="username"
-          name="username"
-          placeholder="please enter your username"
-          label="Username"
-          value={username}
-          require="require"
-          invalid={
-            usernameAvailable === false &&
-            username !== "" &&
-            usernameLoading === false
-          }
-          icon={
-            username === ""
-              ? RiAccountPinBoxFill
-              : usernameLoading
-              ? CgSpinnerTwoAlt
-              : !usernameAvailable
-              ? MdDoNotDisturbOn
-              : GrValidate
-          }
-          iconAnimation={usernameLoading && "spin"}
-          changeHandler={handleUsername}
-        />
-        <TextArea
-          type="bio"
-          name="bio"
-          placeholder="please enter your bio"
-          label="Bio"
-          value={bio}
-          require="require"
-          icon={SiStoryblok}
-          changeHandler={changeHandler}
-        />
-        <Button
-          content={showSocialLinks ? "Hide social link" : "Add social link"}
-          look="black-half-button"
-          clickHandler={handleSocialLink}
-        />
-        {showSocialLinks && (
-          <>
-            <Input
-              type="text"
-              name="facebook"
-              placeholder="please enter your facebook account"
-              label="Facebook"
-              value={inputs.facebook}
-              icon={BsFacebook}
-              changeHandler={changeHandler}
+        <div
+          className={`${classes[`step-container`]} ${
+            currentStep !== 0 && classes[`fade`]
+          }`}
+        >
+          {errorMsg && <InputErrorMsg errorMsg={errorMsg} />}
+          <Input
+            type="text"
+            name="name"
+            placeholder="please enter your name"
+            label="Name"
+            value={name}
+            require="require"
+            icon={BsFillPersonFill}
+            changeHandler={changeHandler}
+          />
+          <Input
+            type="text"
+            name="email"
+            placeholder="please enter your eamil"
+            label="Email"
+            value={email}
+            require="require"
+            icon={MdEmail}
+            changeHandler={changeHandler}
+          />
+          <Input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            placeholder="please enter your password"
+            label="Password"
+            value={password}
+            require="require"
+            icon={showPassword ? BsFillEyeFill : BsFillEyeSlashFill}
+            setShowPassword={setShowPassword}
+            changeHandler={changeHandler}
+          />
+          <Input
+            type="username"
+            name="username"
+            placeholder="please enter your username"
+            label="Username"
+            value={username}
+            require="require"
+            invalid={
+              usernameAvailable === false &&
+              username !== "" &&
+              usernameLoading === false
+            }
+            icon={
+              usernameAvailable || username === ""
+                ? RiAccountPinBoxFill
+                : MdDoNotDisturbOn
+            }
+            loading={usernameLoading}
+            changeHandler={handleUsername}
+          />
+          <div className={classes[`button-container-right`]}>
+            <Button
+              type="button"
+              content="next"
+              clickHandler={(e) => handleChangeStep(e, "next")}
+              look="black-small-button"
             />
-            <Input
-              type="text"
-              name="twitter"
-              placeholder="please enter your twitter account"
-              label="Twitter"
-              value={inputs.twitter}
-              icon={BsTwitter}
-              changeHandler={changeHandler}
+          </div>
+        </div>
+        <div
+          className={`${classes[`step-container`]} ${
+            currentStep !== 1 && classes[`fade`]
+          }`}
+        >
+          {errorMsg && <InputErrorMsg errorMsg={errorMsg} />}
+          <ImageDragDrop
+            setImagePreview={setImagePreview}
+            imagePreview={imagePreview}
+          />
+          <TextArea
+            type="bio"
+            name="bio"
+            placeholder="please enter your bio"
+            label="Bio"
+            value={bio}
+            require="require"
+            rows="2"
+            icon={SiStoryblok}
+            changeHandler={changeHandler}
+          />
+          <div className={classes[`button-container`]}>
+            <Button
+              type="button"
+              content="previous"
+              clickHandler={(e) => handleChangeStep(e, "previous")}
+              look="black-small-button"
             />
-            <Input
-              type="text"
-              name="instagram"
-              placeholder="please enter your instagram account"
-              label="Instagram"
-              value={inputs.instagram}
-              icon={BsInstagram}
-              changeHandler={changeHandler}
+            <Button
+              type="button"
+              content="next"
+              clickHandler={(e) => handleChangeStep(e, "next")}
+              look="black-small-button"
             />
-            <Input
-              type="text"
-              name="youtube"
-              placeholder="please enter your youtube account"
-              label="Youtube"
-              value={inputs.youtube}
-              icon={BsYoutube}
-              changeHandler={changeHandler}
+          </div>
+        </div>
+        <div
+          className={`${classes[`step-container`]} ${
+            currentStep !== 2 && classes[`fade`]
+          }`}
+        >
+          {errorMsg && <InputErrorMsg errorMsg={errorMsg} />}
+          <Input
+            type="text"
+            name="facebook"
+            placeholder="please enter your facebook account"
+            label="Facebook"
+            value={inputs.facebook}
+            icon={BsFacebook}
+            changeHandler={changeHandler}
+          />
+          <Input
+            type="text"
+            name="twitter"
+            placeholder="please enter your twitter account"
+            label="Twitter"
+            value={inputs.twitter}
+            icon={BsTwitter}
+            changeHandler={changeHandler}
+          />
+          <Input
+            type="text"
+            name="instagram"
+            placeholder="please enter your instagram account"
+            label="Instagram"
+            value={inputs.instagram}
+            icon={BsInstagram}
+            changeHandler={changeHandler}
+          />
+          <Input
+            type="text"
+            name="youtube"
+            placeholder="please enter your youtube account"
+            label="Youtube"
+            value={inputs.youtube}
+            icon={BsYoutube}
+            changeHandler={changeHandler}
+          />
+          <div className={classes[`button-container`]}>
+            <Button
+              type="button"
+              content="previous"
+              clickHandler={(e) => handleChangeStep(e, "previous")}
+              look="black-small-button"
             />
-          </>
-        )}
-        <Button
-          type="submit"
-          content="Signup"
-          look="signup-button"
-          icon={BsPencilSquare}
-          isDisable={isDisable}
-        />
+            <Button
+              type="submit"
+              content="Signup"
+              look="signup-button"
+              icon={BsPencilSquare}
+              isDisable={isDisable}
+            />
+          </div>
+        </div>
       </form>
     </>
   );
@@ -292,7 +340,7 @@ export const LoginForm = ({ submitHandler }) => {
     <>
       {formLoading && <BackDrop />}
       <form
-        className={classes.form}
+        className={classes[`login-form`]}
         onSubmit={(e) => submitHandler(e, inputs, setErrorMsg, setFormLoading)}
       >
         {errorMsg && <InputErrorMsg errorMsg={errorMsg} />}

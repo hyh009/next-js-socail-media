@@ -1,0 +1,72 @@
+.container {
+  display: flex;
+  padding: 20px 0;
+  justify-content: center;
+}
+
+.step {
+  width: calc(100% / 3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  position: relative;
+}
+
+.text {
+  color: white;
+  font-size: 1.125rem;
+  width: max-content;
+  font-weight: bold;
+  text-align: center;
+}
+
+.box {
+  width: 30px;
+  height: 30px;
+  background-color: white;
+  color: var(--darkRed);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  position: relative;
+  z-index: 1;
+}
+
+.line {
+  position: absolute;
+  top: 15px;
+  transform: translateY(-50%) translateX(15px);
+  left: 50%;
+  height: 5px;
+  width: calc(100% - 30px);
+  background-color: white;
+  z-index: 0;
+}
+
+.line-filled {
+  background-color: var(--darkRed);
+}
+.box-active {
+  background-color: var(--darkRed);
+  color: white;
+  z-index: 1;
+}
+
+.hide {
+  display: none;
+}
+
+@media screen and (max-width: 770px) {
+  .text {
+    font-size: 0.9rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .text {
+    font-size: 3.5vmin;
+  }
+}

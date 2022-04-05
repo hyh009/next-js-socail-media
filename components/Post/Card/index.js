@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import classes from "./card.module.css";
-import { Content, CommentArea, PostModal, CommentModal } from "../index";
+import { Content, CommentArea, PostModal } from "../index";
 import { Popup } from "../../Common";
 import { BackDrop } from "../../Layout";
 import { AiOutlineClose } from "react-icons/ai";
@@ -8,7 +8,7 @@ import { MdKeyboardReturn } from "react-icons/md";
 import useClickOutsideClose from "../../../utils/hooks/useClickOutsideClose";
 import { deletePost } from "../../../utils/postAction";
 
-const Card = ({ post, user, setToastrType, refreshRouter }) => {
+const Card = ({ post, user, setToastrType, refreshRouter, setUpdate }) => {
   const [loading, setLoading] = useState(false);
   const [showPop, setShowPop] = useState(false);
   const [showPostModal, setShowPostModal] = useState(false);
@@ -24,32 +24,40 @@ const Card = ({ post, user, setToastrType, refreshRouter }) => {
   const handleDeletePost = async (e) => {
     e.preventDefault();
     setLoading(true);
-    await deletePost(post._id, setToastrType, refreshRouter);
+    await deletePost(post._id, setToastrType, refreshRouter, setUpdate);
     setLoading(false);
   };
 
   return (
     <>
       {(loading || showPostModal || showComments) && <BackDrop />}
-      {showPostModal && (
-        <PostModal
-          post={post}
-          user={user}
-          refreshRouter={refreshRouter}
-          setShowPostModal={setShowPostModal}
-          setShowComments={setShowComments}
-        />
-      )}
-      {showComments && (
-        <CommentArea
-          propClass="comment-modal"
-          post={post}
-          user={user}
-          showComments={showComments}
-          refreshRouter={refreshRouter}
-          popRef={commentpopRef}
-        />
-      )}
+      {
+        // post model
+        showPostModal && (
+          <PostModal
+            post={post}
+            user={user}
+            refreshRouter={refreshRouter}
+            setUpdate={setUpdate}
+            setShowPostModal={setShowPostModal}
+            setShowComments={setShowComments}
+          />
+        )
+      }
+      {
+        // comment modal
+        showComments && (
+          <CommentArea
+            propClass="comment-modal"
+            post={post}
+            user={user}
+            showComments={showComments}
+            refreshRouter={refreshRouter}
+            setUpdate={setUpdate}
+            popRef={commentpopRef}
+          />
+        )
+      }
       <div className={classes.container}>
         {
           // change icon & show delete button popup
@@ -77,6 +85,7 @@ const Card = ({ post, user, setToastrType, refreshRouter }) => {
           post={post}
           user={user}
           refreshRouter={refreshRouter}
+          setUpdate={setUpdate}
           setLoading={setLoading}
           showImage={true}
           setShowPostModal={setShowPostModal}
@@ -86,6 +95,7 @@ const Card = ({ post, user, setToastrType, refreshRouter }) => {
           post={post}
           user={user}
           refreshRouter={refreshRouter}
+          setUpdate={setUpdate}
           number={showComments ? undefined : 3}
           setShowComments={setShowComments}
         />

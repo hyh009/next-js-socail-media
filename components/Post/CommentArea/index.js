@@ -10,7 +10,8 @@ import { createComment, deleteComment } from "../../../utils/postAction";
 const CommentArea = ({
   post,
   user,
-  refreshRouter,
+  refreshRouter, // get updated data from getserversideprops
+  setUpdate, // get updated data from client side
   number, // show how many comments
   restrictHeight,
   showComments, // to set no data placeholder for modal only
@@ -34,7 +35,8 @@ const CommentArea = ({
       post._id,
       newComment.trim(),
       setNewComment,
-      refreshRouter
+      refreshRouter,
+      setUpdate
     );
     setLoading(false);
   };
@@ -42,9 +44,10 @@ const CommentArea = ({
   const deleteCommentHandler = async (e, commentId) => {
     e.preventDefault();
     setLoading(true);
-    await deleteComment(post._id, commentId, refreshRouter);
+    await deleteComment(post._id, commentId, refreshRouter, setUpdate);
     setLoading(false);
   };
+
   return (
     <div
       ref={popRef}
@@ -68,7 +71,7 @@ const CommentArea = ({
                 <Comment
                   key={comment._id}
                   comment={comment}
-                  currentUser={user._id}
+                  currentUser={{ _id: user._id, role: user.role }}
                   postUser={post.user._id}
                   deleteCommentHandler={deleteCommentHandler}
                 />

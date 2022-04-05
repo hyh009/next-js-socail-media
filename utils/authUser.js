@@ -29,6 +29,7 @@ export const loginUser = async (user, setErrorMsg, setLoading) => {
   try {
     const res = await axios.post(`${baseUrl}/auth`, { user });
     if (res.data.message === "Success!") {
+      setErrorMsg("");
       setLoading(false);
       Router.push("/");
     }

@@ -8,10 +8,10 @@ import {
   RiMessage2Line,
   RiHome4Line,
 } from "react-icons/ri";
-import { MdNotificationsNone } from "react-icons/md";
+import { MdNotificationsNone, MdNotificationsActive } from "react-icons/md";
 import { logoutUser } from "../../../utils/authUser";
 
-const LinkText = forwardRef(({ onClick, href, text, Icon }, ref) => {
+const LinkText = forwardRef(({ onClick, href, text, Icon, unread }, ref) => {
   return (
     <a
       className={`${classes[`link-text`]}`}
@@ -19,7 +19,7 @@ const LinkText = forwardRef(({ onClick, href, text, Icon }, ref) => {
       onClick={onClick}
       ref={ref}
     >
-      <Icon />
+      <Icon style={{ color: unread ? "yellow" : "inherit" }} />
       <span className={classes.pcOnly}>{text}</span>
     </a>
   );
@@ -30,6 +30,7 @@ LinkText.displayName = "LinkText";
 const Sidebar = ({ user }) => {
   const router = useRouter();
   const isActive = (route) => router.pathname === route;
+
   return (
     <ul className={classes.container}>
       <li className={`${classes.list} ${isActive("/") ? classes.active : ""}`}>
@@ -63,23 +64,29 @@ const Sidebar = ({ user }) => {
       >
         <Link
           href={{
-            pathname: "/",
+            pathname: "/notification",
           }}
           passHref
         >
-          <LinkText Icon={MdNotificationsNone} text="Notifications" />
+          <LinkText
+            Icon={
+              user.unreadNotification
+                ? MdNotificationsActive
+                : MdNotificationsNone
+            }
+            text="Notifications"
+            unread={user.unreadNotification}
+          />
         </Link>
       </li>
       <li
         className={`${classes.list} ${
-          isActive(`/${encodeURIComponent(user.username)}`)
-            ? classes.active
-            : ""
+          isActive(`/[username]`) ? classes.active : ""
         }`}
       >
         <Link
           href={{
-            pathname: "/",
+            pathname: `/${encodeURIComponent(user.username)}`,
           }}
           passHref
         >

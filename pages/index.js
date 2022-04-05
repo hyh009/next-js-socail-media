@@ -3,46 +3,19 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import baseUrl from "../utils/baseUrl";
 import Head from "next/head";
-import { Card, CreatedPost } from "../components/Post";
-import {
-  Nodata,
-  EndMessage,
-  PostToastr,
-  DivSpinner,
-} from "../components/Layout";
-import { toast } from "react-toastify";
-import InfiniteScroll from "react-infinite-scroll-component";
-import classes from "../components/Layout/MainLayout/MainLayout.module.css";
+import UtilContext from "../utils/context/UtilContext";
+import { InfiniteScrollPost, CreatedPost } from "../components/Post";
+import { NoPosts, PostToastr } from "../components/Layout";
 
-const Home = (props) => {
+const Home = ({ user, posts, postPage, setToastrType, errorLoading }) => {
   const [showNoPost, setShowNoPost] = useState(false);
-  const [toastrType, setToastrType] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const { errorLoading } = props;
   const router = useRouter();
   // to get data after create / delete / update data
   const refreshRouter = useCallback(
     () => router.replace(router.asPath),
     [router]
   );
-  // handle toast
-  useEffect(() => {
-    let timer;
-    // delete post
-    if (toastrType === "delete") {
-      toast.info("Post Deleted Successfully", {
-        toastId: "delete",
-      });
-      timer = setTimeout(() => setToastrType(""), 1500);
-      // create post
-    } else if (toastrType === "create") {
-      toast.info("Post Created Successfully", {
-        toastId: "create",
-      });
-      timer = setTimeout(() => setToastrType(""), 1500);
-    }
-    return () => clearTimeout(timer);
-  }, [toastrType]);
 
   // handle data fetching error
   useEffect(() => {
@@ -52,22 +25,22 @@ const Home = (props) => {
   }, [errorLoading]);
 
   useEffect(() => {
-    if (props.postPage.currentPage === props.postPage.maxPage) {
+    if (postPage.currentPage === postPage.maxPage) {
       setHasMore(false);
     }
 
-    if (props.posts.length === 0) {
+    if (posts.length === 0) {
       setShowNoPost(true);
     }
-  }, [props]);
+  }, [posts, postPage]);
 
   // handle infinite scroll
   const fetchDataOnScroll = () => {
     const query = router.query;
-    if (props.postPage.maxPage > props.postPage.currentPage) {
-      query.page = props.postPage.currentPage + 1;
+    if (postPage.maxPage > postPage.currentPage) {
+      query.page = postPage.currentPage + 1;
     } else {
-      query.page = props.postPage.currentPage;
+      query.page = postPage.currentPage;
     }
     router.replace({
       pathname: router.pathname,
@@ -81,30 +54,19 @@ const Home = (props) => {
       </Head>
       <PostToastr />
       <CreatedPost
-        user={props.user}
+        user={user}
         refreshRouter={refreshRouter}
         setToastrType={setToastrType}
       />
-      {showNoPost && <Nodata />}
-      <InfiniteScroll
-        className={classes[`content-wrapper`]}
+      {showNoPost && <NoPosts />}
+      <InfiniteScrollPost
+        posts={posts}
         hasMore={hasMore}
-        next={fetchDataOnScroll}
-        dataLength={props.posts.length}
-        loader={<DivSpinner />}
-        endMessage={<EndMessage />}
-        scrollableTarget="scrollableDiv"
-      >
-        {props.posts.map((post) => (
-          <Card
-            key={post._id}
-            post={post}
-            user={props.user}
-            setToastrType={setToastrType}
-            refreshRouter={refreshRouter}
-          />
-        ))}
-      </InfiniteScroll>
+        fetchDataOnScroll={fetchDataOnScroll}
+        setToastrType={setToastrType}
+        refreshRouter={refreshRouter}
+        user={user}
+      />
     </>
   );
 };
@@ -118,13 +80,11 @@ export const getServerSideProps = async (context) => {
 
     const [userRes, postsRes] = await Promise.all([
       axios(`${baseUrl}/auth`, {
-        withCredentials: true,
         headers: {
           Cookie: context.req.headers.cookie,
         },
       }),
-      axios(`${baseUrl}/post`, {
-        withCredentials: true,
+      axios(`${baseUrl}/post/user/following`, {
         headers: {
           Cookie: context.req.headers.cookie,
         },

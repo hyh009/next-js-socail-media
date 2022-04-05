@@ -25,8 +25,13 @@
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  width: 100%;
+  width: fit-content;
   max-width: 100%;
+}
+
+.user-link {
+  text-decoration: none;
+  width: fit-content;
 }
 
 .location {

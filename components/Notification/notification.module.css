@@ -1,0 +1,49 @@
+.container {
+    width: 100%;
+    display: flex;
+    gap:10px;
+    padding: 5px 10px;
+}
+
+.container:hover{
+    background-color: #eee;
+}
+
+.followr-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 10px;
+}
+.followr-container:hover{
+    background-color: #eee;
+}
+.user-info{
+    display: flex;
+    width: max-content;
+    align-items: center;
+    gap:10px;
+}
+
+.left-side {
+    width: 90%;
+    max-width: calc(100% -70px);
+}
+
+.link-text{
+    color:navy;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.text {
+    font-weight: bold;
+}
+
+.post-image-container {
+    width: 80px;
+    aspect-ratio: 1/1;
+    border-radius: 5px;
+    overflow: hidden;
+}

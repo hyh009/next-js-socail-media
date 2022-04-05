@@ -14,7 +14,7 @@ const UserLink = forwardRef(({ onClick, href, data }, ref) => {
       href={href}
       onClick={onClick}
       ref={ref}
-      className={`${classes[`search-result-container`]}`}
+      className={classes[`search-result-single-container`]}
     >
       <div className={classes[`search-result`]}>
         <MdSearch
@@ -100,23 +100,27 @@ const Search = () => {
             !loading && results.length === 0 && classes[`no-user`]
           }`}
         >
-          {loading ? (
-            <Spinner className={classes[`icon`]} />
-          ) : (
-            <MdPersonSearch className={`${classes.icon}`} />
+          <div className={classes[`input-label`]}>
+            {loading ? (
+              <Spinner className={classes[`icon`]} />
+            ) : (
+              <MdPersonSearch className={`${classes.icon}`} />
+            )}
+            <input
+              className={`${classes.input}`}
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+            />
+          </div>
+          {results.length > 0 && text.length > 0 && (
+            <div className={`${classes[`search-results-container`]}`}>
+              {results.map((data, index) => (
+                <Link href={`/${data.username}`} passHref key={index}>
+                  <UserLink data={data} />
+                </Link>
+              ))}
+            </div>
           )}
-          <input
-            className={`${classes.input}`}
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-          />
-          {results.length > 0 &&
-            text.length > 0 &&
-            results.map((data, index) => (
-              <Link href={`/${data.username}`} passHref key={index}>
-                <UserLink data={data} />
-              </Link>
-            ))}
         </div>
         <span className={classes[`no-result`]}></span>
       </div>

@@ -109,7 +109,6 @@ const CreatedPost = ({ user, refreshRouter, setToastrType }) => {
                 type="button"
                 icon={BiCrop}
                 clickHandler={(e) => {
-                  e.preventDefault();
                   setShowModal(true);
                 }}
               />

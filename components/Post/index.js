@@ -6,3 +6,4 @@ export { default as Comment } from "./Comment";
 export { default as CommentArea } from "./CommentArea";
 export { default as PostModal } from "./PostModal";
 export { default as CropImageModal } from "./CropImageModal";
+export { default as InfiniteScrollPost } from "./InfiniteScrollPost";

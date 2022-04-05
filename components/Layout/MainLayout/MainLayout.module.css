@@ -32,6 +32,21 @@
   overflow-x: hidden;
 }
 
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-height: calc(100vh - var(--navHeight));
+  width: 100%;
+  position: relative;
+  background-color: var(--primaryColor);
+  gap: 20px;
+}
+
+.center-wrapper {
+  width: var(--loginWidth);
+}
 @media screen and (max-width: 1024px) {
   .islogin-Container {
     grid-template-columns: 60px 1fr 200px;
@@ -52,9 +67,7 @@
   .islogin-Container {
     grid-template-columns: 60px 1fr;
   }
-  .content-container {
-    padding: 0 10px;
-  }
+
   .pcOnly {
     display: none;
   }
@@ -74,6 +87,11 @@
 
   .content-wrapper {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .center {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
   }
   .pcOnly {
     display: none;

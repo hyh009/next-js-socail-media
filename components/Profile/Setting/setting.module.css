@@ -1,0 +1,42 @@
+.container {
+    width: 100%;
+}
+
+.update-container {
+    display: flex;
+    flex-direction: column;
+    padding:10px;
+}
+
+
+.password-input-container{
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+    padding: 10px 20px;
+}
+.title {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    gap:5px;
+
+}
+.title:hover {
+    color:var(--darkGray);
+    animation: bounce 0.5s ease-in-out forwards;
+}
+
+.button-container{
+    display: flex;
+    gap:20px
+}
+
+@keyframes bounce {
+    50%{
+        transform:translateX(2%);
+    }
+    100%{
+        transform: translateX(0%);
+    }
+}
