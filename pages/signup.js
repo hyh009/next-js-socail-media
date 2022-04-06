@@ -3,10 +3,10 @@ import { ProgressBar } from "../components/Common";
 import { SignupForm } from "../components/Form/AuthForm";
 import { registerUser } from "../utils/authUser";
 import { uploadPic } from "../utils/uploadPicToCloudinary";
-import baseUrl from "../utils/baseUrl";
-import axios from "axios";
+import useCheckLogin from "../utils/hooks/useCheckLogin";
 
 const Signup = () => {
+  useCheckLogin(); //check if user islogin
   const [imagePreview, setImagePreview] = useState("");
   const [currentStep, setCurrentStep] = useState(0);
   const stepText = ["ACCOUNT SETUP", "PERSONAL DETAILS", "SOCIAL PROFILE"];
@@ -45,28 +45,5 @@ const Signup = () => {
     </>
   );
 };
-export const getServerSideProps = async (context) => {
-  try {
-    // if token exist and is valid, redirect to home page
-    if (context.req.headers.cookie) {
-      const res = await axios(`${baseUrl}/auth/verifyuser`, {
-        withCredentials: true,
-        headers: {
-          Cookie: context.req.headers.cookie,
-        },
-      });
-      if (res.data.message === "valid user") {
-        return {
-          redirect: {
-            destination: "/",
-            permanent: false,
-          },
-        };
-      }
-    }
-    return { props: {} };
-  } catch (error) {
-    return { props: { errorLoading: true } };
-  }
-};
+
 export default Signup;

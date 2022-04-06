@@ -1,3 +1,4 @@
+export { default as Profile } from "./Profile";
 export { default as SmallNavbar } from "./SmallNavbar";
 export { default as Snippet } from "./Snippet";
 export { default as Followers } from "./Followers";

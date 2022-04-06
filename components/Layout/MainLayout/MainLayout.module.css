@@ -47,6 +47,14 @@
 .center-wrapper {
   width: var(--loginWidth);
 }
+
+.error-wrapper {
+  display: flex;
+  height: calc(100vh - var(--navHeight));
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
 @media screen and (max-width: 1024px) {
   .islogin-Container {
     grid-template-columns: 60px 1fr 200px;

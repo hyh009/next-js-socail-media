@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/router";
+import { requireAuthentication } from "../components/HOC/redirectDependonAuth";
 import axios from "axios";
 import baseUrl from "../utils/baseUrl";
 import Head from "next/head";
@@ -73,51 +74,33 @@ const Home = ({ user, posts, postPage, setToastrType, errorLoading }) => {
   );
 };
 
-export const getServerSideProps = async (context) => {
-  const page = context.query.page || 1;
-  try {
-    if (!context.req.headers.cookie) {
-      throw Error("Unauthorized");
-    }
-
-    const [userRes, postsRes] = await Promise.all([
-      axios(`${baseUrl}/auth`, {
-        headers: {
-          Cookie: context.req.headers.cookie,
-        },
-      }),
-      axios(`${baseUrl}/post/user/following`, {
+export const getServerSideProps = requireAuthentication(
+  async (context, userRes) => {
+    const page = context.query.page || 1;
+    try {
+      const postsRes = await axios(`${baseUrl}/post/user/following`, {
         headers: {
           Cookie: context.req.headers.cookie,
         },
         params: {
           page,
         },
-      }),
-    ]);
+      });
 
-    return {
-      props: {
-        user: userRes.data.user,
-        userFollowStats: userRes.data.userFollowStats,
-        posts: postsRes.data.posts,
-        postPage: {
-          currentPage: postsRes.data.currentPage,
-          maxPage: postsRes.data.maxPage,
-        },
-      },
-    };
-  } catch (error) {
-    // if token not verify, redirect to login page
-    if (error.response?.status === 401 || error.message === "Unauthorized") {
       return {
-        redirect: {
-          destination: "/login",
-          permanent: false,
+        props: {
+          user: userRes.data.user,
+          userFollowStats: userRes.data.userFollowStats,
+          posts: postsRes.data.posts,
+          postPage: {
+            currentPage: postsRes.data.currentPage,
+            maxPage: postsRes.data.maxPage,
+          },
         },
       };
+    } catch (error) {
+      return { props: { errorLoading: true } };
     }
-    return { props: { errorLoading: true } };
   }
-};
+);
 export default Home;

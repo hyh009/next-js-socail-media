@@ -6,10 +6,11 @@
     width: 100%;
     display: flex;
     align-items: center;
-    height: 100vh;
-    gap:20px;
-    max-width: 450px;
+    height: calc(100vh - var(--navHeight));
+    gap:50px;
+    max-width: 500px;
 }
+
 
 .image-container {
     flex:1;
@@ -18,10 +19,31 @@
     border-radius: 20%;
     overflow: hidden;
 }
+.info-container {
+  display: flex;
+  flex-direction: column;
+  gap:10px;
+  align-items: center;
+}
+.link-text {
+  text-decoration: none;
+  color:black;
+  font-size: 1.25rem;
+  font-weight: bold;
+  width: fit-content;
+  background-color: #eee;
+  padding: 5px;
+  border-radius: 5px;
+  transition: 0.3s;
+}
 
+.link-text:hover{
+  background-color:black;
+  color: white;
+}
 .text{
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     text-align: center;
 }
 

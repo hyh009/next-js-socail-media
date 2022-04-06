@@ -12,7 +12,7 @@ import { GrMail } from "react-icons/gr";
 import { RiUserUnfollowLine, RiUserFollowLine } from "react-icons/ri";
 import { followUser, unfollowUser } from "../../../utils/profileAction";
 
-const Snippet = ({ user, profile, isFollowing, isFollower, refreshRouter }) => {
+const Snippet = ({ user, profile, isFollowing, refreshRouter }) => {
   const [showAllBio, setShowAllBio] = useState(false);
   const ownAccount = profile.user._id === user._id;
 

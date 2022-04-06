@@ -1,10 +1,20 @@
-.menu {
+.container {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   padding: 0px 50px;
   background-color: var(--secondaryColor);
   height: var(--navHeight);
+}
+.title{
+  font-weight: bold;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+.menu {
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
 
 .menu-item {
@@ -17,14 +27,25 @@
   color: black;
   font-weight: bold;
 }
-
+.menu-item:hover{
+  background-color: #eee;
+}
 .menu-active {
   background-color: var(--darkRed);
   color: white;
 }
 
 @media screen and (max-width: 480px) {
-  .menu {
-    padding: 0px;
+  .container {
+    padding: 10px;
+  }
+
+  .title {
+    font-size: 6vmin;
+  }
+
+  .menu-item {
+    font-size: 4.5vmin;
+    padding: 0 5px;
   }
 }

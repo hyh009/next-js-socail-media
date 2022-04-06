@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import { requireAuthentication } from "../components/HOC/redirectDependonAuth";
 import {
   CommentNotification,
   LikeNotification,
@@ -31,9 +32,7 @@ const Notification = ({
         console.log(err);
       }
     };
-    return () => {
-      notificationRead();
-    };
+    notificationRead();
   }, []);
   return (
     <div style={{ width: "100%" }}>
@@ -69,44 +68,25 @@ const Notification = ({
   );
 };
 
-export const getServerSideProps = async (context) => {
-  try {
-    if (!context.req.headers.cookie) {
-      throw Error("Unauthorized");
-    }
-    const [userRes, notificationRes] = await Promise.all([
-      axios(`${baseUrl}/auth`, {
+export const getServerSideProps = requireAuthentication(
+  async (context, userRes) => {
+    try {
+      const notificationRes = await axios(`${baseUrl}/notification`, {
         headers: {
           Cookie: context.req.headers.cookie,
         },
-      }),
-      axios(`${baseUrl}/notification`, {
-        headers: {
-          Cookie: context.req.headers.cookie,
-        },
-      }),
-    ]);
-    return {
-      props: {
-        user: userRes.data.user,
-        userFollowStats: userRes.data.userFollowStats,
-        notifications: notificationRes.data.notifications,
-      },
-    };
-  } catch (error) {
-    if (
-      error.response?.status === 401 ||
-      error.response.name === "Unauthorized"
-    ) {
+      });
       return {
-        redirect: {
-          destination: "/login",
-          permanent: false,
+        props: {
+          user: userRes.data.user,
+          userFollowStats: userRes.data.userFollowStats,
+          notifications: notificationRes.data.notifications,
         },
       };
+    } catch (error) {
+      return { props: { errorLoading: true } };
     }
-    return { props: { errorLoading: true } };
   }
-};
+);
 
 export default Notification;

@@ -1,20 +1,22 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { requireAuthentication } from "../../components/HOC/redirectDependonAuth";
 import { Card } from "../../components/Post";
 import { PostToastr, NoPost } from "../../components/Layout";
 import axios from "axios";
 import baseUrl from "../../utils/baseUrl";
 
-const Post = ({ post, user, setToastrType, errorLoading }) => {
+const Post = ({ post, user, setToastrType, notFound }) => {
   const router = useRouter();
   // to get data after create / delete / update data
   const refreshRouter = useCallback(
     () => router.replace(router.asPath),
     [router]
   );
+
   return (
     <>
-      {!errorLoading && post && (
+      {!notFound && post && (
         <div style={{ padding: "20px 0" }}>
           <PostToastr />
           <Card
@@ -25,49 +27,36 @@ const Post = ({ post, user, setToastrType, errorLoading }) => {
           />
         </div>
       )}
-      {errorLoading || (!post && <NoPost />)}
+      {notFound && <NoPost username={user.username} />}
     </>
   );
 };
 
-export const getServerSideProps = async (context) => {
-  const postId = context.query.postId;
-  try {
-    if (!context.req.headers.cookie) {
-      throw Error("Unauthorized");
-    }
-
-    const [userRes, postRes] = await Promise.all([
-      axios(`${baseUrl}/auth`, {
+export const getServerSideProps = requireAuthentication(
+  async (context, userRes) => {
+    const postId = context.query.postId;
+    try {
+      const postRes = await axios(`${baseUrl}/post/${postId}`, {
         headers: {
           Cookie: context.req.headers.cookie,
         },
-      }),
-      axios(`${baseUrl}/post/${postId}`, {
-        headers: {
-          Cookie: context.req.headers.cookie,
-        },
-      }),
-    ]);
+      });
 
-    return {
-      props: {
-        user: userRes.data.user,
-        userFollowStats: userRes.data.userFollowStats,
-        post: postRes.data,
-      },
-    };
-  } catch (error) {
-    // if token not verify, redirect to login page
-    if (error.response?.status === 401 || error.message === "Unauthorized") {
       return {
-        redirect: {
-          destination: "/login",
-          permanent: false,
+        props: {
+          user: userRes.data.user,
+          userFollowStats: userRes.data.userFollowStats,
+          post: postRes.data,
         },
       };
+    } catch (error) {
+      if (error.response.status === 404) {
+        return {
+          props: { notFound: true, user: userRes.data.user },
+        };
+      }
+      return { props: { errorLoading: true } };
     }
-    return { props: { errorLoading: true } };
   }
-};
+);
 export default Post;
