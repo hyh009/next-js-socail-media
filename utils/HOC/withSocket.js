@@ -11,8 +11,7 @@ import { MsgModal } from "../../components/Message";
 
 function withSocket(OriginalComponent) {
   return (props) => {
-    const { user, setNotificationUnread, notificationUnread, profile, post } =
-      props;
+    const { user, setNotificationUnread, profile, post, errorCode } = props;
     const router = useRouter();
     let pageName = router.asPath.split("/")[1].substring(1);
     if (router.pathname === "/[username]") {
@@ -23,9 +22,9 @@ function withSocket(OriginalComponent) {
 
     const defaultTitle =
       pageName === "ACCOUNT"
-        ? PAGE_TITLE.ACCOUNT(profile.user.name)
+        ? PAGE_TITLE.ACCOUNT(profile?.user?.name)
         : pageName === "POST"
-        ? PAGE_TITLE.POST(post.user.name)
+        ? PAGE_TITLE.POST(post?.user?.name)
         : PAGE_TITLE[pageName.toUpperCase()];
     // join chat room
     useSocket(user);
