@@ -10,8 +10,8 @@ const InfiniteScrollPost = ({
   hasMore,
   fetchDataOnScroll,
   setToastrType,
-  setUpdate,
-  refreshRouter,
+  setUpdateTrue,
+  currentPage,
 }) => {
   return (
     <InfiniteScroll
@@ -29,8 +29,8 @@ const InfiniteScrollPost = ({
           post={post}
           user={user}
           setToastrType={setToastrType}
-          setUpdate={setUpdate}
-          refreshRouter={refreshRouter}
+          setUpdateTrue={setUpdateTrue}
+          currentPage={currentPage}
         />
       ))}
     </InfiniteScroll>

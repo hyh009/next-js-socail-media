@@ -1,0 +1,117 @@
+.container {
+    width: 35%;
+    min-width: 350px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: aliceblue;
+}
+.header{
+    padding: 2px 10px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--darkRed);
+    gap:5px;
+    
+}
+.header-content {
+    font-size: 1.5rem;
+    padding: 10px 5px;
+    color:white;
+    text-shadow: 0 0 2px rgb(0, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+.header-title{
+    display: flex;
+    align-items: center;
+}
+
+.icon-container{
+    display: flex;
+    gap:15px;
+    font-size: 1.25rem;
+}
+
+.icon {
+    cursor: pointer;
+}
+
+.icon-active {
+    color:var(--secondaryColor);
+}
+
+.icon-return{
+    display: none;
+}
+.smaller-device-icon{
+    display: none;
+}
+
+@media screen and (max-width: 1024px) {
+
+    .container{
+        display: none;
+    }
+
+    .icon-return{
+        color:var(--secondaryColor);
+        cursor: pointer;
+        display: inline-block;
+    }
+    .smaller-device-container{
+        width: 350px;
+        position: absolute;
+        top:0;
+        left:0;
+        z-index: 1;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background-color: aliceblue;
+        transform: scale(0);
+        animation: scale-up 0.3s ease-in-out forwards;
+    }
+
+    .smaller-device-icon{
+        background-color:var(--darkRed);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        font-size: 2rem;
+        border-radius: 50%;
+        padding: 5px;
+        cursor: pointer;
+        position: absolute;
+        top:20%;
+        left:20px;
+        box-shadow: 0 0 3px rgba(0,0,0,0.5);
+        transition: all 0.2s ease-in-out;
+        z-index: 1;
+    }   
+    .smaller-device-icon:hover{
+        transform: scale(1.1);
+    }
+
+  }
+
+
+  @media screen and (max-width: 480px) {
+
+    .smaller-device-container{
+        width: 100%;
+    }
+
+  }
+
+  @keyframes scale-up {
+      100%{
+          transform: scale(1);
+      }
+  }

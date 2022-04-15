@@ -11,100 +11,121 @@ import {
 import { MdNotificationsNone, MdNotificationsActive } from "react-icons/md";
 import { logoutUser } from "../../../utils/authUser";
 
-const LinkText = forwardRef(({ onClick, href, text, Icon, unread }, ref) => {
-  return (
-    <a
-      className={`${classes[`link-text`]}`}
-      href={href}
-      onClick={onClick}
-      ref={ref}
-    >
-      <Icon style={{ color: unread ? "yellow" : "inherit" }} />
-      <span className={classes.pcOnly}>{text}</span>
-    </a>
-  );
-});
+const LinkText = forwardRef(
+  ({ onClick, href, text, Icon, unread, mini }, ref) => {
+    return (
+      <a
+        className={`${classes[`link-text`]} ${
+          mini && classes[`mini-link-text`]
+        }`}
+        href={href}
+        onClick={onClick}
+        ref={ref}
+      >
+        <Icon style={{ color: unread ? "yellow" : "inherit" }} />
+        <span className={`${classes.pcOnly} ${mini && classes.mini}`}>
+          {text}
+        </span>
+      </a>
+    );
+  }
+);
 
 LinkText.displayName = "LinkText";
 
-const Sidebar = ({ user }) => {
+const Sidebar = ({ user, mini, notificationUnread }) => {
   const router = useRouter();
   const isActive = (route) => router.pathname === route;
 
   return (
-    <ul className={classes.container}>
-      <li className={`${classes.list} ${isActive("/") ? classes.active : ""}`}>
-        <Link
-          href={{
-            pathname: "/",
-          }}
-          passHref
-        >
-          <LinkText Icon={RiHome4Line} text="Home" />
-        </Link>
-      </li>
-      <li
-        className={`${classes.list} ${
-          isActive("/message") ? classes.active : ""
+    <div
+      className={`${classes.container} ${mini && classes[`mini-container`]}`}
+    >
+      <ul
+        className={`${classes[`list-container`]} ${
+          mini && classes[`mini-list-container`]
         }`}
       >
-        <Link
-          href={{
-            pathname: "/",
-          }}
-          passHref
+        <li
+          className={`${classes.list} ${mini && classes[`mini-list`]} ${
+            isActive("/") ? classes.active : ""
+          }`}
         >
-          <LinkText Icon={RiMessage2Line} text="Message" />
-        </Link>
-      </li>
-      <li
-        className={`${classes.list} ${
-          isActive("/notification") ? classes.active : ""
-        }`}
-      >
-        <Link
-          href={{
-            pathname: "/notification",
-          }}
-          passHref
+          <Link
+            href={{
+              pathname: "/",
+            }}
+            passHref
+          >
+            <LinkText Icon={RiHome4Line} text="Home" mini={mini} />
+          </Link>
+        </li>
+        <li
+          className={`${classes.list} ${mini && classes[`mini-list`]}  ${
+            isActive("/message") ? classes.active : ""
+          }`}
         >
-          <LinkText
-            Icon={
-              user.unreadNotification
-                ? MdNotificationsActive
-                : MdNotificationsNone
-            }
-            text="Notifications"
-            unread={user.unreadNotification}
-          />
-        </Link>
-      </li>
-      <li
-        className={`${classes.list} ${
-          isActive(`/[username]`) ? classes.active : ""
-        }`}
-      >
-        <Link
-          href={{
-            pathname: `/${encodeURIComponent(user.username)}`,
-          }}
-          passHref
+          <Link
+            href={{
+              pathname: "/message",
+            }}
+            passHref
+          >
+            <LinkText Icon={RiMessage2Line} text="Message" mini={mini} />
+          </Link>
+        </li>
+        <li
+          className={`${classes.list} ${mini && classes[`mini-list`]}  ${
+            isActive("/notification") ? classes.active : ""
+          }`}
         >
-          <LinkText Icon={RiAccountCircleLine} text="Account" />
-        </Link>
-      </li>
-      <li
-        className={`${classes.list}`}
-        onClick={() => {
-          logoutUser(user.email);
-        }}
-      >
-        <span className={`${classes[`link-text`]}`}>
-          <RiLogoutBoxRLine />
-          <span className={classes.pcOnly}>Logout</span>
-        </span>
-      </li>
-    </ul>
+          <Link
+            href={{
+              pathname: "/notification",
+            }}
+            passHref
+          >
+            <LinkText
+              Icon={
+                notificationUnread ? MdNotificationsActive : MdNotificationsNone
+              }
+              text="Notifications"
+              unread={notificationUnread}
+              mini={mini} // don't show text on any device (for message page)
+            />
+          </Link>
+        </li>
+        <li
+          className={`${classes.list} ${mini && classes[`mini-list`]}  ${
+            isActive(`/[username]`) ? classes.active : ""
+          }`}
+        >
+          <Link
+            href={{
+              pathname: `/${encodeURIComponent(user.username)}`,
+            }}
+            passHref
+          >
+            <LinkText Icon={RiAccountCircleLine} text="Account" mini={mini} />
+          </Link>
+        </li>
+        <li
+          className={`${classes.list} ${mini && classes[`mini-list`]} `}
+          onClick={() => {
+            logoutUser(user.email);
+          }}
+        >
+          <span
+            className={`${classes[`link-text`]} $${
+              mini && classes[`mini-link-text`]
+            } `}
+          >
+            <RiLogoutBoxRLine />
+            <span className={mini ? classes.mini : classes.pcOnly}>Logout</span>
+          </span>
+        </li>
+      </ul>
+    </div>
   );
 };
 

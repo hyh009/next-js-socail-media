@@ -1,18 +1,19 @@
-import { useEffect, useState, useCallback } from "react";
+import Error from "next/error";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { requireAuthentication } from "../components/HOC/redirectDependonAuth";
+import { requireAuthentication } from "../utils/HOC/redirectDependonAuth";
 import axios from "axios";
 import baseUrl from "../utils/baseUrl";
 import {
   SmallNavbar,
   Profile,
-  Followers,
-  Following,
+  Follow,
   UpdateProfile,
   Setting,
 } from "../components/Profile";
 import { PostToastr, NoUser } from "../components/Layout";
+import withSocket from "../utils/HOC/withSocket";
 
 const Account = ({
   errorLoading,
@@ -23,17 +24,13 @@ const Account = ({
   user,
   userFollowStats,
   setToastrType,
+  pageTitle,
+  errorCode,
 }) => {
   const router = useRouter();
   const { username } = router.query;
   // save current choosen navbar item (profile, followers, following, edit, setting)
   const [activeItem, setActiveItem] = useState("profile");
-
-  // to get data after follow/unfollow user
-  const refreshRouter = useCallback(
-    () => router.replace(router.asPath),
-    [router]
-  );
 
   // only show edit profile & setting button to current user
   const ownAccount = profile?.user._id === user?._id;
@@ -52,13 +49,18 @@ const Account = ({
     }
   }, [router.asPath]);
 
+  // handle error loading on getServerSideProps
+  if (errorCode) {
+    return <Error statusCode={errorCode} />;
+  }
+
   return (
     <>
       {(notFound || errorLoading) && <NoUser username={user.username} />}
       {!notFound && !errorLoading && (
         <>
           <Head>
-            <title>{`${profile.user.name}'s Page | Mini Social Media`}</title>
+            <title>{pageTitle}</title>
           </Head>
           <PostToastr />
           <SmallNavbar
@@ -76,7 +78,6 @@ const Account = ({
                 username={username}
                 profile={profile}
                 userFollowStats={userFollowStats}
-                refreshRouter={refreshRouter}
                 setToastrType={setToastrType}
               />
             )
@@ -84,33 +85,29 @@ const Account = ({
           {
             // active: followers
             activeItem === "followers" && (
-              <Followers
+              <Follow
                 user={user}
                 profileUserId={profile.user._id}
                 userFollowStats={userFollowStats}
-                refreshRouter={refreshRouter}
+                type="followers"
               />
             )
           }
           {
             // active: following
             activeItem === "following" && (
-              <Following
+              <Follow
                 user={user}
                 profileUserId={profile.user._id}
                 userFollowStats={userFollowStats}
-                refreshRouter={refreshRouter}
+                type="Following"
               />
             )
           }
           {
             // active: edit
             activeItem === "edit" && (
-              <UpdateProfile
-                Profile={profile}
-                refreshRouter={refreshRouter}
-                setToastrType={setToastrType}
-              />
+              <UpdateProfile Profile={profile} setToastrType={setToastrType} />
             )
           }
           {
@@ -132,7 +129,7 @@ export const getServerSideProps = requireAuthentication(
   async (context, userRes) => {
     const { username } = context.query;
     try {
-      const profileRes = await axios(`${baseUrl}/profile/${username}`, {
+      const profileRes = await axios(`${baseUrl}/api/profile/${username}`, {
         headers: {
           Cookie: context.req.headers.cookie,
         },
@@ -153,9 +150,9 @@ export const getServerSideProps = requireAuthentication(
           props: { notFound: true, user: userRes.data.user },
         };
       }
-      return { props: { errorLoading: true } };
+      return { props: { errorCode: error.response?.status || 500 } };
     }
   }
 );
 
-export default Account;
+export default withSocket(Account);

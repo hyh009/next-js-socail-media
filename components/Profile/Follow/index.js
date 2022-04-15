@@ -1,17 +1,30 @@
 import { useEffect, useState, useCallback } from "react";
-import classes from "./following.module.css";
 import axios from "axios";
 import baseUrl from "../../../utils/baseUrl";
+import { followUser, unfollowUser } from "../../../utils/profileAction";
+import {
+  useGetDataFromServer,
+  useGetDataFromClient,
+} from "../../../utils/hooks/useUpdateData";
 import { PostUser, Button } from "../../Common";
 import { DivSpinner } from "../../Layout";
 import { RiUserFollowLine } from "react-icons/ri";
 import { BsFillPersonCheckFill } from "react-icons/bs";
-import { followUser, unfollowUser } from "../../../utils/profileAction";
+import classes from "./follow.module.css";
 
-const Following = ({ profileUserId, userFollowStats, user, refreshRouter }) => {
-  const [following, setFollowing] = useState([]);
+const Following = ({ profileUserId, userFollowStats, user, type }) => {
+  const [userList, setUserList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [update, setUpdate] = useState(false);
+
+  const getUserList = useCallback(async () => {
+    const controller = new AbortController();
+    const res = await axios(`${baseUrl}/api/profile/${type}/${profileUserId}`, {
+      signal: controller.signal,
+    });
+    setUserList(res.data);
+  }, [profileUserId, type]);
+  const refreshRouter = useGetDataFromServer();
+  const [setUpdateTrue] = useGetDataFromClient(getUserList);
   // check if current user is following a user that is following the profile user
   const isFollowing = (followingUserId) => {
     return (
@@ -20,45 +33,28 @@ const Following = ({ profileUserId, userFollowStats, user, refreshRouter }) => {
     );
   };
 
-  const getFollowing = useCallback(async () => {
-    const controller = new AbortController();
-    const res = await axios(`${baseUrl}/profile/following/${profileUserId}`, {
-      signal: controller.signal,
-    });
-    setFollowing(res.data);
-  }, [profileUserId]);
-
   useEffect(() => {
-    const getFollowingWithLoading = async () => {
+    const getUserListWithLoading = async () => {
       setLoading(true);
-      await getFollowing();
+      await getUserList();
       setLoading(false);
     };
-    getFollowingWithLoading();
+    getUserListWithLoading();
     return () => typeof controller !== "undefined" && controller.abort();
-  }, [getFollowing]);
-
-  // to get update data from client side
-  useEffect(() => {
-    if (update) {
-      getFollowing();
-      setUpdate(false);
-    }
-    return () => typeof controller !== "undefined" && controller.abort();
-  }, [getFollowing, update]);
+  }, [getUserList]);
 
   return (
     <div className={classes.container}>
       {loading && <DivSpinner />}
       {!loading &&
-        following.map((followingUser) => {
-          const currentFollowStat = isFollowing(followingUser.user._id);
+        userList.map((singleUser) => {
+          const currentFollowStat = isFollowing(singleUser.user._id);
           return (
-            <div className={classes.row} key={followingUser._id}>
-              <PostUser user={followingUser.user} />
+            <div className={classes.row} key={singleUser._id}>
+              <PostUser user={singleUser.user} />
               {
                 // if following user is current user => do not show button
-                followingUser.user._id !== user._id && (
+                singleUser.user._id !== user._id && (
                   <Button
                     type="button"
                     content={currentFollowStat ? "Following" : "Follow"}
@@ -76,15 +72,15 @@ const Following = ({ profileUserId, userFollowStats, user, refreshRouter }) => {
                       currentFollowStat
                         ? () =>
                             unfollowUser(
-                              followingUser.user._id,
+                              singleUser.user._id,
                               refreshRouter,
-                              setUpdate
+                              setUpdateTrue
                             )
                         : () =>
                             followUser(
-                              followingUser.user._id,
+                              singleUser.user._id,
                               refreshRouter,
-                              setUpdate
+                              setUpdateTrue
                             )
                     }
                   />

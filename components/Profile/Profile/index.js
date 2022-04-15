@@ -4,19 +4,17 @@ import { Snippet } from "../index";
 import { NoPosts, DivSpinner } from "../../Layout";
 import axios from "axios";
 import baseUrl from "../../../utils/baseUrl";
+import { useGetDataFromClient } from "../../../utils/hooks/useUpdateData";
 
 const Profile = ({
   user,
   username,
   profile,
   userFollowStats,
-  refreshRouter,
   setToastrType,
 }) => {
   // keep profile user's posts
   const [posts, setPosts] = useState([]);
-  // to update data from client dide
-  const [update, setUpdate] = useState(false);
   // inifinite scroll related
   const [loading, setLoading] = useState(false);
   const [maxPage, setMaxPage] = useState(2);
@@ -35,13 +33,16 @@ const Profile = ({
   // get posts by username function
   const getPosts = useCallback(async () => {
     const controller = new AbortController();
-    const res = await axios(`${baseUrl}/post/user/${username}?page=${page}`, {
-      signal: controller.signal,
-    });
+    const res = await axios(
+      `${baseUrl}/api/post/user/${username}?page=${page}`,
+      {
+        signal: controller.signal,
+      }
+    );
     setPosts(res.data.posts);
     setMaxPage(res.data.maxPage);
   }, [page, username]);
-
+  const [setUpdateTrue] = useGetDataFromClient(getPosts);
   // get profile user posts
   useEffect(() => {
     const getPostWithLoading = async () => {
@@ -52,15 +53,6 @@ const Profile = ({
     getPostWithLoading();
     return () => typeof controller !== "undefined" && controller.abort();
   }, [getPosts]);
-
-  // to get update data from client side
-  useEffect(() => {
-    if (update) {
-      getPosts();
-      setUpdate(false);
-    }
-    return () => typeof controller !== "undefined" && controller.abort();
-  }, [getPosts, update]);
 
   // set has more for infinite scroll
   useEffect(() => {
@@ -83,7 +75,6 @@ const Profile = ({
         profile={profile}
         isFollowing={isFollowing}
         isFollower={isFollower}
-        refreshRouter={refreshRouter}
       />
       {loading && <DivSpinner />}
       {!loading && posts.length === 0 && <NoPosts />}
@@ -93,7 +84,7 @@ const Profile = ({
           hasMore={hasMore}
           fetchDataOnScroll={fetchDataOnScroll}
           setToastrType={setToastrType}
-          setUpdate={setUpdate}
+          setUpdateTrue={setUpdateTrue}
           user={user}
         />
       )}

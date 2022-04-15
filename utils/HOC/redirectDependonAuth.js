@@ -16,18 +16,18 @@ export function requireAuthentication(getServerSidePropsFunction) {
     }
 
     try {
-      const userRes = await axios(`${baseUrl}/auth`, {
+      const userRes = await axios(`${baseUrl}/api/auth`, {
         headers: {
           Cookie: context.req.headers.cookie,
         },
       });
       return await getServerSidePropsFunction(context, userRes);
     } catch (err) {
-      if (error.response?.status === 401 || error.message === "Unauthorized") {
+      if (err.response?.status === 401 || err.message === "Unauthorized") {
         return {
           redirect: {
             destination: "/login",
-            statusCode: 302,
+            permanent: false,
           },
         };
       }

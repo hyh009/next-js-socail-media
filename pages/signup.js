@@ -1,4 +1,7 @@
 import { useState } from "react";
+import Head from "next/head";
+import { PAGE_TITLE } from "../utils/headContnet";
+import { NoUserLayout } from "../components/Layout";
 import { ProgressBar } from "../components/Common";
 import { SignupForm } from "../components/Form/AuthForm";
 import { registerUser } from "../utils/authUser";
@@ -34,6 +37,9 @@ const Signup = () => {
 
   return (
     <>
+      <Head>
+        <title>{PAGE_TITLE.SINGUP}</title>
+      </Head>
       <ProgressBar currentStep={currentStep} stepText={stepText} />
       <SignupForm
         submitHandler={handleSignup}
@@ -47,3 +53,7 @@ const Signup = () => {
 };
 
 export default Signup;
+
+Signup.getLayout = function PageLayout(page) {
+  return <NoUserLayout>{page}</NoUserLayout>;
+};

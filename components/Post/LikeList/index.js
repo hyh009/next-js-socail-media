@@ -1,14 +1,11 @@
 import { useState, useEffect } from "react";
-import classes from "./likeList.module.css";
+import axios from "axios";
+import baseUrl from "../../../utils/baseUrl";
+import Link from "next/link";
 import { Avator } from "../../Common";
 import { Spinner } from "../../Layout";
-import baseUrl from "../../../utils/baseUrl";
-import axios from "axios";
-import {
-  AiOutlineLoading3Quarters,
-  AiOutlineCloseCircle,
-  AiOutlineSearch,
-} from "react-icons/ai";
+import { AiOutlineCloseCircle, AiOutlineSearch } from "react-icons/ai";
+import classes from "./likeList.module.css";
 
 const LikeList = ({ postId, propRef, setShowLikeList }) => {
   const [loading, setLoading] = useState(false);
@@ -17,7 +14,7 @@ const LikeList = ({ postId, propRef, setShowLikeList }) => {
     const controller = new AbortController();
     const getLikesUserInfo = async () => {
       setLoading(true);
-      const res = await axios(`${baseUrl}/post/like/${postId}`, {
+      const res = await axios(`${baseUrl}/api/post/like/${postId}`, {
         signal: controller.signal,
       });
       setLikesUserInfo(res.data);
@@ -50,7 +47,11 @@ const LikeList = ({ postId, propRef, setShowLikeList }) => {
               shape="circle"
             />
             <span className={classes[`user-name`]}>{info.user.name}</span>
-            <AiOutlineSearch className={classes[`search-icon`]} />
+            <Link href={`/${encodeURIComponent(info.user.username)}`}>
+              <a>
+                <AiOutlineSearch className={classes[`search-icon`]} />
+              </a>
+            </Link>
           </li>
         ))}
       {loading && (

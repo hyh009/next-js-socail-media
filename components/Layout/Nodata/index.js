@@ -17,6 +17,7 @@ export const NoNotification = () => {
           height="100%"
           layout="responsive"
           objectFit="cover"
+          priority={true}
         />
       </div>
     </div>
@@ -37,6 +38,7 @@ export const NoPosts = () => {
           height="100%"
           layout="responsive"
           objectFit="cover"
+          priority={true}
         />
       </div>
     </div>
@@ -62,6 +64,7 @@ export const NoPost = () => {
           height="100%"
           layout="responsive"
           objectFit="cover"
+          priority={true}
         />
       </div>
     </div>
@@ -87,6 +90,7 @@ export const NoUser = ({ username }) => {
           height="100%"
           layout="responsive"
           objectFit="cover"
+          priority={true}
         />
       </div>
     </div>

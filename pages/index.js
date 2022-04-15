@@ -1,37 +1,29 @@
-import { useEffect, useState, useCallback } from "react";
-import { useRouter } from "next/router";
-import { requireAuthentication } from "../components/HOC/redirectDependonAuth";
+import { requireAuthentication } from "../utils/HOC/redirectDependonAuth";
 import axios from "axios";
 import baseUrl from "../utils/baseUrl";
+import { useEffect, useState } from "react";
+import withSocket from "../utils/HOC/withSocket";
+import { useRouter } from "next/router";
 import Head from "next/head";
-import UtilContext from "../utils/context/UtilContext";
-import { InfiniteScrollPost, CreatedPost } from "../components/Post";
+import Error from "next/error";
 import { NoPosts, PostToastr } from "../components/Layout";
+import { InfiniteScrollPost, CreatedPost } from "../components/Post";
 
-const Home = ({ user, posts, postPage, setToastrType, errorLoading }) => {
-  const [showNoPost, setShowNoPost] = useState(false);
+const Home = ({
+  user,
+  posts,
+  postPage,
+  setToastrType,
+  pageTitle,
+  errorCode,
+}) => {
   const [hasMore, setHasMore] = useState(true);
-  const router = useRouter();
-  // to get data after create / delete / update data
-  const refreshRouter = useCallback(
-    () => router.replace(router.asPath),
-    [router]
-  );
 
-  // handle data fetching error
-  useEffect(() => {
-    if (errorLoading) {
-      setShowNoPost(true);
-    }
-  }, [errorLoading]);
+  const router = useRouter();
 
   useEffect(() => {
     if (postPage.currentPage === postPage.maxPage) {
       setHasMore(false);
-    }
-
-    if (posts.length === 0) {
-      setShowNoPost(true);
     }
   }, [posts, postPage]);
 
@@ -48,26 +40,28 @@ const Home = ({ user, posts, postPage, setToastrType, errorLoading }) => {
       query: query,
     });
   };
+
+  // handle error loading on getServerSideProps
+  if (errorCode) {
+    return <Error statusCode={errorCode} />;
+  }
   return (
     <>
       <Head>
-        <title>Home | Mini Social Media</title>
+        <title>{pageTitle}</title>
       </Head>
       <PostToastr />
-      <CreatedPost
-        user={user}
-        refreshRouter={refreshRouter}
-        setToastrType={setToastrType}
-      />
-      {showNoPost && <NoPosts />}
-      {posts.length > 0 && (
+      <CreatedPost user={user} setToastrType={setToastrType} />
+      {posts.length === 0 ? (
+        <NoPosts />
+      ) : (
         <InfiniteScrollPost
           posts={posts}
           hasMore={hasMore}
           fetchDataOnScroll={fetchDataOnScroll}
           setToastrType={setToastrType}
-          refreshRouter={refreshRouter}
           user={user}
+          currentPage={postPage.currentPage}
         />
       )}
     </>
@@ -78,7 +72,7 @@ export const getServerSideProps = requireAuthentication(
   async (context, userRes) => {
     const page = context.query.page || 1;
     try {
-      const postsRes = await axios(`${baseUrl}/post/user/following`, {
+      const postsRes = await axios(`${baseUrl}/api/post/user/following`, {
         headers: {
           Cookie: context.req.headers.cookie,
         },
@@ -99,8 +93,8 @@ export const getServerSideProps = requireAuthentication(
         },
       };
     } catch (error) {
-      return { props: { errorLoading: true } };
+      return { props: { errorCode: error.response?.status || 500 } };
     }
   }
 );
-export default Home;
+export default withSocket(Home);

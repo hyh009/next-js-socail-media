@@ -62,7 +62,6 @@ export const Input = ({
 };
 
 export const InputWithAvator = ({
-  usernmae,
   profilePicUrl,
   type,
   label,
@@ -72,6 +71,7 @@ export const InputWithAvator = ({
   changeHandler,
   require,
   invalid,
+  alt,
 }) => {
   return (
     <div className={classes.container}>
@@ -89,7 +89,7 @@ export const InputWithAvator = ({
           invalid && classes.invalid
         }`}
       >
-        <Avator src={profilePicUrl} alt={usernmae} size="small" />
+        <Avator src={profilePicUrl} alt={alt} size="small" />
         <input
           className={classes.input}
           type={type}

@@ -19,6 +19,10 @@
 .followr-container:hover{
     background-color: #eee;
 }
+
+.follower-content{
+    flex:1;
+}
 .user-info{
     display: flex;
     width: max-content;
@@ -27,8 +31,7 @@
 }
 
 .left-side {
-    width: 90%;
-    max-width: calc(100% -70px);
+    flex:1;
 }
 
 .link-text{
@@ -47,3 +50,13 @@
     border-radius: 5px;
     overflow: hidden;
 }
+
+@media screen and (max-width: 480px) {
+    .container{
+        padding: 5px 0px;
+    }
+
+    .followr-container {
+        padding: 5px 0px;
+    }
+  }

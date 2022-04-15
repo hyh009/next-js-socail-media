@@ -1,4 +1,7 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
+import baseUrl from "../../../utils/baseUrl";
+import Cookies from "js-cookie";
 import { Input, TextArea } from "../Input";
 import { Button, ImageDragDrop, InputErrorMsg } from "../../Common";
 import { BackDrop } from "../../Layout";
@@ -17,9 +20,6 @@ import { MdEmail, MdDoNotDisturbOn } from "react-icons/md";
 import { SiStoryblok } from "react-icons/si";
 import { RiAccountPinBoxFill } from "react-icons/ri";
 import { GoSignIn } from "react-icons/go";
-import axios from "axios";
-import baseUrl from "../../../utils/baseUrl";
-import Cookies from "js-cookie";
 
 export const SignupForm = ({
   submitHandler,
@@ -75,7 +75,7 @@ export const SignupForm = ({
         return;
       }
       try {
-        const res = await axios.get(`${baseUrl}/signup/${username}`, {
+        const res = await axios.get(`${baseUrl}/api/signup/${username}`, {
           signal: controller.signal,
         });
         if (res.data.message === "Username is available") {

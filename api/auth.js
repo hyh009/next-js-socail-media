@@ -51,7 +51,6 @@ router.post("/", async (req, res) => {
         .status(401)
         .json({ message: "email or password is not correct" });
     }
-
     // create and save jwt token
     const payload = { userId: user._id };
     jwt.sign(

@@ -1,5 +1,10 @@
 export { default as BackDrop } from "./BackDrop";
-export { default as MainLayout } from "./MainLayout";
+export {
+  UserLayout,
+  NoUserLayout,
+  MessageLayout,
+  ErrorPageLayout,
+} from "./MainLayout";
 export { default as Navbar } from "./Navbar";
 export { NoNotification, NoPosts, NoPost, NoComment, NoUser } from "./Nodata";
 export { default as Search } from "./Search";

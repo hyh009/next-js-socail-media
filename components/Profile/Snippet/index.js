@@ -11,10 +11,12 @@ import {
 import { GrMail } from "react-icons/gr";
 import { RiUserUnfollowLine, RiUserFollowLine } from "react-icons/ri";
 import { followUser, unfollowUser } from "../../../utils/profileAction";
+import { useGetDataFromServer } from "../../../utils/hooks/useUpdateData";
 
-const Snippet = ({ user, profile, isFollowing, refreshRouter }) => {
+const Snippet = ({ user, profile, isFollowing }) => {
   const [showAllBio, setShowAllBio] = useState(false);
   const ownAccount = profile.user._id === user._id;
+  const refreshRouter = useGetDataFromServer();
 
   return (
     <div className={classes.container}>

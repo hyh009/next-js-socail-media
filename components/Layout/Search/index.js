@@ -1,10 +1,9 @@
-import { useState, useEffect, useRef, useCallback, forwardRef } from "react";
+import { useState, useRef, forwardRef } from "react";
 import classes from "./search.module.css";
 import Link from "next/link";
+import { useUserSearch } from "../../../utils/hooks/useUserSearch";
 import { Spinner } from "../index";
 import { Avator } from "../../Common";
-import axios from "axios";
-import baseUrl from "../../../utils/baseUrl";
 import { MdPersonSearch, MdSearch } from "react-icons/md";
 import { AiOutlineClose } from "react-icons/ai";
 import useClickOutsideClose from "../../../utils/hooks/useClickOutsideClose";
@@ -38,37 +37,11 @@ UserLink.displayName = "UserLink";
 
 const Search = () => {
   const [text, setText] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState([]);
   const [showSearch, setShowSearch] = useState(false);
+  const [loading, setLoading] = useState(false);
   const searchRef = useRef();
   useClickOutsideClose(searchRef, setShowSearch);
-
-  const handleSearch = useCallback(async () => {
-    setLoading(true);
-    try {
-      if (text.trim().length === 0) {
-        setResults([]);
-        return;
-      }
-      const res = await axios(`${baseUrl}/search/${text}`);
-      setResults(() =>
-        res.data.map((data) => ({
-          name: data.name,
-          username: data.username,
-          profilePicUrl: data.profilePicUrl,
-        }))
-      );
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setLoading(false);
-    }
-  }, [text]);
-
-  useEffect(() => {
-    handleSearch();
-  }, [handleSearch]);
+  const { results } = useUserSearch(text, setLoading);
 
   return (
     <>

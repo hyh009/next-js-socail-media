@@ -13,6 +13,14 @@
   gap: 20px;
   place-items: center;
 }
+.container::backdrop{
+  background: var(--black);
+  opacity: 0;
+  transition:opacity 0.5s;
+}
+.container[open]{
+  animation:fade-in 0.5s forwards;
+}
 
 .textonly-container {
   position: absolute;
@@ -74,5 +82,11 @@
 @media screen and (max-width: 480px) {
   .container {
     width: 100%;
+  }
+}
+
+@keyframes fade-in {
+  100%{
+    opacity: 0.8;
   }
 }

@@ -13,8 +13,9 @@ import {
 } from "react-icons/ai";
 import { BiCrop } from "react-icons/bi";
 import { profileUpdate } from "../../../utils/profileAction";
+import { useGetDataFromServer } from "../../../utils/hooks/useUpdateData";
 
-const UpdateProfile = ({ Profile, refreshRouter, setToastrType }) => {
+const UpdateProfile = ({ Profile, setToastrType }) => {
   const [profile, setProfile] = useState({
     bio: Profile.bio,
     facebook: Profile?.social?.facebook || "",
@@ -27,6 +28,7 @@ const UpdateProfile = ({ Profile, refreshRouter, setToastrType }) => {
   const [loading, setLoading] = useState(false);
   const [showSocialLinks, setShowSocialLinks] = useState(false);
   const [showModal, setShowModal] = useState(false); // for image cropper
+  const refreshRouter = useGetDataFromServer();
   // handle input change
   const changeHandler = (e) => {
     const { name, value } = e.target;

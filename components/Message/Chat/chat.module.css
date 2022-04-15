@@ -1,0 +1,48 @@
+.container{
+    display: flex;
+    gap:10px;
+    width: 100%;
+}
+
+.sender {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+.message-content {
+    display: flex;
+    align-items: flex-end;
+    gap:5px;
+    width: calc(100% - 30px);
+}
+.sender-message-content {
+    flex-direction: row-reverse;
+}
+.message-text{
+    background-color: aliceblue;
+    backdrop-filter: blur(5px);
+    border-radius: 5px;
+    padding: 0 5px;
+    box-shadow: 0 0 1px white;
+    font-size: 1.125rem;
+    box-shadow: 0 0 2px rgba(0,0,0,0.2);
+    width: fit-content;
+    word-wrap:break-word;
+    max-width: 50%;
+}
+
+.message-text-deleted {
+    background-color: #eee;
+    color:var(--lightGray)
+}
+
+.message-date{
+    color:var(--darkGray);
+    font-size: 0.9rem;
+}
+
+.icon-delete {
+    color:var(--darkRed);
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: block;
+}

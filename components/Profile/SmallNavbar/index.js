@@ -1,4 +1,3 @@
-import { useState } from "react";
 import classes from "./smallNavbar.module.css";
 
 const SmallNavbar = ({

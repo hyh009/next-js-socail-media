@@ -11,7 +11,10 @@ export const registerUser = async (
   setLoading
 ) => {
   try {
-    const res = await axios.post(`${baseUrl}/signup`, { user, profilePicUrl });
+    const res = await axios.post(`${baseUrl}/api/signup`, {
+      user,
+      profilePicUrl,
+    });
     if (res.data.message === "user created") {
       // redirect to login page
       Router.push("/login");
@@ -27,7 +30,7 @@ export const registerUser = async (
 
 export const loginUser = async (user, setErrorMsg, setLoading) => {
   try {
-    const res = await axios.post(`${baseUrl}/auth`, { user });
+    const res = await axios.post(`${baseUrl}/api/auth`, { user });
     if (res.data.message === "Success!") {
       setErrorMsg("");
       setLoading(false);
@@ -43,7 +46,7 @@ export const loginUser = async (user, setErrorMsg, setLoading) => {
 // save email to set value of login page email input
 export const logoutUser = async (email) => {
   cookie.set("userEmail", email);
-  await axios(`${baseUrl}/auth/logout`);
+  await axios(`${baseUrl}/api/auth/logout`);
   Router.push("/login");
   Router.reload();
 };

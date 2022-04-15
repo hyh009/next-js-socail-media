@@ -1,14 +1,21 @@
 import { useState, useEffect } from "react";
+import { SocketProvider } from "../utils/context/SocketContext";
 import Head from "next/head";
-import MainLayout from "../components/Layout/MainLayout";
+import Router from "next/router";
+import { UserLayout } from "../components/Layout";
+import { toast } from "react-toastify";
+import nProgress from "nprogress";
 import "../public/styles.css";
 import "react-toastify/dist/ReactToastify.css";
 import "cropperjs/dist/cropper.css";
-import UtilContext from "../utils/context/UtilContext";
-import { toast } from "react-toastify";
 
 function MyApp({ Component, pageProps }) {
   const [toastrType, setToastrType] = useState(false);
+  const [notificationUnread, setNotificationUnread] = useState(false);
+  // handle route change animation
+  Router.onRouteChangeStart = () => nProgress.start();
+  Router.onRouteChangeComplete = () => nProgress.done();
+  Router.onRouteChangeError = () => nProgress.done();
   // handle toast
   useEffect(() => {
     let timer;
@@ -24,6 +31,7 @@ function MyApp({ Component, pageProps }) {
         toastId: "create",
       });
       timer = setTimeout(() => setToastrType(""), 1500);
+      // update post
     } else if (toastrType === "update") {
       toast.info("Updated Successfully", {
         toastId: "updated",
@@ -33,6 +41,18 @@ function MyApp({ Component, pageProps }) {
     return () => clearTimeout(timer);
   }, [toastrType]);
 
+  const getLayout =
+    Component.getLayout ||
+    ((page) => (
+      <UserLayout
+        {...pageProps}
+        notificationUnread={notificationUnread}
+        setNotificationUnread={setNotificationUnread}
+      >
+        {page}
+      </UserLayout>
+    ));
+
   return (
     <>
       <Head>
@@ -41,18 +61,15 @@ function MyApp({ Component, pageProps }) {
         <link rel="icon" href="/favicon.png" sizes="16*16" type="image/png" />
         <title>Mini Social Media</title>
       </Head>
-      <UtilContext.Provider
-        value={{
-          toastr: {
-            toastrType: { toastrType },
-            setToastrType: { setToastrType },
-          },
-        }}
-      >
-        <MainLayout {...pageProps}>
-          <Component {...pageProps} setToastrType={setToastrType} />
-        </MainLayout>
-      </UtilContext.Provider>
+      <SocketProvider>
+        {getLayout(
+          <Component
+            {...pageProps}
+            setToastrType={setToastrType}
+            setNotificationUnread={setNotificationUnread}
+          />
+        )}
+      </SocketProvider>
     </>
   );
 }

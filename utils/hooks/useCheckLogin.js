@@ -8,7 +8,7 @@ const useCheckLogin = () => {
   useEffect(() => {
     const checkUser = async () => {
       try {
-        const res = await axios(`${baseUrl}/auth/verifyuser`);
+        const res = await axios(`${baseUrl}/api/auth/verifyuser`);
         if (res.data.message === "valid user") {
           return router.push("/");
         }

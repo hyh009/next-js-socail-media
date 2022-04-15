@@ -23,6 +23,14 @@
   border: 2px solid var(--secondaryColor);
 }
 
+.border-red {
+  border: 2px solid var(--darkRed);
+}
+
+.border-blue {
+  border: 2px solid var(--primaryColor);
+}
+
 @media screen and (max-width: 770px) {
   .no-tablet {
     display: none;

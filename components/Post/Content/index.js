@@ -7,19 +7,28 @@ import { FaRegCommentDots } from "react-icons/fa";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import useClickOutsideClose from "../../../utils/hooks/useClickOutsideClose";
 import { toggleLikePost } from "../../../utils/postAction";
+import { useSocketConnect } from "../../../utils/context/SocketContext";
+import socketEvent from "../../../utils/socketEvent";
+import { useGetDataFromServer } from "../../../utils/hooks/useUpdateData";
 
 const Content = ({
   post,
   user,
-  refreshRouter,
-  setUpdate,
+  setUpdateTrue,
   showImage,
   setShowPostModal,
   setShowComments,
   propClass,
+  currentPage,
 }) => {
   const [showLikeList, setShowLikeList] = useState(false);
   const likeListRef = useRef(null);
+
+  const socket = useSocketConnect();
+  let refreshRouter = null;
+  if (!setUpdateTrue) {
+    refreshRouter = useGetDataFromServer();
+  }
 
   useClickOutsideClose(likeListRef, setShowLikeList);
   //check if post is liked by current user
@@ -27,9 +36,9 @@ const Content = ({
     post.likes &&
     post.likes.filter((like) => like.user === user._id).length > 0;
 
-  // toggle like post
+  // toggle like post axios
   const handleToggleLike = async (e, mode) => {
-    await toggleLikePost(post._id, mode, refreshRouter, setUpdate);
+    await toggleLikePost(post._id, mode, refreshRouter, setUpdateTrue);
   };
 
   return (
@@ -60,6 +69,7 @@ const Content = ({
             height="80%"
             layout="responsive"
             objectFit="cover"
+            priority={currentPage === 1}
             onClick={showImage ? () => setShowPostModal(true) : undefined}
           />
         </div>
@@ -72,7 +82,29 @@ const Content = ({
               className={classes[`icon-like`]}
               title="unlike"
               onClick={(e) => {
-                handleToggleLike(e, "unlike");
+                if (socket) {
+                  socket.emit(socketEvent.POST_LIEK, {
+                    postId: post._id,
+                    userId: user._id,
+                    like: false,
+                  });
+                  socket.once(
+                    socketEvent.POST_LIKED_DONE,
+                    ({ success, error }) => {
+                      if (success) {
+                        if (setUpdateTrue) {
+                          setUpdateTrue();
+                        } else {
+                          refreshRouter();
+                        }
+                      } else if (error) {
+                        alert(error);
+                      }
+                    }
+                  );
+                } else {
+                  handleToggleLike(e, "unlike");
+                }
               }}
             />
           ) : (
@@ -80,7 +112,29 @@ const Content = ({
               className={classes[`icon-nolike`]}
               title="like the post"
               onClick={(e) => {
-                handleToggleLike(e, "like");
+                if (socket) {
+                  socket.emit(socketEvent.POST_LIEK, {
+                    postId: post._id,
+                    userId: user._id,
+                    like: true,
+                  });
+                  socket.once(
+                    socketEvent.POST_LIKED_DONE,
+                    ({ success, error }) => {
+                      if (success) {
+                        if (setUpdateTrue) {
+                          setUpdateTrue();
+                        } else {
+                          refreshRouter();
+                        }
+                      } else if (error) {
+                        alert(error);
+                      }
+                    }
+                  );
+                } else {
+                  handleToggleLike(e, "like");
+                }
               }}
             />
           )}

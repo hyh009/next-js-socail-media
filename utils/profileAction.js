@@ -5,15 +5,15 @@ import catchErrors from "./catchErrors";
 export const followUser = async (
   userToFollowId,
   refreshRouter = null,
-  setUpdate = null
+  setUpdateTrue = null
 ) => {
   try {
-    await axios(`${baseUrl}/profile/follow/${userToFollowId}`);
+    await axios(`${baseUrl}/api/profile/follow/${userToFollowId}`);
     if (refreshRouter) {
       refreshRouter();
     }
-    if (setUpdate) {
-      setUpdate(true);
+    if (setUpdateTrue) {
+      setUpdateTrue();
     }
   } catch (err) {
     console.log(err);
@@ -24,15 +24,15 @@ export const followUser = async (
 export const unfollowUser = async (
   userToUnfollowId,
   refreshRouter = null,
-  setUpdate = null
+  setUpdateTrue = null
 ) => {
   try {
-    await axios(`${baseUrl}/profile/unfollow/${userToUnfollowId}`);
+    await axios(`${baseUrl}/api/profile/unfollow/${userToUnfollowId}`);
     if (refreshRouter) {
       refreshRouter();
     }
-    if (setUpdate) {
-      setUpdate(true);
+    if (setUpdateTrue) {
+      setUpdateTrue();
     }
   } catch (err) {
     console.log(err);
@@ -51,7 +51,7 @@ export const profileUpdate = async (
   try {
     setLoading(true);
     const { bio, facebook, instagram, youtube, twitter } = profile;
-    await axios.put(`${baseUrl}/profile/update`, {
+    await axios.put(`${baseUrl}/api/profile/update`, {
       bio,
       facebook,
       instagram,
@@ -75,7 +75,7 @@ export const passwordUpdate = async (
   setToastrType
 ) => {
   try {
-    await axios.put(`${baseUrl}/profile/setting/password`, {
+    await axios.put(`${baseUrl}/api/profile/setting/password`, {
       currentPassword,
       newPassword,
     });
@@ -92,7 +92,7 @@ export const passwordUpdate = async (
 };
 
 export const toggleMessagePopup = async (setMessagePopup, setToastrType) => {
-  await axios.put(`${baseUrl}/profile/setting/messagepopup`);
+  await axios.put(`${baseUrl}/api/profile/setting/messagepopup`);
   setMessagePopup((prev) => !prev);
   setToastrType("update");
 };

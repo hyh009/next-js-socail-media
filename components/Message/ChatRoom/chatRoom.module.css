@@ -1,0 +1,100 @@
+.container {
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: white;
+}
+.no-currentchat-container {
+    display: flex;
+    flex-direction: column;
+    width: 65%;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-shadow: 2px -1px var(--lightGray);
+    user-select: none;
+}
+
+.delete-msg-icon{
+    cursor: pointer;
+}
+.image-container {
+    width: 50%;
+    aspect-ratio: 4/3;
+}
+.chat-header{
+    height: 50px;
+    font-size: 1.25rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    gap:5px;
+    background-color: rgba(220,220,220,0.3);
+    position: relative;
+}
+
+.close-icon {
+    position: absolute;
+    top:5px;
+    right: 5px;
+    cursor: pointer;
+}
+.chat-window{
+    width: 100%;
+    flex:1;
+    display: flex;
+    flex-direction: column;
+    padding: 5px ;
+    gap:20px;
+    height: calc(100vh - 100px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.chat-input {
+    display: grid;
+    grid-template-columns: 1fr 50px;
+    gap:5px;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    place-items: center;
+    background-color: rgba(220,220,220,0.3);
+}
+
+@media screen and (max-width: 1024px) {
+    .container{
+        width: 100%;
+        height: 100vh;
+        background-color: white;
+        overflow-x: hidden;
+    }
+
+    .no-currentchat-container{
+        width: 100%;
+       height: 100vh;
+       overflow: hidden;
+    }
+
+  }
+
+
+  @media screen and (max-width: 480px) {
+    .container{
+
+        height: calc(100vh - 40px);
+    }
+
+    .no-currentchat-container{
+
+        height: calc(100vh - 40px);
+    }
+
+  }
+

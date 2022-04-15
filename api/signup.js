@@ -3,6 +3,7 @@ const router = express.Router();
 const UserModel = require("../models/UserModel");
 const ProfileModel = require("../models/ProfileModel");
 const FollowerModel = require("../models/FollowerModel");
+const ChatModel = require("../models/ChatModel");
 const NotificationModel = require("../models/NotificationModel");
 const bcrypt = require("bcryptjs");
 const isEmail = require("validator/lib/isEmail");
@@ -93,6 +94,7 @@ router.post("/", async (req, res) => {
     }).save();
 
     await new NotificationModel({ user: user._id, notifications: [] }).save();
+    await new ChatModel({ user: user._id, chats: [] }).save();
 
     res.status(200).json({ message: "user created" });
   } catch (err) {

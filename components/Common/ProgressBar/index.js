@@ -1,4 +1,5 @@
 import React from "react";
+import { BsCheck } from "react-icons/bs";
 import classes from "./progressBar.module.css";
 
 const ProgressBar = ({ currentStep, stepText }) => {
@@ -17,7 +18,7 @@ const ProgressBar = ({ currentStep, stepText }) => {
               isActive(index) && classes[`box-active`]
             }`}
           >
-            {index + 1}
+            {currentStep > index ? <BsCheck /> : `${index + 1}`}
           </div>
           <span className={`${classes.text}`}>{text}</span>
         </div>

@@ -1,7 +1,7 @@
 :root {
   --navHeight: 50px;
   --progressBar: #54d1db;
-  --primaryColor: rgb(30, 67, 136);
+  --primaryColor: rgb(8, 36, 90);
   --secondaryColor: rgb(243, 221, 188);
   --black: #030e12;
   --darkRed: #ce4843;
@@ -61,4 +61,3 @@ body {
 }
 
 @import "./nprogress.css";
-@import "./listMessages.css";

@@ -9,8 +9,9 @@ import { MdLocationOn } from "react-icons/md";
 import { BiCrop } from "react-icons/bi";
 import { TiLocationArrowOutline } from "react-icons/ti";
 import { createPost } from "../../../utils/postAction";
+import { useGetDataFromServer } from "../../../utils/hooks/useUpdateData";
 
-const CreatedPost = ({ user, refreshRouter, setToastrType }) => {
+const CreatedPost = ({ user, setToastrType }) => {
   const [newPost, setNewPost] = useState({ text: "" });
   const [imagePreview, setImagePreview] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -19,6 +20,8 @@ const CreatedPost = ({ user, refreshRouter, setToastrType }) => {
   const [isDisable, setIsDisable] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
+
+  const refreshRouter = useGetDataFromServer();
 
   useEffect(() => {
     setIsDisable(loading || newPost.text.length === 0);

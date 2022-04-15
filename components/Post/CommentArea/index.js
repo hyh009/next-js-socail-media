@@ -6,12 +6,12 @@ import { Button } from "../../Common";
 import { Comment } from "../index";
 import { BsFillArrowRightSquareFill, BsThreeDots } from "react-icons/bs";
 import { createComment, deleteComment } from "../../../utils/postAction";
+import { useGetDataFromServer } from "../../../utils/hooks/useUpdateData";
 
 const CommentArea = ({
   post,
   user,
-  refreshRouter, // get updated data from getserversideprops
-  setUpdate, // get updated data from client side
+  setUpdateTrue, // get updated data from client side
   number, // show how many comments
   restrictHeight,
   showComments, // to set no data placeholder for modal only
@@ -20,6 +20,11 @@ const CommentArea = ({
 }) => {
   const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(false);
+  let refreshRouter;
+  if (!setUpdateTrue) {
+    refreshRouter = useGetDataFromServer();
+  }
+
   if (typeof number === "undefined") number = post.comments.length;
   // handle input change
   const changeHandler = (e) => {
@@ -36,7 +41,7 @@ const CommentArea = ({
       newComment.trim(),
       setNewComment,
       refreshRouter,
-      setUpdate
+      setUpdateTrue
     );
     setLoading(false);
   };
@@ -44,7 +49,7 @@ const CommentArea = ({
   const deleteCommentHandler = async (e, commentId) => {
     e.preventDefault();
     setLoading(true);
-    await deleteComment(post._id, commentId, refreshRouter, setUpdate);
+    await deleteComment(post._id, commentId, refreshRouter, setUpdateTrue);
     setLoading(false);
   };
 

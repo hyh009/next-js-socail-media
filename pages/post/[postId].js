@@ -1,30 +1,21 @@
-import { useCallback, useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { requireAuthentication } from "../../components/HOC/redirectDependonAuth";
-import { Card } from "../../components/Post";
-import { PostToastr, NoPost } from "../../components/Layout";
+import { requireAuthentication } from "../../utils/HOC/redirectDependonAuth";
 import axios from "axios";
 import baseUrl from "../../utils/baseUrl";
+import Head from "next/head";
+import { Card } from "../../components/Post";
+import { PostToastr, NoPost } from "../../components/Layout";
+import withSocket from "../../utils/HOC/withSocket";
 
-const Post = ({ post, user, setToastrType, notFound }) => {
-  const router = useRouter();
-  // to get data after create / delete / update data
-  const refreshRouter = useCallback(
-    () => router.replace(router.asPath),
-    [router]
-  );
-
+const Post = ({ post, user, setToastrType, notFound, pageTitle }) => {
   return (
     <>
+      <Head>
+        <title>{pageTitle}</title>
+      </Head>
       {!notFound && post && (
         <div style={{ padding: "20px 0" }}>
           <PostToastr />
-          <Card
-            post={post}
-            user={user}
-            setToastrType={setToastrType}
-            refreshRouter={refreshRouter}
-          />
+          <Card post={post} user={user} setToastrType={setToastrType} />
         </div>
       )}
       {notFound && <NoPost username={user.username} />}
@@ -36,7 +27,7 @@ export const getServerSideProps = requireAuthentication(
   async (context, userRes) => {
     const postId = context.query.postId;
     try {
-      const postRes = await axios(`${baseUrl}/post/${postId}`, {
+      const postRes = await axios(`${baseUrl}/api/post/${postId}`, {
         headers: {
           Cookie: context.req.headers.cookie,
         },
@@ -59,4 +50,4 @@ export const getServerSideProps = requireAuthentication(
     }
   }
 );
-export default Post;
+export default withSocket(Post);

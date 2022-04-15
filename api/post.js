@@ -92,6 +92,7 @@ router.get("/user/following", authMiddleware, async (req, res) => {
 
     let posts = [];
     let totalPosts = 0;
+    // only get the posts from the user that request user is following
     if (userFollowingStats.following.length > 0) {
       posts = await PostModel.find({
         user: {
@@ -105,7 +106,7 @@ router.get("/user/following", authMiddleware, async (req, res) => {
         .sort({ createdAt: -1 })
         .populate("user")
         .populate("comments.user");
-      // only get the posts from the user that request user is following
+
       totalPosts = await PostModel.find({
         user: {
           $in: [

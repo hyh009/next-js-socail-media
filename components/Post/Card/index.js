@@ -7,8 +7,9 @@ import { AiOutlineClose } from "react-icons/ai";
 import { MdKeyboardReturn } from "react-icons/md";
 import useClickOutsideClose from "../../../utils/hooks/useClickOutsideClose";
 import { deletePost } from "../../../utils/postAction";
+import { useGetDataFromServer } from "../../../utils/hooks/useUpdateData";
 
-const Card = ({ post, user, setToastrType, refreshRouter, setUpdate }) => {
+const Card = ({ post, user, setToastrType, setUpdateTrue, currentPage }) => {
   const [loading, setLoading] = useState(false);
   const [showPop, setShowPop] = useState(false);
   const [showPostModal, setShowPostModal] = useState(false);
@@ -19,12 +20,16 @@ const Card = ({ post, user, setToastrType, refreshRouter, setUpdate }) => {
   // click outside to close popup
   useClickOutsideClose(popRef, setShowPop);
   useClickOutsideClose(commentpopRef, setShowComments);
+  let refreshRouter = null;
+  if (!setUpdateTrue) {
+    refreshRouter = useGetDataFromServer();
+  }
 
   // delete a post
   const handleDeletePost = async (e) => {
     e.preventDefault();
     setLoading(true);
-    await deletePost(post._id, setToastrType, refreshRouter, setUpdate);
+    await deletePost(post._id, setToastrType, refreshRouter, setUpdateTrue);
     setLoading(false);
   };
 
@@ -37,8 +42,6 @@ const Card = ({ post, user, setToastrType, refreshRouter, setUpdate }) => {
           <PostModal
             post={post}
             user={user}
-            refreshRouter={refreshRouter}
-            setUpdate={setUpdate}
             setShowPostModal={setShowPostModal}
             setShowComments={setShowComments}
           />
@@ -52,8 +55,7 @@ const Card = ({ post, user, setToastrType, refreshRouter, setUpdate }) => {
             post={post}
             user={user}
             showComments={showComments}
-            refreshRouter={refreshRouter}
-            setUpdate={setUpdate}
+            setUpdateTrue={setUpdateTrue}
             popRef={commentpopRef}
           />
         )
@@ -84,18 +86,17 @@ const Card = ({ post, user, setToastrType, refreshRouter, setUpdate }) => {
         <Content
           post={post}
           user={user}
-          refreshRouter={refreshRouter}
-          setUpdate={setUpdate}
+          setUpdateTrue={setUpdateTrue}
           setLoading={setLoading}
           showImage={true}
+          currentPage={currentPage}
           setShowPostModal={setShowPostModal}
           setShowComments={setShowComments}
         />
         <CommentArea
           post={post}
           user={user}
-          refreshRouter={refreshRouter}
-          setUpdate={setUpdate}
+          setUpdateTrue={setUpdateTrue}
           number={showComments ? undefined : 3}
           setShowComments={setShowComments}
         />
