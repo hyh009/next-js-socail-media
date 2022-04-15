@@ -1,13 +1,17 @@
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-export const useGetDataFromServer = () => {
+export const useGetDataFromServer = (setUpdateTrue = null) => {
   const router = useRouter();
   const refreshRouter = useCallback(
     () => router.replace(router.asPath),
     [router]
   );
-  return refreshRouter;
+  if (setUpdateTrue) {
+    return null;
+  } else {
+    return refreshRouter;
+  }
 };
 
 export const useGetDataFromClient = (getDataFn) => {

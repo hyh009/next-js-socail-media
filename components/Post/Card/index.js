@@ -20,10 +20,7 @@ const Card = ({ post, user, setToastrType, setUpdateTrue, currentPage }) => {
   // click outside to close popup
   useClickOutsideClose(popRef, setShowPop);
   useClickOutsideClose(commentpopRef, setShowComments);
-  let refreshRouter = null;
-  if (!setUpdateTrue) {
-    refreshRouter = useGetDataFromServer();
-  }
+  const refreshRouter = useGetDataFromServer(setUpdateTrue);
 
   // delete a post
   const handleDeletePost = async (e) => {

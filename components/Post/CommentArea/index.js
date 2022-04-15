@@ -20,11 +20,7 @@ const CommentArea = ({
 }) => {
   const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(false);
-  let refreshRouter;
-  if (!setUpdateTrue) {
-    refreshRouter = useGetDataFromServer();
-  }
-
+  const refreshRouter = useGetDataFromServer(setUpdateTrue);
   if (typeof number === "undefined") number = post.comments.length;
   // handle input change
   const changeHandler = (e) => {

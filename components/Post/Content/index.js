@@ -25,10 +25,7 @@ const Content = ({
   const likeListRef = useRef(null);
 
   const socket = useSocketConnect();
-  let refreshRouter = null;
-  if (!setUpdateTrue) {
-    refreshRouter = useGetDataFromServer();
-  }
+  const refreshRouter = useGetDataFromServer(setUpdateTrue);
 
   useClickOutsideClose(likeListRef, setShowLikeList);
   //check if post is liked by current user
