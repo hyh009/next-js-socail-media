@@ -19,11 +19,10 @@ const toggleLikePost = async (postId, userId, like) => {
         return { success: false, error: "Post liked before" };
       post.likes.unshift({ user: userId });
       await post.save();
-
-      // notification
-      if (post.user.toString() !== userId) {
-        await newLikeNotification(userId, postId, post.user.toString());
-      }
+      return {
+        success: true,
+        postData: { postByUserId: post.user.toString(), postPic: post.picUrl },
+      };
     } else {
       const postLikeUserIndex = post.likes
         .map((like) => like.user.toString())
@@ -34,28 +33,46 @@ const toggleLikePost = async (postId, userId, like) => {
 
       post.likes.splice(postLikeUserIndex, 1);
       await post.save();
-      // remove notification
-      if (post.user.toString() !== userId) {
-        await removeLikeNotification(userId, postId, post.user.toString());
-      }
+      return {
+        success: true,
+        postData: { postByUserId: post.user.toString() },
+      };
     }
-    // get user info for realtime notification
-    const user = await UserModel.findById(userId);
-    const { name, profilePicUrl, username } = user;
-    return {
-      success: true,
-      error: false,
-      data: {
-        name,
-        profilePicUrl,
-        username,
-        postPic: post.picUrl,
-      },
-      postByUserId: post.user.toString(),
-    };
   } catch (error) {
     return { error: "Server error" };
   }
 };
 
-module.exports = { toggleLikePost };
+const notifyPostOwner = async (userId, postId, postData, like) => {
+  try {
+    if (like) {
+      // notification
+      if (postData.postByUserId !== userId) {
+        await newLikeNotification(userId, postId, postData.postByUserId);
+      }
+      // get user info for realtime notification
+      const user = await UserModel.findById(userId);
+      const { name, profilePicUrl, username } = user;
+      return {
+        notifySuccess: true,
+        notifyError: false,
+        data: {
+          name,
+          profilePicUrl,
+          username,
+          postPic: postData.picUrl,
+        },
+        postByUserId: postData.postByUserId,
+      };
+    } else {
+      if (postData.postByUserId !== userId) {
+        await removeLikeNotification(userId, postId, postData.postByUserId);
+      }
+      return { notifySuccess: true, notifyError: false };
+    }
+  } catch (error) {
+    console.log(error);
+    return { notifyError: "Server error" };
+  }
+};
+module.exports = { toggleLikePost, notifyPostOwner };

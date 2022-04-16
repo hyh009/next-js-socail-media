@@ -11,7 +11,7 @@ import { MsgModal } from "../../components/Message";
 
 function withSocket(OriginalComponent) {
   return (props) => {
-    const { user, setNotificationUnread, profile, post, errorCode } = props;
+    const { user, setNotificationUnread, profile, post } = props;
     const router = useRouter();
     let pageName = router.asPath.split("/")[1].substring(1);
     if (router.pathname === "/[username]") {

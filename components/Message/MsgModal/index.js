@@ -2,9 +2,12 @@ import ReactDOM from "react-dom";
 import { Avator, CalculateTime } from "../../Common";
 import classes from "./msgModal.module.css";
 
-const MsgModal = ({ newRecievedMessage }) => {
+const MsgModal = ({ newRecievedMessage, setShowNewMessageModal }) => {
   return ReactDOM.createPortal(
-    <div className={classes.container}>
+    <div
+      className={classes.container}
+      onAnimationEnd={() => setShowNewMessageModal(false)}
+    >
       <Avator
         src={newRecievedMessage.senderProfilePic}
         alr={newRecievedMessage.senderName}

@@ -2,6 +2,7 @@ import classes from "./sidebar.module.css";
 import { forwardRef } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import Image from "next/image";
 import {
   RiLogoutBoxRLine,
   RiAccountCircleLine,
@@ -41,6 +42,16 @@ const Sidebar = ({ user, mini, notificationUnread }) => {
     <div
       className={`${classes.container} ${mini && classes[`mini-container`]}`}
     >
+      <div className={classes.logo}>
+        <Image
+          src="/logo.png"
+          alt="logo"
+          width={40}
+          height={40}
+          title="Logo made by DesignEvo free logo creator"
+        ></Image>
+        <span className={classes.pcOnly}>Mini Social Media</span>
+      </div>
       <ul
         className={`${classes[`list-container`]} ${
           mini && classes[`mini-list-container`]

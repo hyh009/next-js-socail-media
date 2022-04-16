@@ -5,6 +5,20 @@
   height: 100vh;
   padding: 25px 20px;
   background-color: var(--primaryColor);
+  display: flex;
+  flex-direction: column;
+  gap:10px;
+}
+
+.logo {
+  font-size: 1.5rem;
+  height: 40px;
+  color:white;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  gap:10px;
 }
 
 .list-container {
@@ -12,7 +26,7 @@
   flex-direction: column;
   list-style-type: none;
   gap: 30px;
-  height: 100%;
+  height: calc(100% - 50px);
   padding: 0;
   background: rgba(255, 255, 255, 0.1);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);

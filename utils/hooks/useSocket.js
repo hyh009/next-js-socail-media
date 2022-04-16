@@ -75,26 +75,31 @@ export const useSocketReceiveMsg = (user, defaultTitle) => {
 export const useSocketNotifyPostLiked = (setNotificationUnread) => {
   const [newNotification, setNewNotification] = useState(null);
   const [showNotificationPopup, setShowNotificationPopup] = useState(false);
-
   const closeNotificationPopup = () => setShowNotificationPopup(false);
+
+  const postLikedNotifyHandler = useCallback(
+    ({ name, profilePicUrl, username, postId, postPic }) => {
+      setNewNotification({
+        name,
+        profilePicUrl,
+        username,
+        postId,
+        postPic,
+      });
+      setShowNotificationPopup(true);
+      setNotificationUnread(true);
+    },
+    []
+  );
+
   const socket = useSocketConnect();
   useEffect(() => {
     if (socket) {
-      socket.once(
-        socketEvent.POST_LIKED_NOTIFY,
-        ({ name, profilePicUrl, username, postId, postPic }) => {
-          setNewNotification({
-            name,
-            profilePicUrl,
-            username,
-            postId,
-            postPic,
-          });
-          setShowNotificationPopup(true);
-          setNotificationUnread(true);
-        }
-      );
+      socket.on(socketEvent.POST_LIKED_NOTIFY, postLikedNotifyHandler);
     }
+    return () => {
+      socket.off(socketEvent.POST_LIKED_NOTIFY, postLikedNotifyHandler);
+    };
   }, []);
   //close notification after 5s
   useEffect(() => {

@@ -9,6 +9,7 @@ export default class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Hubballi&display=swap"
             rel="stylesheet"
           />
+          <link rel="shortcut icon" href="/logo.png" />
         </Head>
         <body>
           <script
