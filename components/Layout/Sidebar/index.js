@@ -50,7 +50,9 @@ const Sidebar = ({ user, mini, notificationUnread }) => {
           height={40}
           title="Logo made by DesignEvo free logo creator"
         ></Image>
-        <span className={classes.pcOnly}>Mini Social Media</span>
+        <span className={`${classes.pcOnly} ${classes[`mini-logo`]}`}>
+          Mini Social Media
+        </span>
       </div>
       <ul
         className={`${classes[`list-container`]} ${

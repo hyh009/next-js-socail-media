@@ -89,6 +89,9 @@
   padding: 10px 5px;
 }
 
+.mini-logo {
+  display: none;
+}
 .mini-list-container {
   padding:  10px 5px;
 }
