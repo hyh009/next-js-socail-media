@@ -23,9 +23,11 @@ const Signup = () => {
     e.preventDefault();
     setFormLoading(true);
     let profilePicUrl;
+
     if (imageBase64String) {
       profilePicUrl = await uploadPic(imageBase64String);
     }
+
     // handle uploading image error
     if (imageBase64String !== "" && !profilePicUrl) {
       setFormLoading(false);

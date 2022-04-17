@@ -146,18 +146,27 @@
     height: 40px;
     display: flex;
     align-items: center;
-    padding: 0px 15px;;
+    padding: 0px 5px;;
+    flex-direction: row;
 
+  }
+
+  .logo{
+    padding: 0 5px;
   }
   .list-container, .mini-list-container {
     flex-direction: row;
-    gap: 6vmin;
-    padding: 5px;
+    gap: 5vmin;
+    padding: 0px;
     background-color: transparent;
+    align-items: center;
+    height: 100%;
   }
 
   .list, .mini-list{
-    padding: 5px;
+    padding: 0px;
     display: flex;
+    padding: 2px;
+
   }
 }

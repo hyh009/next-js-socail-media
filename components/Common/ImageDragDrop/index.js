@@ -15,6 +15,7 @@ const ImageDragDrop = ({ imagePreview, setImagePreview, size }) => {
     },
     [setImagePreview]
   );
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (

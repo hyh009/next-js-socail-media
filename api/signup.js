@@ -12,6 +12,7 @@ const userPng =
   "https://res.cloudinary.com/dh2splieo/image/upload/v1646928267/social_media/user_mklcpl_eezlmo.png";
 
 const regexUserName = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/;
+// check if username is valid
 router.get("/:username", async (req, res) => {
   const { username } = req.params;
   try {
@@ -32,20 +33,20 @@ router.get("/:username", async (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 });
-
+// signup
 router.post("/", async (req, res) => {
   const {
     name,
     email,
     username,
     password,
-    profilePicUrl,
     bio,
     facebook,
     youtube,
     instagram,
     twitter,
   } = req.body.user;
+  const { profilePicUrl } = req.body;
   // simple validation
   if (!isEmail(email))
     return res.status(401).json({ message: "email is invalid" });
@@ -61,6 +62,7 @@ router.post("/", async (req, res) => {
     user = await UserModel.findOne({ email: email.toLowerCase() });
     if (user)
       return res.status(401).json({ message: "email already registered" });
+    console.log(profilePicUrl, "api/signup");
     // handle data
     user = new UserModel({
       name,
