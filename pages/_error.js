@@ -35,6 +35,6 @@ Error.getInitialProps = ({ res, err }) => {
 
 export default Error;
 
-error.getLayout = function PageLayout(page) {
+Error.getLayout = function PageLayout(page) {
   return <ErrorPageLayout>{page}</ErrorPageLayout>;
 };

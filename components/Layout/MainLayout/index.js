@@ -11,13 +11,16 @@ export const UserLayout = ({
   setNotificationUnread,
   errorCode,
 }) => {
+  useEffect(() => {
+    if (user) {
+      setNotificationUnread(user.unreadNotification);
+    }
+  }, [user, setNotificationUnread]);
+
   // handle error loading on getServerSideProps
   if (errorCode) {
     return <Error statusCode={errorCode} />;
   }
-  useEffect(() => {
-    setNotificationUnread(user.unreadNotification);
-  }, [user, setNotificationUnread]);
   return (
     <>
       <div id="backdrop-root" />
@@ -40,12 +43,16 @@ export const MessageLayout = ({
   errorCode,
 }) => {
   // handle error loading on getServerSideProps
+
+  useEffect(() => {
+    if (user) {
+      setNotificationUnread(user.unreadNotification);
+    }
+  }, [user, setNotificationUnread]);
+
   if (errorCode) {
     return <Error statusCode={errorCode} />;
   }
-  useEffect(() => {
-    setNotificationUnread(user.unreadNotification);
-  }, [user, setNotificationUnread]);
   return (
     <>
       <div id="backdrop-root" />
