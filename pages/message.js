@@ -1,4 +1,3 @@
-import Error from "next/error";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { requireAuthentication } from "../utils/HOC/redirectDependonAuth";
 import axios from "axios";
@@ -13,7 +12,7 @@ import { ChatOverview, ChatRoom } from "../components/Message";
 import { NotificationPopup } from "../components/Notification";
 import { PAGE_TITLE } from "../utils/headContnet";
 
-const Message = ({ user, chats, setNotificationUnread, errorCode }) => {
+const Message = ({ user, chats, setNotificationUnread }) => {
   const [connectedUsers, setConnectedUsers] = useState([]); // online userlist
   const [loggedChats, setLoggedChats] = useState(chats);
   const [messagesLoading, setMessagesLoading] = useState(false);
@@ -301,10 +300,6 @@ const Message = ({ user, chats, setNotificationUnread, errorCode }) => {
       alert("Error occurs while deleting chat");
     }
   };
-  // handle error loading on getServerSideProps
-  if (errorCode) {
-    return <Error statusCode={errorCode} />;
-  }
   return (
     <>
       <Head>

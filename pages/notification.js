@@ -1,4 +1,3 @@
-import Error from "next/error";
 import { useEffect } from "react";
 import Head from "next/head";
 import { requireAuthentication } from "../utils/HOC/redirectDependonAuth";
@@ -12,12 +11,8 @@ import {
   FollowNotification,
 } from "../components/Notification";
 
-const Notification = ({
-  userFollowStats,
-  notifications,
-  errorCode,
-  pageTitle,
-}) => {
+const Notification = ({ userFollowStats, notifications, pageTitle }) => {
+  // turn unread notification off
   useEffect(() => {
     const notificationRead = async () => {
       try {
@@ -28,11 +23,6 @@ const Notification = ({
     };
     notificationRead();
   }, []);
-
-  // handle error loading on getServerSideProps
-  if (errorCode) {
-    return <Error statusCode={errorCode} />;
-  }
 
   return (
     <>
@@ -50,14 +40,20 @@ const Notification = ({
                   userFollowStats={userFollowStats}
                 />
               );
-            } else if (notification.type === "newLike") {
+            } else if (
+              notification.type === "newLike" &&
+              notification.post !== null
+            ) {
               return (
                 <LikeNotification
                   key={notification._id}
                   notification={notification}
                 />
               );
-            } else if (notification.type === "newComment") {
+            } else if (
+              notification.type === "newComment" &&
+              notification.post !== null
+            ) {
               return (
                 <CommentNotification
                   key={notification._id}
@@ -88,6 +84,7 @@ export const getServerSideProps = requireAuthentication(
         },
       };
     } catch (error) {
+      console.log(error);
       return { props: { errorCode: error.response?.status || 500 } };
     }
   }

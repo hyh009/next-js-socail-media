@@ -2,17 +2,22 @@ import Navbar from "../Navbar";
 import classes from "./MainLayout.module.css";
 import { Search, Sidebar } from "../index";
 import { useEffect } from "react";
+import Error from "next/error";
 
 export const UserLayout = ({
   children,
   user,
   notificationUnread,
   setNotificationUnread,
+  errorCode,
 }) => {
+  // handle error loading on getServerSideProps
+  if (errorCode) {
+    return <Error statusCode={errorCode} />;
+  }
   useEffect(() => {
     setNotificationUnread(user.unreadNotification);
   }, [user, setNotificationUnread]);
-
   return (
     <>
       <div id="backdrop-root" />
@@ -32,7 +37,12 @@ export const MessageLayout = ({
   user,
   setNotificationUnread,
   notificationUnread,
+  errorCode,
 }) => {
+  // handle error loading on getServerSideProps
+  if (errorCode) {
+    return <Error statusCode={errorCode} />;
+  }
   useEffect(() => {
     setNotificationUnread(user.unreadNotification);
   }, [user, setNotificationUnread]);

@@ -14,7 +14,15 @@ router.get("/", authMiddleware, async (req, res) => {
       .populate("notifications.user")
       .populate("notifications.post");
 
-    return res.status(200).json(userNotification);
+    let noNullNotification = [];
+    if (userNotification.notifications.length > 0) {
+      noNullNotification = userNotification.notifications.filter(
+        (notification) => notification.post !== null
+      );
+    }
+    return res
+      .status(200)
+      .json({ ...userNotification, notifications: noNullNotification });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Server error" });

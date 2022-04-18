@@ -22,8 +22,8 @@ export function requireAuthentication(getServerSidePropsFunction) {
         },
       });
       return await getServerSidePropsFunction(context, userRes);
-    } catch (err) {
-      if (err.response?.status === 401 || err.message === "Unauthorized") {
+    } catch (error) {
+      if (error.response?.status === 401 || error.message === "Unauthorized") {
         return {
           redirect: {
             destination: "/login",

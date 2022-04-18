@@ -1,4 +1,3 @@
-import Error from "next/error";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
@@ -25,7 +24,6 @@ const Account = ({
   userFollowStats,
   setToastrType,
   pageTitle,
-  errorCode,
 }) => {
   const router = useRouter();
   const { username } = router.query;
@@ -48,11 +46,6 @@ const Account = ({
       scrollToTop();
     }
   }, [router.asPath]);
-
-  // handle error loading on getServerSideProps
-  if (errorCode) {
-    return <Error statusCode={errorCode} />;
-  }
 
   return (
     <>

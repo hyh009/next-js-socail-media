@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const ObjectId = require("mongoose").Types.ObjectId;
 const PostModel = require("../models/PostModel");
 const UserModel = require("../models/UserModel");
 const FollowerModel = require("../models/FollowerModel");
@@ -62,9 +61,6 @@ router.get("/", authMiddleware, async (req, res) => {
 router.get("/:postId", authMiddleware, async (req, res) => {
   try {
     const { postId } = req.params;
-    // if (!ObjectId.isValid(postId)) {
-    //   res.status(404).json({ message: "Invlid post Id" });
-    // }
     const post = await PostModel.findById(postId)
       .populate("user")
       .populate("comments.user");

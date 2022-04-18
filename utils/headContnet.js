@@ -16,4 +16,5 @@ export const PAGE_TITLE = {
     }'s Post | ${SITE_NAME}`,
   FOUROFOUR: `404 Page Not Found | ${SITE_NAME}`,
   FIVEOO: `500 Server error | ${SITE_NAME}`,
+  ERROR: `Error Occurred | ${SITE_NAME}`,
 };

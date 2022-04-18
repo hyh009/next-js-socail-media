@@ -5,18 +5,10 @@ import { useEffect, useState } from "react";
 import withSocket from "../utils/HOC/withSocket";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import Error from "next/error";
 import { NoPosts, PostToastr } from "../components/Layout";
 import { InfiniteScrollPost, CreatedPost } from "../components/Post";
 
-const Home = ({
-  user,
-  posts,
-  postPage,
-  setToastrType,
-  pageTitle,
-  errorCode,
-}) => {
+const Home = ({ user, posts, postPage, setToastrType, pageTitle }) => {
   const [hasMore, setHasMore] = useState(true);
 
   const router = useRouter();
@@ -41,10 +33,6 @@ const Home = ({
     });
   };
 
-  // handle error loading on getServerSideProps
-  if (errorCode) {
-    return <Error statusCode={errorCode} />;
-  }
   return (
     <>
       <Head>
