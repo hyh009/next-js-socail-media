@@ -14,3 +14,9 @@
   overflow: hidden;
   white-space: nowrap;
 }
+
+.link-text{
+  color:gray;
+  text-decoration: none;
+  cursor: pointer;
+}

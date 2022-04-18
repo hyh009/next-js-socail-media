@@ -68,6 +68,9 @@
   height: 100%;
 }
 
+.search-result:hover{
+  background-color: var(--darkGray);
+}
 .input {
   width: 90%;
   font-size: 1.25rem;

@@ -10,29 +10,29 @@ const Navbar = ({ errorPage }) => {
   return (
     <div className={classes.container}>
       <Link href="/" passHref>
-        <div className={classes.title}>Mini Social Media</div>
+        <a className={classes.title}>Mini Social Media</a>
       </Link>
       {!errorPage && (
         <div className={classes.menu}>
           <Link href="/login" passHref>
-            <div
+            <a
               className={`${classes[`menu-item`]} ${
                 checkIfActive("/login") ? classes[`menu-active`] : ""
               }`}
             >
               <AiOutlineLogin />
               Login
-            </div>
+            </a>
           </Link>
           <Link href="/signup" passHref>
-            <div
+            <a
               className={`${classes[`menu-item`]} ${
                 checkIfActive("/signup") ? classes[`menu-active`] : ""
               }`}
             >
               <BsPencilSquare />
               Signup
-            </div>
+            </a>
           </Link>
         </div>
       )}

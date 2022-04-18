@@ -35,7 +35,7 @@
 }
 
 .location {
-  color: var(--darkGray);
+  color: gray;
   width: 100%;
   max-width: 100%;
   text-overflow: ellipsis;

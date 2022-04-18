@@ -1,5 +1,5 @@
-import moment from "moment";
-import Moment from "react-moment";
+import dayjs from "dayjs";
+import { useRouter } from "next/router";
 import classes from "./calculateTime.module.css";
 
 const checkDay = (postDate, thisYear, beforeYesterday, yesterday, today) => {
@@ -15,12 +15,17 @@ const checkDay = (postDate, thisYear, beforeYesterday, yesterday, today) => {
 };
 
 export const CalculateTime = ({ date, type, postId, msg }) => {
-  const postDate = moment(date);
-  const dateTitle = moment(date).format("YYYY MM DD, h:mm a");
-  const thisYear = moment().startOf("year");
-  const beforeYesterday = moment().subtract(2, "day").endOf("day");
-  const yesterday = moment().subtract(1, "day").endOf("day");
-  const today = moment().endOf("day");
+  const router = useRouter();
+  const postDate = dayjs(date);
+  const dateTitle = dayjs(date).format("YYYY MM DD, h:mm a");
+  const thisYear = dayjs().startOf("year");
+  const beforeYesterday = dayjs().subtract(2, "day").endOf("day");
+  const yesterday = dayjs().subtract(1, "day").endOf("day");
+  const today = dayjs().endOf("day");
+
+  const clickHandler = () => {
+    router.push(`/post/${postId}`);
+  };
   if (
     checkDay(postDate, thisYear, beforeYesterday, yesterday, today) ===
     "before this year"
@@ -36,7 +41,12 @@ export const CalculateTime = ({ date, type, postId, msg }) => {
             : ""
         }
       >
-        <Moment format="YYYY-MM-DD hh:mm A">{date}</Moment>
+        <span
+          className={classes[`link-text`]}
+          onClick={postId ? router.push(`/post/${postId}`) : undefined}
+        >
+          {dayjs(date).format("YYYY-MM-DD hh:mm A")}
+        </span>
       </div>
     );
   } else if (
@@ -53,8 +63,10 @@ export const CalculateTime = ({ date, type, postId, msg }) => {
             : ""
         }
       >
-        {!msg && "Today "}
-        <Moment format="hh:mm A">{date}</Moment>
+        <span
+          className={classes[`link-text`]}
+          onClick={postId ? clickHandler : undefined}
+        >{`${!msg && "Today "}${dayjs(date).format("hh:mm A")}`}</span>
       </div>
     );
   } else if (
@@ -72,7 +84,10 @@ export const CalculateTime = ({ date, type, postId, msg }) => {
             : ""
         }
       >
-        Yesterday <Moment format="hh:mm A">{date}</Moment>
+        <span
+          className={classes[`link-text`]}
+          onClick={postId ? clickHandler : undefined}
+        >{`${!msg && "Yesterday "}${dayjs(date).format("hh:mm A")}`}</span>
       </div>
     );
   } else if (
@@ -90,7 +105,10 @@ export const CalculateTime = ({ date, type, postId, msg }) => {
             : ""
         }
       >
-        <Moment format="MM-DD hh:mm A">{date}</Moment>
+        <span
+          className={classes[`link-text`]}
+          onClick={postId ? clickHandler : undefined}
+        >{`${dayjs(date).format("MM-DD hh:mm A")}`}</span>
       </div>
     );
   }

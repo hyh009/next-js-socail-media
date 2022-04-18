@@ -41,6 +41,7 @@ const Card = ({ post, user, setToastrType, setUpdateTrue, currentPage }) => {
             user={user}
             setShowPostModal={setShowPostModal}
             setShowComments={setShowComments}
+            setUpdateTrue={setUpdateTrue}
           />
         )
       }

@@ -78,7 +78,7 @@ const CommentArea = ({
         </div>
       )}
       {/* add comment input */}
-      <div className={classes[`comment-input-container`]}>
+      <form className={classes[`comment-input-container`]}>
         <InputWithAvator
           type="text"
           placeholder="Add a comment"
@@ -93,7 +93,7 @@ const CommentArea = ({
           clickHandler={addCommentHandler}
           isDisable={newComment.trim().length === 0}
         />
-      </div>
+      </form>
     </div>
   );
 };

@@ -15,7 +15,7 @@ const toggleLikePost = async (postId, userId, like) => {
         .map((like) => like.user.toString())
         .indexOf(userId);
 
-      if (!postLikeUserIndex < 0)
+      if (postLikeUserIndex >= 0)
         return { success: false, error: "Post liked before" };
       post.likes.unshift({ user: userId });
       await post.save();

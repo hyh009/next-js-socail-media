@@ -17,7 +17,13 @@ const CloseIcon = ({ setShowPostModal }) => {
   );
 };
 
-const PostModal = ({ post, user, setShowPostModal, setShowComments }) => {
+const PostModal = ({
+  post,
+  user,
+  setShowPostModal,
+  setShowComments,
+  setUpdateTrue,
+}) => {
   return ReactDOM.createPortal(
     <div
       className={`${
@@ -48,12 +54,14 @@ const PostModal = ({ post, user, setShowPostModal, setShowComments }) => {
           user={user}
           propClass={post.picUrl && "post-modal"}
           setShowComments={setShowComments}
+          setUpdateTrue={setUpdateTrue}
         />
         <CommentArea
           post={post}
           user={user}
           restrictHeight="180"
           propClass={post.picUrl && "post-modal"}
+          setUpdateTrue={setUpdateTrue}
         />
       </div>
     </div>,
