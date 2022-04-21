@@ -13,7 +13,7 @@ router.get("/", authMiddleware, async (req, res) => {
   const userId = req.userId; // set in middleware
 
   try {
-    const user = await UserModel.findById(userId);
+    const user = await UserModel.findById(userId).select("-__v");
     const userFollowStats = await FollowerModel.findOne({ user: userId });
 
     return res.status(200).json({ user, userFollowStats });
