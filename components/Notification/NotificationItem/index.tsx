@@ -1,5 +1,5 @@
 import React,{ useState } from "react";
-import { IUserFollowStats,NotifyFollowRelatedState,NotifyPostRelatedState} from "../../../utils/types";
+import { IUserFollowStats,NotificationState} from "../../../utils/types";
 import { Avator, CalculateTime, Button } from "../../Common";
 import Link from "next/link";
 import Image from "next/image";
@@ -9,11 +9,11 @@ import { useGetDataFromServer } from "../../../utils/hooks";
 import classes from "./notification.module.css";
 
 interface PostRelatedProps {
-  notification: NotifyPostRelatedState
+  notification: NotificationState
 }
 
 interface FollowRelatedProps {
-  notification: NotifyFollowRelatedState
+  notification: NotificationState
   userFollowStats:IUserFollowStats
 }
 export const CommentNotification:React.FC<PostRelatedProps> = ({ notification }) => {
@@ -32,7 +32,7 @@ export const CommentNotification:React.FC<PostRelatedProps> = ({ notification })
         <Link href={`/post/${encodeURIComponent(notification.post._id)}`}>
           <a className={classes[`link-text`]}> post</a>
         </Link>
-        <CalculateTime date={notification.date} />
+        <CalculateTime date={notification.date as number} />
         <p className={classes.text}>{notification.text}</p>
         {notification.post?.picUrl && (
           <div className={classes[`post-image-container`]}>
@@ -67,7 +67,7 @@ export const LikeNotification:React.FC<PostRelatedProps> = ({ notification }) =>
         <Link href={`/post/${encodeURIComponent(notification.post._id)}`}>
           <a className={classes[`link-text`]}> post</a>
         </Link>
-        <CalculateTime date={notification.date} />
+        <CalculateTime date={notification.date as number} />
         {notification.post?.picUrl && (
           <div className={classes[`post-image-container`]}>
             <Image
@@ -107,7 +107,7 @@ export const FollowNotification:React.FC<FollowRelatedProps> = ({ notification, 
             <a className={classes[`link-text`]}>{notification.user.name} </a>
           </Link>
           started following you
-          <CalculateTime date={notification.date} />
+          <CalculateTime date={notification.date as number} />
         </div>
       </div>
       <Button

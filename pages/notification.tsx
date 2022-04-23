@@ -1,7 +1,9 @@
 import { useEffect } from "react";
+import {type  GetServerSidePropsContext, NextPage } from "next"
+import type { IUserFollowStats,NotificationState,IUser } from "../utils/types";
 import Head from "next/head";
 import { requireAuthentication } from "../utils/HOC/redirectDependonAuth";
-import axios from "axios";
+import axios,{ type AxiosResponse} from "axios";
 import baseUrl from "../utils/baseUrl";
 import withSocket from "../utils/HOC/withSocket";
 import { NoNotification } from "../components/Layout";
@@ -11,7 +13,15 @@ import {
   FollowNotification,
 } from "../components/Notification";
 
-const Notification = ({ userFollowStats, notifications, pageTitle }) => {
+
+
+interface Props {
+  userFollowStats:IUserFollowStats
+  notifications:NotificationState[]
+  pageTitle:string
+}
+
+const Notification:NextPage<Props> = ({ userFollowStats, notifications, pageTitle }) => {
   // turn unread notification off
   useEffect(() => {
     const notificationRead = async () => {
@@ -69,9 +79,10 @@ const Notification = ({ userFollowStats, notifications, pageTitle }) => {
 };
 
 export const getServerSideProps = requireAuthentication(
-  async (context, userRes) => {
+  async (context:GetServerSidePropsContext,
+         userRes:AxiosResponse<{user:IUser[], userFollowStats:IUserFollowStats}>) => {
     try {
-      const notificationRes = await axios(`${baseUrl}/api/notification`, {
+      const notificationRes:AxiosResponse<{notifications:NotificationState[]}> = await axios(`${baseUrl}/api/notification`, {
         headers: {
           Cookie: context.req.headers.cookie,
         },

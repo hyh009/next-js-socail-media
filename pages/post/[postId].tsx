@@ -1,8 +1,8 @@
-import {  GetServerSideProps } from 'next'
-import React, { Dispatch, SetStateAction } from "react";
-import { IPost, IUser } from "../../utils/types";
+import { type GetServerSidePropsContext, NextPage } from 'next'
+import React, { type Dispatch, SetStateAction } from "react";
+import {type IPost, IUser,IUserFollowStats } from "../../utils/types";
 import { requireAuthentication } from "../../utils/HOC/redirectDependonAuth";
-import axios from "axios";
+import axios,{ type AxiosResponse} from "axios";
 import baseUrl from "../../utils/baseUrl";
 import Head from "next/head";
 import { Card } from "../../components/Post";
@@ -18,7 +18,7 @@ interface Props {
   notFound?:boolean
 }
 
-const Post:React.FC<Props> = ({ post, user, setToastrType, notFound, pageTitle }) => {
+const Post:NextPage<Props> = ({ post, user, setToastrType, notFound, pageTitle }) => {
   return (
     <>
       <Head>
@@ -35,11 +35,12 @@ const Post:React.FC<Props> = ({ post, user, setToastrType, notFound, pageTitle }
   );
 };
 
-export const getServerSideProps: GetServerSideProps = requireAuthentication(
-  async (context, userRes) => {
+export const getServerSideProps = requireAuthentication(
+  async (context:GetServerSidePropsContext, 
+         userRes:AxiosResponse<{user:IUser[], userFollowStats:IUserFollowStats}>) => {
     const postId = context.query.postId;
     try {
-      const postRes = await axios(`${baseUrl}/api/post/${postId}`, {
+      const postRes:AxiosResponse<IPost[]> = await axios(`${baseUrl}/api/post/${postId}`, {
         headers: {
           Cookie: context.req.headers.cookie,
         },
@@ -58,7 +59,7 @@ export const getServerSideProps: GetServerSideProps = requireAuthentication(
           props: { notFound: true, user: userRes.data.user },
         };
       }
-      return { props: { errorLoading: true } };
+      return { props: { errorCode: error.response?.status || 500 } };
     }
   }
 );

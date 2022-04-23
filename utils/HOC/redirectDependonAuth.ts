@@ -1,8 +1,10 @@
-import axios from "axios";
-import baseUrl from "../../utils/baseUrl";
+import { GetServerSidePropsContext } from 'next'
+import axios, { AxiosResponse } from "axios";
+import baseUrl from "../baseUrl";
+import { IUser,IUserFollowStats } from '../types';
 
-export function requireAuthentication(getServerSidePropsFunction) {
-  return async (context) => {
+export function requireAuthentication(getServerSidePropsFunction:any) {
+  return async (context:GetServerSidePropsContext) => {
     const token = context.req.headers.cookie;
 
     if (!token) {
@@ -16,7 +18,7 @@ export function requireAuthentication(getServerSidePropsFunction) {
     }
 
     try {
-      const userRes = await axios(`${baseUrl}/api/auth`, {
+      const userRes:AxiosResponse<{user:IUser[], userFollowStats:IUserFollowStats}> = await axios(`${baseUrl}/api/auth`, {
         headers: {
           Cookie: context.req.headers.cookie,
         },

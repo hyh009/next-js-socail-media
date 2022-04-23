@@ -1,7 +1,37 @@
 // import {Types} from "mongoose";
+import { Dispatch,SetStateAction } from "react"
+// Signup
+export interface SignupInputstate {
+  name: string
+  email: string
+  password: string
+  bio: string
+  facebook: string
+  youtube: string
+  twitter: string
+  instagram: string
+}
+
+export type SignupHandler =  (e: React.FormEvent<HTMLFormElement>,
+  inputData:SignupInputstate, 
+  imagePreview:string,
+  setErrorMsg:Dispatch<SetStateAction<string>>, 
+  setFormLoading:Dispatch<SetStateAction<boolean>>) => Promise<void>
+
+// Login
+export interface LoginInputstate {
+  email:string
+  password:string
+}
+
+export type LoginHandler =  (e:React.FormEvent<HTMLFormElement>, 
+  inputData:LoginInputstate, 
+  setErrorMsg:Dispatch<SetStateAction<string>>, 
+  setFormLoading:Dispatch<SetStateAction<boolean>>)=>Promise<void>
+
 // USER
 export interface DisplayUser {
-  _id: string
+  _id?: string
   name: string
   profilePicUrl: string
 }
@@ -10,11 +40,10 @@ export interface SearchUser extends DisplayUser {
   username: string
 }
 
-type role = "user"|"admin"
 
 export interface IUser extends SearchUser {
   email:string
-  role:role
+  role:"user"|"admin"
   newMessagePopup:boolean
   unreadMessage:boolean
   unreadNotification:boolean
@@ -49,6 +78,7 @@ export interface IComment {
 
 
 // Profile
+
 export interface IProfile {
   _id:string
   user: IUser
@@ -93,17 +123,14 @@ export interface ConnectedUserState {
 }
 
 //NOTIFICATION
-export interface NotifyPostRelatedState {
-    user:IUser
-    date:number
-    post:IPost
-    text:string
-  
-}
-
-export interface NotifyFollowRelatedState {
-    user:IUser
-    date:number
+export interface NotificationState {
+  _id:string
+  type: "newLike"| "newComment"| "newFollower"
+  user: IUser
+  date: number|string
+  post?: IPost
+  commentId?:string
+  text?: string
 }
 
 export  interface NewNotificationState {
@@ -126,15 +153,8 @@ export interface IMessage extends DisplayMessage{
   receiver:string
 }
 
-export interface NewMsgState {
-  sender: string// sender userId
-  receiver:string // receiver userId
-  msg:string // msg content
-  date: number
-  _id: string // uuid
-}
 
-export interface NewReceivedMsgState extends NewMsgState {
+export interface NewReceivedMsgState extends IMessage {
   senderProfilePic:string
   senderName:string
 }

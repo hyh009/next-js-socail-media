@@ -1,15 +1,29 @@
 import { requireAuthentication } from "../utils/HOC/redirectDependonAuth";
-import axios from "axios";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {type GetServerSidePropsContext, NextPage } from 'next'
+import axios, {type AxiosResponse } from "axios";
 import baseUrl from "../utils/baseUrl";
-import { useEffect, useState } from "react";
+import {type IPost, IUser,IUserFollowStats } from "../utils/types";
 import withSocket from "../utils/HOC/withSocket";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { NoPosts, PostToastr } from "../components/Layout";
 import { InfiniteScrollPost, CreatedPost } from "../components/Post";
 
-const Home = ({ user, posts, postPage, setToastrType, pageTitle }) => {
-  const [hasMore, setHasMore] = useState(true);
+
+interface Props {
+  user:IUser
+  posts:IPost[]
+  postPage:{
+    maxPage:number 
+    currentPage:number
+  }
+  setToastrType:Dispatch<SetStateAction<string>>
+  pageTitle:string
+}
+
+const Home:NextPage<Props> = ({ user, posts, postPage, setToastrType, pageTitle }) => {
+  const [hasMore, setHasMore] = useState<boolean>(true);
 
   const router = useRouter();
 
@@ -20,12 +34,12 @@ const Home = ({ user, posts, postPage, setToastrType, pageTitle }) => {
   }, [posts, postPage]);
 
   // handle infinite scroll
-  const fetchDataOnScroll = () => {
+  const fetchDataOnScroll = ():void => {
     const query = router.query;
     if (postPage.maxPage > postPage.currentPage) {
-      query.page = postPage.currentPage + 1;
+      query.page = (postPage.currentPage + 1).toString(); 
     } else {
-      query.page = postPage.currentPage;
+      query.page = (postPage.currentPage).toString();
     }
     router.replace({
       pathname: router.pathname,
@@ -57,10 +71,11 @@ const Home = ({ user, posts, postPage, setToastrType, pageTitle }) => {
 };
 
 export const getServerSideProps = requireAuthentication(
-  async (context, userRes) => {
-    const page = context.query.page || 1;
+  async (context:GetServerSidePropsContext, 
+         userRes:AxiosResponse<{user:IUser[], userFollowStats:IUserFollowStats}>) => {
+    const page = context.query.page as string || "1";
     try {
-      const postsRes = await axios(`${baseUrl}/api/post/user/following`, {
+      const postsRes:AxiosResponse<{posts:IPost[],currentPage:number,maxPage:number}> = await axios(`${baseUrl}/api/post/user/following`, {
         headers: {
           Cookie: context.req.headers.cookie,
         },

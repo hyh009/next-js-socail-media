@@ -1,15 +1,18 @@
+import { Dispatch, SetStateAction } from "react";
 import axios from "axios";
 import baseUrl from "./baseUrl";
+import { type SignupInputstate,LoginInputstate } from "./types";
 import catchErrors from "./catchErrors";
 import Router from "next/router";
 import cookie from "js-cookie";
 
+
 export const registerUser = async (
-  user,
-  profilePicUrl,
-  setErrorMsg,
-  setLoading
-) => {
+  user:SignupInputstate,
+  profilePicUrl:string,
+  setErrorMsg:Dispatch<SetStateAction<string>>,
+  setLoading:Dispatch<SetStateAction<boolean>>
+):Promise<void> => {
   try {
     const res = await axios.post(`${baseUrl}/api/signup`, {
       user,
@@ -28,7 +31,10 @@ export const registerUser = async (
   setLoading(false);
 };
 
-export const loginUser = async (user, setErrorMsg, setLoading) => {
+export const loginUser = async (
+  user:LoginInputstate,
+  setErrorMsg:Dispatch<SetStateAction<string>>,
+  setLoading:Dispatch<SetStateAction<boolean>>):Promise<void> => {
   try {
     const res = await axios.post(`${baseUrl}/api/auth`, { user });
     if (res.data.message === "Success!") {
@@ -44,18 +50,10 @@ export const loginUser = async (user, setErrorMsg, setLoading) => {
 };
 
 // save email to set value of login page email input
-export const logoutUser = async (email) => {
+export const logoutUser = async (email:string):Promise<void> => {
   cookie.set("userEmail", email);
   await axios(`${baseUrl}/api/auth/logout`);
   Router.push("/login");
   Router.reload();
 };
 
-export const redirectUser = (ctx, location) => {
-  if (ctx.req) {
-    ctx.res.writeHead(302, { Location: location });
-    ctx.res.end();
-  } else {
-    window.location.href = location;
-  }
-};

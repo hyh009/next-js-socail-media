@@ -1,6 +1,7 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback,type Dispatch, SetStateAction, ReactElement } from "react";
 import { requireAuthentication } from "../utils/HOC/redirectDependonAuth";
-import axios from "axios";
+import type { GetServerSidePropsContext,NextLayoutComponentType } from 'next';
+import axios,{ type AxiosResponse} from "axios";
 import baseUrl from "../utils/baseUrl";
 import Head from "next/head";
 import socketEvent from "../utils/socketEvent";
@@ -10,19 +11,27 @@ import { useSocket, useSocketNotifyPostLiked } from "../utils/hooks/useSocket";
 import { MessageLayout } from "../components/Layout";
 import { ChatOverview, ChatRoom } from "../components/Message";
 import { NotificationPopup } from "../components/Notification";
-import { PAGE_TITLE } from "../utils/headContnet";
+import { PAGE_TITLE } from "../utils/headContent";
+import {type IChat, IUser,ConnectedUserState, IMessage,CurrentChatWithState,IUserFollowStats } from "../utils/types";
 
-const Message = ({ user, chats, setNotificationUnread }) => {
-  const [connectedUsers, setConnectedUsers] = useState([]); // online userlist
-  const [loggedChats, setLoggedChats] = useState(chats);
-  const [messagesLoading, setMessagesLoading] = useState(false);
-  const [currentChatWith, setCurrentChatWith] = useState(null);
-  const [messages, setMessages] = useState([]);
+
+interface Props {
+  user:IUser
+  chats:IChat[]
+  setNotificationUnread:Dispatch<SetStateAction<boolean>>
+}
+
+const Message:NextLayoutComponentType<Props> = ({ user, chats, setNotificationUnread }) => {
+  const [connectedUsers, setConnectedUsers] = useState<Array<ConnectedUserState>>([]); // online userlist
+  const [loggedChats, setLoggedChats] = useState<Array<IChat>>(chats);
+  const [messagesLoading, setMessagesLoading] = useState<boolean>(false);
+  const [currentChatWith, setCurrentChatWith] = useState<CurrentChatWithState>(null);
+  const [messages, setMessages] = useState<Array<IMessage>>([]);
   const [pageTitle, changeTitle] = useChangeTitle(PAGE_TITLE.MESSAGE); //page title
-  const openChatUser = useRef();
-  const chatsRef = useRef();
-  const newMessageRef = useRef(); // for scroll to bottom
-  const chatWindowRef = useRef(); // prevent dragable icon outside chat window
+  const openChatUser = useRef<CurrentChatWithState>(null); // for getting updated data from socket.on event handler
+  const chatsRef = useRef<Array<IChat>>(null); // for getting updated data from socket.on event handler
+  const newMessageRef = useRef<HTMLDivElement>(null); // for scroll to bottom
+  const chatWindowRef = useRef<HTMLDivElement>(null); // prevent dragable icon outside chat window
   openChatUser.current = currentChatWith;
   chatsRef.current = loggedChats;
   // audio notification
@@ -47,8 +56,8 @@ const Message = ({ user, chats, setNotificationUnread }) => {
   }, []);
   // to update chat when deleted msg is lastMessage
   const updatedChatsIfMsgDeleted = useCallback(
-    (messagesWith) => {
-      if (typeof messagesWith === "undefined") {
+    (messagesWith:string =null) => {
+      if (messagesWith === null) {
         messagesWith = currentChatWith.messagesWith;
       }
 
@@ -67,7 +76,7 @@ const Message = ({ user, chats, setNotificationUnread }) => {
   );
 
   // socket on listener: MESSAGE_SAVE_AND_SENT
-  const saveAndSentMsgListener = useCallback(async (args) => {
+  const saveAndSentMsgListener = useCallback(async (args:{newMsg:IMessage}):Promise<void> => {
     // add messages from you own to chat window (if window is open)
     const { newMsg } = args;
     if (
@@ -110,9 +119,9 @@ const Message = ({ user, chats, setNotificationUnread }) => {
 
   // socket on listener: MESSAGE_RECEIVED
   const receiveMsgListener = useCallback(
-    async (args) => {
+    async (args:{newMsg:IMessage}):Promise<void> => {
       const { newMsg } = args;
-      let senderName; // for notification (change page title)
+      let senderName:string; // for notification (change page title)
       // add messages from messagesWith user (if window is open)
       if (
         openChatUser.current !== null &&
@@ -179,7 +188,7 @@ const Message = ({ user, chats, setNotificationUnread }) => {
 
   // socket on listener: MESSAGE_DELETE_UPDATE
   const changeDeletedMsgListener = useCallback(
-    async (args) => {
+    async (args:{messagesWith:string,msgId:string,isLastMsg:boolean}):Promise<void> => {
       const { messagesWith, msgId, isLastMsg } = args;
       // if user's currentChatWith user ===  messagesWith user and messagesWith user delete a msg
       if (messagesWith === openChatUser.current?.messagesWith) {
@@ -252,7 +261,7 @@ const Message = ({ user, chats, setNotificationUnread }) => {
   ]);
 
   // input submit event => send message
-  const sendMsg = (msg) => {
+  const sendMsg = (msg:string):void => {
     if (typeof currentChatWith === null || msg.length === 0) {
       return;
     }
@@ -265,7 +274,7 @@ const Message = ({ user, chats, setNotificationUnread }) => {
     }
   };
   // delete icon onclick event => delete message
-  const deleteMsg = (msgId) => {
+  const deleteMsg = (msgId:string):void => {
     if (socket) {
       socket.emit(socketEvent.MESSAGE_DELETE, {
         userId: user._id,
@@ -289,7 +298,7 @@ const Message = ({ user, chats, setNotificationUnread }) => {
     }
   };
   // delete chat
-  const deleteChat = async (messagesWith) => {
+  const deleteChat = async (messagesWith:string):Promise<void> => {
     try {
       await axios.delete(`${baseUrl}/api/chat/${messagesWith}`);
       setLoggedChats((prev) =>
@@ -337,9 +346,10 @@ const Message = ({ user, chats, setNotificationUnread }) => {
 };
 
 export const getServerSideProps = requireAuthentication(
-  async (context, userRes) => {
+  async (context:GetServerSidePropsContext, 
+         userRes:AxiosResponse<{user:IUser[], userFollowStats:IUserFollowStats}>) => {
     try {
-      const chatRes = await axios(`${baseUrl}/api/chat`, {
+      const chatRes:AxiosResponse<{chatsToBeSent:IChat[]}> = await axios(`${baseUrl}/api/chat`, {
         headers: {
           Cookie: context.req.headers.cookie,
         },
@@ -359,12 +369,13 @@ export const getServerSideProps = requireAuthentication(
 
 export default Message;
 
-Message.getLayout = function PageLayout(page) {
+Message.getLayout = function PageLayout(page:ReactElement) {
   const { props } = page;
   return (
     <MessageLayout
       user={props.user}
       setNotificationUnread={props.setNotificationUnread}
+      notificationUnread={props.notificationUnread}
     >
       {page}
     </MessageLayout>

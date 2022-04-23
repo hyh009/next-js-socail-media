@@ -1,4 +1,5 @@
-import { useState, useEffect,Dispatch,SetStateAction } from "react";
+import { useState, useEffect, type Dispatch,SetStateAction } from "react";
+import {type SignupInputstate,LoginInputstate,LoginHandler,SignupHandler} from "../../../utils/types"
 import axios from "axios";
 import baseUrl from "../../../utils/baseUrl";
 import Cookies from "js-cookie";
@@ -20,29 +21,13 @@ import { MdEmail, MdDoNotDisturbOn } from "react-icons/md";
 import { RiAccountPinBoxFill } from "react-icons/ri";
 import { GoSignIn } from "react-icons/go";
 interface SignupFormProps {
-  submitHandler: (e: React.FormEvent<HTMLFormElement>,
-    inputs:SignupInputstate, 
-    imagePreview:string,
-    setErrorMsg:Dispatch<SetStateAction<string>>, 
-    setFormLoading:Dispatch<SetStateAction<boolean>>) => void
+  submitHandler: SignupHandler
   imagePreview:string
   setImagePreview:Dispatch<SetStateAction<string>>
   currentStep:number
   setCurrentStep:Dispatch<SetStateAction<number>>
 
 }
-
-interface SignupInputstate {
-  name: string
-  email: string
-  password: string
-  bio: string
-  facebook: string
-  youtube: string
-  twitter: string
-  instagram: string
-}
-
 
 export const SignupForm:React.FC<SignupFormProps> = ({
   submitHandler,
@@ -325,15 +310,7 @@ export const SignupForm:React.FC<SignupFormProps> = ({
 };
 
 interface LoginFormProps  {
-  submitHandler: (e: React.FormEvent<HTMLFormElement>,
-                  inputs:LoginInputstate, 
-                  setErrorMsg:Dispatch<SetStateAction<string>>, 
-                  setFormLoading:Dispatch<SetStateAction<boolean>>) => void
-}
-
-interface LoginInputstate {
-  email:string
-  password:string
+  submitHandler: LoginHandler
 }
 
 export const LoginForm:React.FC<LoginFormProps> = ({ submitHandler }) => {

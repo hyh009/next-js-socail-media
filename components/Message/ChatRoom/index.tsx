@@ -1,5 +1,5 @@
 import { useState, useEffect, Dispatch, SetStateAction, RefObject } from "react";
-import {IUser, DisplayUser, IMessage} from "../../../utils/types"
+import {IUser, DisplayUser, IMessage, CurrentChatWithState} from "../../../utils/types"
 import Image from "next/image";
 import { scrollToBottom } from "../../../utils/chatAction";
 import { InputWithAvator } from "../../Form";
@@ -13,8 +13,8 @@ import { MdSend } from "react-icons/md";
 import classes from "./chatRoom.module.css";
 interface Props {
   user:IUser
-  currentChatWith:DisplayUser
-  setCurrentChatWith:Dispatch<SetStateAction<DisplayUser>>
+  currentChatWith:CurrentChatWithState
+  setCurrentChatWith:Dispatch<SetStateAction<CurrentChatWithState>>
   messages:IMessage[]
   sendMsg:(msg:string)=>void
   newMessageRef:RefObject<HTMLDivElement>
@@ -96,8 +96,8 @@ const ChatRoom:React.FC<Props> = ({
                     isCurrentUserSender={isCurrentUserSender(message.sender)}
                     senderInfo={
                       isCurrentUserSender(message.sender)
-                        ? user
-                        : currentChatWith
+                        ? {name:user.name, profilePicUrl:user.profilePicUrl}
+                        : {name:currentChatWith.name, profilePicUrl:currentChatWith.profilePicUrl}
                     }
                     newMessageRef={newMessageRef}
                     enableDeleteMsg={enableDeleteMsg}

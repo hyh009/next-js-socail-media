@@ -11,7 +11,7 @@ interface Props {
   hasMore:boolean
   fetchDataOnScroll:()=>void
   setToastrType:Dispatch<SetStateAction<string>>
-  setUpdateTrue:()=>void
+  setUpdateTrue?:()=>void
   currentPage?:number // no need for account(profile) page
 }
 

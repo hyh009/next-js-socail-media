@@ -1,11 +1,16 @@
-import React from "react";
+import React, { ReactElement } from "react";
+import type { NextLayoutComponentType } from 'next';
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { PAGE_TITLE } from "../utils/headContnet";
+import { PAGE_TITLE } from "../utils/headContent";
 import { ErrorPageLayout } from "../components/Layout";
 import { Button } from "../components/Common";
 
-const Error = ({ statusCode }) => {
+interface Props {
+  statusCode?:number
+}
+
+const Error: NextLayoutComponentType<Props> = ({ statusCode }) => {
   const router = useRouter();
   return (
     <>
@@ -35,6 +40,6 @@ Error.getInitialProps = ({ res, err }) => {
 
 export default Error;
 
-Error.getLayout = function PageLayout(page) {
+Error.getLayout = function PageLayout(page:ReactElement) {
   return <ErrorPageLayout>{page}</ErrorPageLayout>;
 };

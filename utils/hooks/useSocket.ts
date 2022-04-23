@@ -1,6 +1,8 @@
 import { useEffect, useState, useCallback,Dispatch,SetStateAction } from "react";
-import { IUser,NewMsgState,NewReceivedMsgState, NewNotificationState} from "../types";
-import {usersType} from "../types/socket"
+import { type IUser,IMessage,NewReceivedMsgState, NewNotificationState} from "../types";
+import { type Socket} from "socket.io-client";
+import { type ServerToClientEvents, ClientToServerEvents } from "../types/socket";
+import { type usersType} from "../types/socket"
 import { usePlayAudio, useChangeTitle } from "./useNotification";
 import socketEvent from "../socketEvent";
 import { getUserInfo } from "../chatAction";
@@ -8,7 +10,7 @@ import { useSocketConnect } from "../context/SocketContext";
 
 
 // create socket io client connection && get online user list
-export const useSocket = (user:IUser, setConnectedUsers:Dispatch<SetStateAction<usersType>> = null) => {
+export const useSocket = (user:IUser, setConnectedUsers:Dispatch<SetStateAction<usersType>> = null):Socket<ServerToClientEvents, ClientToServerEvents> => {
   const socket = useSocketConnect(); // get socket from useContext
 
   useEffect(() => {
@@ -30,7 +32,12 @@ export const useSocket = (user:IUser, setConnectedUsers:Dispatch<SetStateAction<
   return socket;
 };
 
-export const useSocketReceiveMsg = (user:IUser, defaultTitle:string) => {
+type ReceiveMsgReturn = [pageTitle: string,
+                         newRecievedMessage:NewReceivedMsgState,
+                         showNewMessageModal:boolean,
+                         setShowNewMessageModal:Dispatch<SetStateAction<boolean>> ]
+
+export const useSocketReceiveMsg = (user:IUser, defaultTitle:string):ReceiveMsgReturn => {
   const socket = useSocketConnect();
   const [newRecievedMessage, setNewRecievedMessage] = useState<NewReceivedMsgState>(null);
   const [showNewMessageModal, setShowNewMessageModal] = useState<boolean>(false);
@@ -38,7 +45,7 @@ export const useSocketReceiveMsg = (user:IUser, defaultTitle:string) => {
   const [pageTitle, changePageTitle] = useChangeTitle(defaultTitle);
 
   const newMessageReceived = useCallback(
-    async (args:{newMsg:NewMsgState}):Promise<void> => {
+    async (args:{newMsg:IMessage}):Promise<void> => {
       const { newMsg } = args;
       const { name, profilePicUrl } = await getUserInfo(newMsg.sender);
       if (user.newMessagePopup) {
@@ -74,8 +81,12 @@ export const useSocketReceiveMsg = (user:IUser, defaultTitle:string) => {
   ];
 };
 
-export const useSocketNotifyPostLiked = (setNotificationUnread:Dispatch<SetStateAction<boolean>>) => {
-  const [newNotification, setNewNotification] = useState(null);
+type NotifyPostLikedReturn = [newNotification:NewNotificationState, 
+                              showNotificationPopup:boolean,
+                              closeNotificationPopup:()=>void]
+
+export const useSocketNotifyPostLiked = (setNotificationUnread:Dispatch<SetStateAction<boolean>>):NotifyPostLikedReturn => {
+  const [newNotification, setNewNotification] = useState<NewNotificationState>(null);
   const [showNotificationPopup, setShowNotificationPopup] = useState<boolean>(false);
   const closeNotificationPopup = ():void => setShowNotificationPopup(false);
 

@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect,type ReactNode } from "react";
+import type { NextComponentType } from 'next';
+import { AppContext, AppInitialProps, AppLayoutProps } from 'next/app';
 import { SocketProvider } from "../utils/context/SocketContext";
 import Head from "next/head";
 import Router from "next/router";
@@ -9,16 +11,22 @@ import "../public/styles.css";
 import "react-toastify/dist/ReactToastify.css";
 import "cropperjs/dist/cropper.css";
 
-function MyApp({ Component, pageProps }) {
-  const [toastrType, setToastrType] = useState(false);
-  const [notificationUnread, setNotificationUnread] = useState(false);
+const MyApp:NextComponentType<AppContext, AppInitialProps, AppLayoutProps> = ({ Component, pageProps }: AppLayoutProps) =>{
+  const [toastrType, setToastrType] = useState<string>("");
+  const [notificationUnread, setNotificationUnread] = useState<boolean>(false);
   // handle route change animation
-  Router.onRouteChangeStart = () => nProgress.start();
-  Router.onRouteChangeComplete = () => nProgress.done();
-  Router.onRouteChangeError = () => nProgress.done();
+  Router.events.on('routeChangeStart', () => {
+    nProgress.start();
+})
+  Router.events.on('routeChangeComplete', () => {
+  nProgress.done();
+})
+  Router.events.on('routeChangeError', () => {
+  nProgress.done();
+})
   // handle toast
   useEffect(() => {
-    let timer;
+    let timer:any;
     // delete post
     if (toastrType === "delete") {
       toast.info("Post Deleted Successfully", {
@@ -40,13 +48,12 @@ function MyApp({ Component, pageProps }) {
     }
     return () => clearTimeout(timer);
   }, [toastrType]);
-
+  
   const getLayout =
     Component.getLayout ||
-    ((page) => (
+    ((page:ReactNode) => (
       <UserLayout
         {...pageProps}
-        notificationUnread={notificationUnread}
         setNotificationUnread={setNotificationUnread}
       >
         {page}
@@ -66,6 +73,7 @@ function MyApp({ Component, pageProps }) {
           <Component
             {...pageProps}
             setToastrType={setToastrType}
+            notificationUnread={notificationUnread}
             setNotificationUnread={setNotificationUnread}
           />
         )}

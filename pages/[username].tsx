@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState, type Dispatch } from "react";
 import { useRouter } from "next/router";
+import {type  GetServerSidePropsContext, NextPage } from 'next'
+import {IUser, IUserFollowStats, type IProfile} from "../utils/types"
 import Head from "next/head";
 import { requireAuthentication } from "../utils/HOC/redirectDependonAuth";
-import axios from "axios";
+import axios,{type AxiosResponse} from "axios";
 import baseUrl from "../utils/baseUrl";
 import {
   SmallNavbar,
@@ -14,8 +16,21 @@ import {
 import { PostToastr, NoUser } from "../components/Layout";
 import withSocket from "../utils/HOC/withSocket";
 
-const Account = ({
-  errorLoading,
+
+interface Props {
+  notFound:boolean
+  profile:IProfile
+  followersLength:number
+  followingLength:number
+  user:IUser
+  userFollowStats:IUserFollowStats
+  setToastrType:Dispatch<SetStateAction<string>>
+  pageTitle:string
+}
+
+type activeItemState = "profile"|"following" |"followers" |"edit" | "setting";
+
+const Account:NextPage<Props> = ({
   notFound,
   profile,
   followersLength,
@@ -26,18 +41,18 @@ const Account = ({
   pageTitle,
 }) => {
   const router = useRouter();
-  const { username } = router.query;
+  const { username }  = router.query;
   // save current choosen navbar item (profile, followers, following, edit, setting)
-  const [activeItem, setActiveItem] = useState("profile");
+  const [activeItem, setActiveItem] = useState<activeItemState>("profile");
 
   // only show edit profile & setting button to current user
-  const ownAccount = profile?.user._id === user?._id;
+  const ownAccount:boolean = profile?.user._id === user?._id;
 
   // set activeItem to profile when profile user changed
   // scroll to top when path changed
   useEffect(() => {
     setActiveItem("profile");
-    const scrollToTop = () => {
+    const scrollToTop = ():void => {
       document.getElementById("scrollableDiv").scrollTo({
         top: 0,
       });
@@ -49,8 +64,8 @@ const Account = ({
 
   return (
     <>
-      {(notFound || errorLoading) && <NoUser username={user.username} />}
-      {!notFound && !errorLoading && (
+      {(notFound ) && <NoUser username={user.username} />}
+      {!notFound && (
         <>
           <Head>
             <title>{pageTitle}</title>
@@ -68,7 +83,7 @@ const Account = ({
             activeItem === "profile" && (
               <Profile
                 user={user}
-                username={username}
+                username={username as string}
                 profile={profile}
                 userFollowStats={userFollowStats}
                 setToastrType={setToastrType}
@@ -93,7 +108,7 @@ const Account = ({
                 user={user}
                 profileUserId={profile.user._id}
                 userFollowStats={userFollowStats}
-                type="Following"
+                type="following"
               />
             )
           }
@@ -119,10 +134,11 @@ const Account = ({
 };
 
 export const getServerSideProps = requireAuthentication(
-  async (context, userRes) => {
+  async (context:GetServerSidePropsContext, 
+         userRes:AxiosResponse<{user:IUser[], userFollowStats:IUserFollowStats}>) => {
     const { username } = context.query;
     try {
-      const profileRes = await axios(`${baseUrl}/api/profile/${username}`, {
+      const profileRes:AxiosResponse<{profile:IProfile,followingLength:number,followersLength:number}>= await axios(`${baseUrl}/api/profile/${username}`, {
         headers: {
           Cookie: context.req.headers.cookie,
         },

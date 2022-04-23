@@ -1,0 +1,26 @@
+import axios, {AxiosError} from "axios"
+const catchErrors = (error:Error | AxiosError):string => {
+  let errorMsg = "";
+  console.log(error);
+  if(axios.isAxiosError(error)){
+    if (error.response) {
+      // If the request was made and the server not responded with a status code in the range of 2xx
+      errorMsg = error.response.data.message;
+      console.error(errorMsg);
+
+  }else if (error.request) {
+    // if the request was made and no response was recevied from server
+    errorMsg = error.request;
+
+    console.error(errorMsg);
+  } 
+  } else {
+    // if something else happened while making the request
+    errorMsg = error.message;
+
+    console.error(errorMsg);
+  }
+  return errorMsg;
+};
+
+export default catchErrors;

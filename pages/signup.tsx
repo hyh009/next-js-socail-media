@@ -1,6 +1,8 @@
-import { useState } from "react";
+import React,{ ReactElement, useState } from "react";
+import type { NextLayoutComponentType } from 'next';
+import type{ SignupHandler} from "../utils/types"
 import Head from "next/head";
-import { PAGE_TITLE } from "../utils/headContnet";
+import { PAGE_TITLE } from "../utils/headContent";
 import { NoUserLayout } from "../components/Layout";
 import { ProgressBar } from "../components/Common";
 import { SignupForm } from "../components/Form/AuthForm";
@@ -8,21 +10,21 @@ import { registerUser } from "../utils/authUser";
 import { uploadPic } from "../utils/uploadPicToCloudinary";
 import useCheckLogin from "../utils/hooks/useCheckLogin";
 
-const Signup = () => {
+const Signup:NextLayoutComponentType = () => {
   useCheckLogin(); //check if user islogin
-  const [imagePreview, setImagePreview] = useState("");
-  const [currentStep, setCurrentStep] = useState(0);
+  const [imagePreview, setImagePreview] = useState<string>("");
+  const [currentStep, setCurrentStep] = useState<number>(0);
   const stepText = ["ACCOUNT SETUP", "PERSONAL DETAILS", "SOCIAL PROFILE"];
-  const handleSignup = async (
+  const handleSignup:SignupHandler = async (
     e,
     inputData,
     imageBase64String,
     setErrorMsg,
-    setFormLoading
+    setFormLoading,
   ) => {
     e.preventDefault();
     setFormLoading(true);
-    let profilePicUrl;
+    let profilePicUrl:string;
 
     if (imageBase64String) {
       profilePicUrl = await uploadPic(imageBase64String);
@@ -56,6 +58,6 @@ const Signup = () => {
 
 export default Signup;
 
-Signup.getLayout = function PageLayout(page) {
+Signup.getLayout = function PageLayout(page:ReactElement) {
   return <NoUserLayout>{page}</NoUserLayout>;
 };

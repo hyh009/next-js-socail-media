@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 export const uploadPic = async (image:string):Promise<string> => {
   try {
