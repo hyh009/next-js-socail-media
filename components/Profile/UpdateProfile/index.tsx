@@ -96,7 +96,7 @@ const UpdateProfile:React.FC<Props> = ({ Profile, setToastrType }) => {
             content="Crop image"
             type="button"
             icon={BiCrop}
-            clickHandler={(e) => {
+            clickHandler={() => {
               setShowModal(true);
             }}
           />

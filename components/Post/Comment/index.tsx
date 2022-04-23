@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { IComment, IUser } from "../../../utils/types";
+import { IComment } from "../../../utils/types";
 import { CommentUser, SmallPopup } from "../../Common";
 import { AiOutlineClose } from "react-icons/ai";
 import useClickOutsideClose from "../../../utils/hooks/useClickOutsideClose";

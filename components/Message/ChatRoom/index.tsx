@@ -1,5 +1,5 @@
 import { useState, useEffect, Dispatch, SetStateAction, RefObject } from "react";
-import {IUser, DisplayUser, IMessage, CurrentChatWithState} from "../../../utils/types"
+import {IUser, IMessage, CurrentChatWithState} from "../../../utils/types"
 import Image from "next/image";
 import { scrollToBottom } from "../../../utils/chatAction";
 import { InputWithAvator } from "../../Form";

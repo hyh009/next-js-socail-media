@@ -98,7 +98,7 @@ export const SignupForm:React.FC<SignupFormProps> = ({
       setUsernameLoading(false);
     };
     // check if username is available every 300ms
-    let timer = setTimeout(() => {
+    const timer = setTimeout(() => {
       checkUsername();
     }, 300);
 
