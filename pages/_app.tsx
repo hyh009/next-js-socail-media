@@ -1,4 +1,4 @@
-import { useState, useEffect,type ReactNode } from "react";
+import { useState, useEffect,type ReactElement } from "react";
 import type { NextComponentType } from 'next';
 import { AppContext, AppInitialProps, AppLayoutProps } from 'next/app';
 import { SocketProvider } from "../utils/context/SocketContext";
@@ -51,7 +51,7 @@ const MyApp:NextComponentType<AppContext, AppInitialProps, AppLayoutProps> = ({ 
   
   const getLayout =
     Component.getLayout ||
-    ((page:ReactNode) => (
+    ((page:ReactElement) => (
       <UserLayout
         {...pageProps}
         setNotificationUnread={setNotificationUnread}
@@ -65,7 +65,7 @@ const MyApp:NextComponentType<AppContext, AppInitialProps, AppLayoutProps> = ({ 
       <Head>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <meta charSet="UTF-8" />
-        <link rel="icon" href="/favicon.png" sizes="16*16" type="image/png" />
+        <link rel="shortcut icon" href="/logo.png"/>
         <title>Mini Social Media</title>
       </Head>
       <SocketProvider>

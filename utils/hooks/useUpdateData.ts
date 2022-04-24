@@ -13,8 +13,9 @@ export const useGetDataFromServer = (setUpdateTrue:setUpdateTrueType = null) => 
     return refreshRouter;
   }
 };
+type NoReturnFn = ()=>void
 
-export const useGetDataFromClient = (getDataFn:(controller:AbortController)=>{}) => {
+export const useGetDataFromClient = (getDataFn:(controller:AbortController)=>Promise<void>):[NoReturnFn] => {
   const [update, setUpdate] = useState<boolean>(false);
 
   const setUpdateTrue = useCallback(():void => {
@@ -24,10 +25,14 @@ export const useGetDataFromClient = (getDataFn:(controller:AbortController)=>{})
   // to get update data from client side
   useEffect(() => {
     const controller = new AbortController();
-    if (update) {
-      getDataFn(controller);
-      setUpdate(false);
+    const getData = async ()=>{
+      if (update) {
+        console.log(getDataFn);
+        await getDataFn(controller);
+        setUpdate(false);
+      }
     }
+    getData();
     return () => typeof controller !== "undefined" && controller.abort();
   }, [getDataFn, update]);
 
